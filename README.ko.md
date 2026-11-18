@@ -1,6 +1,7 @@
 [English](README.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
 [User manuals / 사용자 안내서 / ユーザーマニュアル](docs/MANUALS.md)
+[Air 6 router mode / Air 6 ルーターモード / Air 6 라우터 모드](docs/ROUTER-MODE.ko.md)
 
 # luci-app-sbair-modem
 
@@ -32,5 +33,6 @@ SoftBank Air 6 (RG620T-SBK / RUDOLF)의 벤더 수정 OpenWrt 21.02.7 펌웨어�
 ## 라이선스
 
 [LICENSE](LICENSE)를 참고하세요.
+
 
 

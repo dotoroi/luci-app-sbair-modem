@@ -1,6 +1,7 @@
 [English](README.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
 [User manuals / 사용자 안내서 / ユーザーマニュアル](docs/MANUALS.md)
+[Air 6 router mode / Air 6 ルーターモード / Air 6 라우터 모드](docs/ROUTER-MODE.en.md)
 
 # luci-app-sbair-modem
 
@@ -32,5 +33,6 @@ The translated LuCI catalogs are under `po/`. Build them with LuCI's `po2lmo` us
 ## License
 
 See [LICENSE](LICENSE).
+
 
 

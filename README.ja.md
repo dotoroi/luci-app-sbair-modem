@@ -1,6 +1,7 @@
 [English](README.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
 [User manuals / 사용자 안내서 / ユーザーマニュアル](docs/MANUALS.md)
+[Air 6 router mode / Air 6 ルーターモード / Air 6 라우터 모드](docs/ROUTER-MODE.ja.md)
 
 # luci-app-sbair-modem
 
@@ -246,6 +247,7 @@ OTA / FOTAを無効にすると、`fota.config.enabled=0`と`fota.provision.enab
 ## ライセンス
 
 MIT（→ [LICENSE](LICENSE)）。第三者ソフトウェアの扱いは[NOTICE.md](NOTICE.md)を参照してください。
+
 
 
 
