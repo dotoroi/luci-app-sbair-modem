@@ -2,15 +2,15 @@
 
 [English](ROUTER-MODE.en.md) | [한국어](ROUTER-MODE.ko.md) | [日本語](ROUTER-MODE.ja.md)
 
-この文書では、Floop3の **Network → Connection Mode（ネットワーク → 接続モード）** に実装されたルーター構成を説明します。対象はvendor改造版OpenWrt 21.02.7です。有線WANはポート経路の異なる2種類があります。
+この文書では、Floop3の **Network → Connection Mode（ネットワーク → 接続モード）** に実装されたルーター構成を説明します。対象はvendor改造版OpenWrt 21.02.7です。セルラー設定を維持しながら有線インターネットを使う場合、この案内では**Air 6 Ethernet WAN (VLAN 3)**を優先候補として推奨します。有線WANはポート経路の異なる2種類があります。
 
 ## 選択できるモード
 
 | LuCI表示 | 上流回線 | 動作 |
 |---|---|---|
 | **Stock cellular router (SIM / ccmni)** | 内蔵セルラーモデム | 保存済みSIMルータープロファイルを戻し、プライベートLANとLAN DHCPを維持します。 |
+| **Air 6 Ethernet WAN (VLAN 3) — 推奨** | スイッチVLAN 3の`eth0.3` | VLAN 3にDHCP上流を追加し、セルラー`network.wan`設定を保持します。 |
 | **Floop3 wired WAN router (eth1)** | 専用論理インターフェース`eth1` | 上位機器からDHCPでアドレスを取得し、`network.wan`をeth1へ割り当てます。セルラー上流を置き換えます。 |
-| **Air 6 Ethernet WAN (VLAN 3)** | スイッチVLAN 3の`eth0.3` | VLAN 3にDHCP上流を追加し、セルラー`network.wan`設定を保持します。 |
 
 有線モードはいずれもプライベートLANアドレスとDHCP範囲を維持し、既存のLAN→WAN転送とmasquerade（NAT）ポリシーを再利用します。適用前にWAN firewall zoneの入力ポリシーがDROP/REJECTであること、masqueradeとLAN→WAN転送があることを検証します。条件を満たさない場合、強制適用せず中止します。ハードウェアNATや性能アクセラレーションを有効化する機能ではありません。
 
@@ -20,11 +20,11 @@
 
 `eth1`はソフトウェアが識別する論理名です。リポジトリの記録だけでは筐体上のどの印字ポートか確定できません。**Network → Diagnostics**で候補とリンクを確認し、ポート表示を確認したうえで実際のリンク試験により判別してください。上流ネットワークをLANポートへ接続するとDHCPサーバーが競合するおそれがあります。
 
-### VLAN 3 Ethernet WAN
+### 推奨構成：VLAN 3 Ethernet WAN
 
 実装に記録されたスイッチ構成を使用します。外部スイッチポート1をVLAN 1から外してVLAN 3へuntaggedで追加し、CPUポート5をVLAN 3へtaggedで追加して`eth0.3`を作ります。別のDHCPクライアント`network.ethernetwan`をWAN firewall/NAT zoneへ登録します。セルラーの`network.wan`設定は残ります。
 
-セルラーとEthernetの両方がデフォルトルートを広告する場合があります。コードは優先順位や自動フェイルオーバーを設定しないため、状態画面または`ip route`で実際のデフォルトルートを確認してください。スイッチのポート番号から筐体の印字ポートを推測しないでください。VLAN変更の失敗で遠隔管理が切れる可能性があるためUART復旧手段を用意してください。
+セルラー設定を保持したい場合の有線WAN推奨構成です。ただし「推奨」はモード選択についてであり、この実装がルーティングmetricを設定する意味ではありません。セルラーとEthernetの両方がデフォルトルートを広告する場合があり、コードは優先順位や自動フェイルオーバーを設定しません。状態画面または`ip route`で実際のデフォルトルートを確認してください。スイッチのポート番号から筐体の印字ポートを推測しないでください。VLAN変更の失敗で遠隔管理が切れる可能性があるためUART復旧手段を用意してください。
 
 ## 切り替え前の準備
 
@@ -63,4 +63,5 @@ ifstatus ethernetwan
 
 - **管理IP DHCPクライアント**：Air 6自身が上位ルーターから管理アドレスを取得します。AP/Bridge管理用で、WAN DHCPとは別です。
 - **LAN DHCPサーバー**：Air 6が内部端末へアドレスを配布します。ルーターモードでは有効である必要があります。**Network → LAN Services**で管理し、Connection Mode画面がWAN/LAN DHCPを無条件に切り替えることはありません。
+
 

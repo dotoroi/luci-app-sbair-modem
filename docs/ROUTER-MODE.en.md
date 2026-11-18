@@ -2,15 +2,15 @@
 
 [English](ROUTER-MODE.en.md) | [한국어](ROUTER-MODE.ko.md) | [日本語](ROUTER-MODE.ja.md)
 
-This guide describes the router configurations implemented under Floop3 **Network → Connection Mode**. The target is vendor-modified OpenWrt 21.02.7. There are two wired WAN configurations, using different port paths.
+This guide describes the router configurations implemented under Floop3 **Network → Connection Mode**. The target is vendor-modified OpenWrt 21.02.7. If you want wired Internet while preserving the cellular configuration, this guide recommends **Air 6 Ethernet WAN (VLAN 3)** as the preferred mode. The two wired WAN configurations use different port paths.
 
 ## Available modes
 
 | LuCI label | Uplink | Behavior |
 |---|---|---|
 | **Stock cellular router (SIM / ccmni)** | Built-in cellular modem | Restores the saved SIM-router profile and keeps the private LAN and LAN DHCP. |
+| **Air 6 Ethernet WAN (VLAN 3) — Recommended** | `eth0.3` on switch VLAN 3 | Adds a DHCP uplink on VLAN 3 while preserving the cellular `network.wan` configuration. |
 | **Floop3 wired WAN router (eth1)** | Dedicated logical interface `eth1` | Gets an address from the upstream device by DHCP and assigns `network.wan` to eth1. Replaces the cellular uplink. |
-| **Air 6 Ethernet WAN (VLAN 3)** | `eth0.3` on switch VLAN 3 | Adds a DHCP uplink on VLAN 3 while preserving the cellular `network.wan` configuration. |
 
 Both wired modes retain the private LAN address and DHCP pool, and reuse the existing LAN→WAN forwarding and masquerade (NAT) policy. Before applying, the code checks for a WAN firewall zone with DROP/REJECT input, masquerading, and LAN→WAN forwarding. It refuses to proceed if those prerequisites are absent. This does not imply hardware NAT or performance acceleration is enabled.
 
@@ -20,11 +20,11 @@ This mode changes `network.wan` to DHCP on `eth1`. If `wan6` exists, IPv6 WAN is
 
 `eth1` is a logical interface name detected by software. The repository does not establish which labeled physical jack on the case maps to it. Check **Network → Diagnostics** for candidates/link state, inspect device port labels, and identify the jack with a controlled physical link test. Connecting an upstream network to a LAN jack can cause competing DHCP servers.
 
-### VLAN 3 Ethernet WAN
+### Recommended option: VLAN 3 Ethernet WAN
 
 This mode applies the switch layout recorded by the implementation: external switch port 1 is removed from VLAN 1 and added untagged to VLAN 3; CPU port 5 is tagged in VLAN 3, creating `eth0.3`. A separate DHCP client, `network.ethernetwan`, is added to the WAN firewall/NAT zone. The existing cellular `network.wan` remains configured.
 
-Both cellular and Ethernet may advertise a default route. The code does not set route preference or automatic failover, so check the active default route in status or with `ip route`. Do not infer the case jack label from the switch port number. A failed switch/VLAN change can cut off remote management; keep UART recovery available.
+This is the recommended wired WAN profile when you want to retain the cellular configuration. “Recommended” refers to the mode choice; this implementation does not set route metrics. Cellular and Ethernet may both advertise a default route, and the code does not set route preference or automatic failover, so check the active default route in status or with `ip route`. Do not infer the case jack label from the switch port number. A failed switch/VLAN change can cut off remote management; keep UART recovery available.
 
 ## Before switching
 
@@ -63,4 +63,5 @@ To return to cellular routing, choose **Stock cellular router (SIM / ccmni)** in
 
 - **Management IP DHCP client**: the Air 6 itself obtains a management address from an upstream router. This is for AP/Bridge management and is separate from WAN DHCP.
 - **LAN DHCP server**: the Air 6 assigns addresses to local clients. It must remain enabled in router mode. It is managed under **Network → LAN Services**; the Connection Mode screen does not arbitrarily toggle WAN/LAN DHCP.
+
 

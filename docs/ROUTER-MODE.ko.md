@@ -2,15 +2,15 @@
 
 [English](ROUTER-MODE.en.md) | [한국어](ROUTER-MODE.ko.md) | [日本語](ROUTER-MODE.ja.md)
 
-이 안내서는 Floop3의 **Network → Connection Mode(네트워크 → 접속 모드)**에 구현된 라우터 구성을 설명합니다. 대상은 벤더 수정 OpenWrt 21.02.7입니다. 실제로 제공되는 유선 WAN 구성은 두 가지이며, 서로 다른 포트 경로를 사용합니다.
+이 안내서는 Floop3의 **Network → Connection Mode(네트워크 → 접속 모드)**에 구현된 라우터 구성을 설명합니다. 대상은 벤더 수정 OpenWrt 21.02.7입니다. 유선 인터넷을 사용하면서 셀룰러 설정도 보존하려면 이 안내서는 **Air 6 Ethernet WAN (VLAN 3)**을 우선 선택지로 권장합니다. 유선 WAN 구성은 두 가지이며 서로 다른 포트 경로를 사용합니다.
 
 ## 모드 선택
 
 | LuCI 표시 | 업링크 | 동작 |
 |---|---|---|
 | **Stock cellular router (SIM / ccmni)** | Air 6 내장 이동통신 모뎀 | 저장된 SIM 라우터 구성을 복원합니다. 사설 LAN과 LAN DHCP를 유지합니다. |
+| **Air 6 Ethernet WAN (VLAN 3) — 권장** | 스위치 VLAN 3의 `eth0.3` | 포트 VLAN 3으로 DHCP 업링크를 추가하면서 셀룰러 `network.wan` 설정을 보존합니다. |
 | **Floop3 wired WAN router (eth1)** | 전용 논리 인터페이스 `eth1` | 상위 장치에서 DHCP로 주소를 받고, `network.wan`을 eth1에 연결합니다. 기존 셀룰러 WAN을 대체합니다. |
-| **Air 6 Ethernet WAN (VLAN 3)** | 스위치 VLAN 3의 `eth0.3` | 포트 VLAN 3으로 DHCP 업링크를 추가하면서 셀룰러 `network.wan` 설정을 보존합니다. |
 
 두 유선 WAN 모드는 LAN의 사설 주소와 DHCP 범위를 유지하고, 기존 LAN→WAN 방화벽 전달과 masquerade(NAT)를 재사용합니다. 적용 전 해당 WAN 방화벽 영역의 입력 정책이 DROP/REJECT이고 NAT 및 LAN→WAN 전달이 있는지 검사합니다. 요구 조건이 맞지 않으면 설정을 강행하지 않고 중단합니다. 성능 가속이나 하드웨어 NAT 활성화를 뜻하지는 않습니다.
 
@@ -20,11 +20,11 @@
 
 `eth1`은 소프트웨어에서 식별한 논리 인터페이스 이름입니다. 저장소 문서만으로 케이스의 특정 잭 위치를 확정할 수 없습니다. Network → Diagnostics에서 후보·링크 상태를 확인하고, 장치의 포트 표시를 확인해 어느 잭이 eth1인지 실물 링크 테스트로 식별하세요. LAN 잭에 상위 네트워크를 연결하면 DHCP 서버가 충돌할 수 있습니다.
 
-### VLAN 3 이더넷 WAN
+### 권장 선택지: VLAN 3 이더넷 WAN
 
 이 모드는 구현에 기록된 스위치 구성을 사용합니다. 외부 스위치 포트 1을 VLAN 1에서 빼 VLAN 3에 untagged로 넣고, CPU 포트 5를 VLAN 3에 tagged로 두어 `eth0.3`을 만듭니다. 별도 `network.ethernetwan` DHCP 클라이언트를 WAN 방화벽/NAT 영역에 추가합니다. 기존 셀룰러 `network.wan`은 남습니다.
 
-이 구성은 셀룰러와 이더넷이 각각 기본 경로를 광고할 수 있습니다. 코드가 경로 우선순위나 자동 장애조치를 정하지 않으므로 어느 회선이 실제 기본 경로인지 상태 화면이나 `ip route`로 확인해야 합니다. 소스의 포트 번호만으로 기기 외부의 잭 이름을 추정하지 마세요. 스위치/VLAN 변경 실패는 원격 관리 연결을 끊을 수 있어 UART 복구 경로가 필요합니다.
+따라서 셀룰러 설정을 보존하려는 유선 WAN의 권장 구성입니다. 단, “권장”은 모드 선택에 대한 안내이며 이 구현이 라우팅 metric을 설정한다는 뜻은 아닙니다. 셀룰러와 이더넷이 각각 기본 경로를 광고할 수 있고 코드가 경로 우선순위나 자동 장애조치를 정하지 않으므로, 실제 기본 경로는 상태 화면이나 `ip route`로 확인해야 합니다. 소스의 포트 번호만으로 기기 외부의 잭 이름을 추정하지 마세요. 스위치/VLAN 변경 실패는 원격 관리 연결을 끊을 수 있어 UART 복구 경로가 필요합니다.
 
 ## 적용 전 준비
 
@@ -63,5 +63,6 @@ ifstatus ethernetwan
 
 - **관리 IP DHCP 클라이언트**: Air 6 자체가 상위 라우터에서 관리 주소를 받는 설정입니다. AP/Bridge 관리용 설정이며, 유선 WAN의 DHCP와 다릅니다.
 - **LAN DHCP 서버**: Air 6가 내부 단말에 주소를 나눠 줍니다. 라우터 모드에서는 켜져 있어야 합니다. LuCI의 **Network → LAN Services**에서 제어하며, Connection Mode 화면은 직접 WAN/LAN DHCP를 임의로 토글하지 않습니다.
+
 
 
