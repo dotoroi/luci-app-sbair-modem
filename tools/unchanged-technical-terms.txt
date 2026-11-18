@@ -1,0 +1,41 @@
+# Deliberately unchanged user-visible terms, protocols, exact commands, and identifiers.
+# One complete gettext message ID per line. Long descriptions are not permitted.
+/bin/usim
+5G NR
+APN
+AT+CFUN=0
+AT+CFUN=1
+AT+CFUN=4
+AT+EPBSEH=
+AT+EPBSEH=?
+AT+EPBSEH?
+AT+ESIMMAP=2
+DNS
+EID
+ICCID
+IMEI
+ISD-R AID
+LAN DHCP
+LAN/Wi-Fi
+LTE
+MAC / MTU
+MLO
+MTU
+RSRP
+RSRQ
+RSSI
+SGP.22
+SIM / eSIM
+SMS
+SSID
+SoftBank Air
+TAC
+UDC
+VID:PID
+WPS
+Wi-Fi
+eSIM
+ifup wan
+usb0
+IMS
+eUICC

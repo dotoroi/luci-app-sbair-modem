@@ -65,10 +65,10 @@ func simlockState(ch *ATChannel) map[string]any {
 	// **5 と 6 は MTK の拡張**で、規格には無い(モデム内の +CPIN 文字列表に
 	// PH-NSSP / PH-SIMC があることで確認)。
 	labels := map[int]string{
-		0: "ネットワーク", 1: "ネットワークサブセット", 2: "サービスプロバイダ",
-		3: "コーポレート", 4: "SIM/USIM",
-		5: "ネットワークサブセット+事業者 (MTK 拡張)",
-		6: "SIM+コーポレート (MTK 拡張)",
+		0: "Network", 1: "Network subset", 2: "Service provider",
+		3: "Corporate", 4: "SIM/USIM",
+		5: "Network subset + service provider (MTK extension)",
+		6: "SIM + corporate (MTK extension)",
 	}
 	num := func(s string) int {
 		var n int
@@ -120,7 +120,7 @@ func runSimlockWorker(arg string) int {
 	ch := NewATChannel(*device)
 	ch.SetTimeout(30 * time.Second)
 	if err := ch.Connect(); err != nil {
-		return j.fail("接続", err.Error())
+		return j.fail("Connect", err.Error())
 	}
 	defer ch.Disconnect()
 
@@ -154,7 +154,7 @@ func simlockApply(ch *ATChannel, on bool, step func(string)) (string, string, er
 	}
 
 	// 掛け直しの前にも解除が要る。既存のルールを消さずに追加すると積み上がる。
-	step("ロックを解除 (AT+ESMLCK)")
+	step("Disable SIM lock (AT+ESMLCK)")
 	for _, c := range []string{"0", "2"} {
 		for _, op := range []string{"0", "3"} { // 0 = 解除 / 3 = ルール削除
 			run(fmt.Sprintf("AT+ESMLCK=%s,%s,%q", c, op, simlockKey))
@@ -162,7 +162,7 @@ func simlockApply(ch *ATChannel, on bool, step func(string)) (string, string, er
 	}
 
 	if arg == "on" {
-		step("ロックを設定 (AT+ESMLCK)")
+		step("Enable SIM lock (AT+ESMLCK)")
 		run(fmt.Sprintf("AT+ESMLCK=0,2,%q,%q", simlockKey, simlockWCP))
 		run(fmt.Sprintf("AT+ESMLCK=2,2,%q,%q,%q", simlockKey, simlockSB, simlockGID))
 	}
@@ -182,19 +182,19 @@ func simlockApply(ch *ATChannel, on bool, step func(string)) (string, string, er
 
 	// **CFUN=4 では足りない。** SIM ごと落とさないと +CPIN の判定が
 	// 初期化時のまま残り、解除しても PH-NET PIN が消えない。
-	step("SIM を読み直す (AT+CFUN=0)")
+	step("Reload SIM (AT+CFUN=0)")
 	if _, err := ch.Command("AT+CFUN=0"); err != nil {
 		return "AT+CFUN=0", "", err
 	}
 	time.Sleep(15 * time.Second)
 
-	step("電波を戻す (AT+CFUN=1)")
+	step("Restore radio (AT+CFUN=1)")
 	if _, err := ch.Command("AT+CFUN=1"); err != nil {
 		time.Sleep(10 * time.Second)
 		_, _ = ch.Command("AT+CFUN=1")
 	}
 
-	step("SIM の状態を確認")
+	step("Verify SIM state")
 	want := (arg == "on")
 	for i := 0; i < 12; i++ {
 		time.Sleep(5 * time.Second)
@@ -211,14 +211,14 @@ func simlockApply(ch *ATChannel, on bool, step func(string)) (string, string, er
 		if !known {
 			continue
 		}
-		msg := fmt.Sprintf("SIM: %s / ロック: %v", pin, locked)
+		msg := fmt.Sprintf("SIM: %s / locked: %v", pin, locked)
 		if locked == want {
-			return "完了", msg, nil
+			return "Complete", msg, nil
 		}
 		// 望む状態になっていない。**そのときだけ**、途中で出た誤りを見せる。
 		if i == 11 && len(notes) > 0 {
-			return "確認", "", errors.New(msg + " / " + strings.Join(notes, " / "))
+		return "Verify SIM state", "", errors.New(msg + " / " + strings.Join(notes, " / "))
 		}
 	}
-	return "確認", "", errors.New("切替後に SIM の状態を確認できませんでした。")
+	return "Verify SIM state", "", errors.New("Unable to verify the SIM state after the change.")
 }

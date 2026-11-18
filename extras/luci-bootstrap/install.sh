@@ -162,6 +162,30 @@ run_logged() {
 	[ "$remote_status" -eq 0 ] || die "remote command failed; see $logfile"
 }
 
+# Dropbear on some stock SBA6 images has neither an SFTP subsystem nor a
+# usable scp server.  Stream tar over the already-authenticated SSH command
+# channel instead; this needs only the target's existing tar and shell.
+stream_tree() {
+	local source_dir destination bundle
+	source_dir=$1
+	destination=$2
+	shift 2
+	bundle="$CACHE_DIR/transfer-$(date +%Y%m%d-%H%M%S)-$$.tar"
+	tar -cf "$bundle" -C "$source_dir" "$@" || die "could not prepare SSH transfer bundle"
+	ssh "$TARGET" "mkdir -p '$destination' && tar -xf - -C '$destination'" <"$bundle" || {
+		rm -f "$bundle"
+		die "could not stream files to $destination over SSH"
+	}
+	rm -f "$bundle"
+}
+
+stream_file() {
+	local source_file destination
+	source_file=$1
+	destination=$2
+	ssh "$TARGET" "cat > '$destination'" <"$source_file" || die "could not stream $source_file over SSH"
+}
+
 preflight() {
 	printf '%s\n' "[2/7] Checking SSH and SBA6 platform..."
 	preflight_log="$CACHE_DIR/preflight-$(date +%Y%m%d-%H%M%S).log"
@@ -177,21 +201,19 @@ upload_install_tree() {
 	printf '%s\n' "[5/7] Uploading bootstrap and package set..."
 	ssh "$TARGET" "rm -rf '$TARGET_STAGE'; mkdir -p '$TARGET_STAGE/packages'" ||
 		die "could not prepare the Air6 staging directory"
-	scp "$TARGET_SCRIPT" "$CHECK_SCRIPT" "$LOCKFILE" "$TARGET:$TARGET_STAGE/" ||
-		die "could not upload bootstrap scripts"
+	stream_tree "$SELF" "$TARGET_STAGE" target.sh check.sh packages.lock
 
 	bundle="$CACHE_DIR/sba6-luci-packages.tar"
 	set -- $(manifest_filenames)
 	tar -cf "$bundle" -C "$CACHE_DIR" "$@" || die "could not assemble package bundle"
-	scp "$bundle" "$TARGET:$TARGET_STAGE/" || die "could not upload package bundle"
-	ssh "$TARGET" "tar -xf '$TARGET_STAGE/sba6-luci-packages.tar' -C '$TARGET_STAGE/packages' && rm -f '$TARGET_STAGE/sba6-luci-packages.tar' && chmod 0755 '$TARGET_STAGE/target.sh' '$TARGET_STAGE/check.sh'" ||
+	ssh "$TARGET" "tar -xf - -C '$TARGET_STAGE/packages' && chmod 0755 '$TARGET_STAGE/target.sh' '$TARGET_STAGE/check.sh'" <"$bundle" ||
 		die "could not unpack the Air6 package bundle"
+	rm -f "$bundle"
 }
 
 upload_script_only() {
 	ssh "$TARGET" "mkdir -p '$TARGET_STAGE'" || die "could not prepare the Air6 staging directory"
-	scp "$TARGET_SCRIPT" "$CHECK_SCRIPT" "$LOCKFILE" "$TARGET:$TARGET_STAGE/" ||
-		die "could not upload repair scripts"
+	stream_tree "$SELF" "$TARGET_STAGE" target.sh check.sh packages.lock
 	ssh "$TARGET" "chmod 0755 '$TARGET_STAGE/target.sh' '$TARGET_STAGE/check.sh'" ||
 		die "could not prepare repair scripts"
 }
@@ -216,7 +238,7 @@ validate_manifest
 case "$MODE" in
 	check)
 		mkdir -p "$CACHE_DIR"
-		scp "$CHECK_SCRIPT" "$TARGET:$CHECK_PATH" || die "could not upload check.sh"
+		stream_file "$CHECK_SCRIPT" "$CHECK_PATH"
 		ssh "$TARGET" "chmod 0755 '$CHECK_PATH'" || die "could not prepare check.sh"
 		run_logged check "sh '$CHECK_PATH'"
 		;;

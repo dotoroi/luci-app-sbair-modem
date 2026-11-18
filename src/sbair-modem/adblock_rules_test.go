@@ -84,7 +84,7 @@ func TestApplyAdblockRulesJoinsDNSAndCleanupErrors(t *testing.T) {
 	enumerationErr := errors.New("iptables -S failed")
 	adblockIptablesOutput = func(...string) (string, error) { return "", enumerationErr }
 	err := applyAdblockRules()
-	if !errors.Is(err, enumerationErr) || !strings.Contains(err.Error(), "専用dnsmasq") {
+	if !errors.Is(err, enumerationErr) || !strings.Contains(err.Error(), "The dedicated DNS service is unavailable") {
 		t.Fatalf("error = %v, want DNS and cleanup errors", err)
 	}
 }

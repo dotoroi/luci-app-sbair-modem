@@ -37,7 +37,7 @@ func jobLockPath(name string) string { return filepath.Join(runtimeDir(), "jobs"
 
 func newJob(name string) *job {
 	return &job{name: name, state: jobState{
-		State: "running", Step: "起動", Started: time.Now().Format(time.RFC3339),
+		State: "running", Step: "Start", Started: time.Now().Format(time.RFC3339),
 	}}
 }
 
@@ -88,7 +88,7 @@ func readJob(name string) map[string]any {
 // and partway means the radio is off and the mapping may already have changed.
 func startJob(name string, args ...string) map[string]any {
 	if err := ensurePrivateDir(filepath.Join(runtimeDir(), "jobs")); err != nil {
-		return map[string]any{"error": fmt.Sprintf("ジョブ実行領域を安全に準備できません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to safely prepare the job directory: %v", err)}
 	}
 	// Wait for the short status/write/spawn critical section. Once the first
 	// caller releases it, the second caller reads the durable running state and
@@ -96,21 +96,21 @@ func startJob(name string, args ...string) map[string]any {
 	// error.
 	lock, err := acquireRuntimeLock(jobLockPath(name), 5*time.Second)
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("ジョブを開始できません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to start the job: %v", err)}
 	}
 	defer lock.close()
 
 	if cur := readJob(name); cur["state"] == "running" {
-		return map[string]any{"error": "すでに実行中です", "state": "running"}
+		return map[string]any{"error": "A job is already running.", "state": "running"}
 	}
 	self, err := jobExecutable()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("自分の場所が分かりません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to determine the executable path: %v", err)}
 	}
 
 	j := newJob(name)
 	if err := j.write(); err != nil {
-		return map[string]any{"error": fmt.Sprintf("ジョブ状態を保存できません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to save job status: %v", err)}
 	}
 
 	argv := append([]string{"-d", *device, name + "-worker"}, args...)
@@ -118,8 +118,8 @@ func startJob(name string, args ...string) map[string]any {
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = nil, nil, nil
 	if err := cmd.Start(); err != nil {
-		_ = j.fail("起動", err.Error())
-		return map[string]any{"error": fmt.Sprintf("ワーカーを起動できません: %v", err)}
+		_ = j.fail("Start", err.Error())
+		return map[string]any{"error": fmt.Sprintf("Unable to start the worker: %v", err)}
 	}
 	go func() { _ = cmd.Wait() }()
 

@@ -69,7 +69,7 @@ func clientNoteSet(mac, note string) map[string]any {
 		return map[string]any{"error": "mac is required"}
 	}
 	if err := ensureConfig(); err != nil {
-		return map[string]any{"error": fmt.Sprintf("/etc/config/%s を作れません: %v", apnConfig, err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to create config file: %v", err)}
 	}
 	sec := apnConfig + "." + macSectionName(mac)
 	if note == "" {

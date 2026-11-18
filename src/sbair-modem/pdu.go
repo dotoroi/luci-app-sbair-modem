@@ -190,12 +190,12 @@ func decodeSCTS(b []byte) time.Time {
 func decodeDeliver(pduHex string) (*smsPDU, error) {
 	raw, err := hex.DecodeString(strings.TrimSpace(pduHex))
 	if err != nil {
-		return nil, fmt.Errorf("PDU が 16 進ではありません: %w", err)
+		return nil, fmt.Errorf("PDU is not valid hexadecimal data: %w", err)
 	}
 	p := 0
 	need := func(n int) error {
 		if p+n > len(raw) {
-			return errors.New("PDU が途中で切れています")
+			return errors.New("PDU is truncated.")
 		}
 		return nil
 	}
@@ -217,7 +217,7 @@ func decodeDeliver(pduHex string) (*smsPDU, error) {
 	pduType := raw[p]
 	p++
 	if pduType&0x03 != 0x00 {
-		return nil, fmt.Errorf("SMS-DELIVER ではありません (MTI=%d)", pduType&0x03)
+		return nil, fmt.Errorf("Response is not an SMS-DELIVER PDU.")
 	}
 	hasUDH := pduType&0x40 != 0
 
@@ -255,12 +255,12 @@ func decodeDeliver(pduHex string) (*smsPDU, error) {
 	udhOctets := 0
 	if hasUDH {
 		if len(ud) < 1 {
-			return nil, errors.New("UDH が入りません")
+			return nil, errors.New("UDH is missing.")
 		}
 		udhl := int(ud[0])
 		udhOctets = 1 + udhl
 		if udhOctets > len(ud) {
-			return nil, errors.New("UDH が途中で切れています")
+			return nil, errors.New("UDH is truncated.")
 		}
 		concat = parseUDH(ud[1:udhOctets])
 	}

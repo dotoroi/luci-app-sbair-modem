@@ -150,7 +150,7 @@ func adblockSet(mac, enabled string) map[string]any {
 		return map[string]any{"error": "mac is required"}
 	}
 	if err := ensureConfig(); err != nil {
-		return map[string]any{"error": fmt.Sprintf("/etc/config/%s を作れません: %v", apnConfig, err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to create config file: %v", err)}
 	}
 	sec := apnConfig + "." + macSectionName(mac)
 	if _, err := uci("get", sec); err != nil {
@@ -173,7 +173,7 @@ func adblockSet(mac, enabled string) map[string]any {
 		return map[string]any{"error": fmt.Sprintf("uci commit: %v", err)}
 	}
 	if err := applyAdblockRules(); err != nil {
-		return map[string]any{"error": fmt.Sprintf("ルール反映に失敗: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to apply firewall rules: %v", err)}
 	}
 	return map[string]any{"result": "ok", "enabled": val == "1"}
 }
@@ -220,9 +220,9 @@ func writeAdblockHosts() error {
 	path := adblockHostsFile()
 	if info, err := os.Lstat(filepath.Dir(path)); err != nil || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
 		if err != nil {
-			return fmt.Errorf("hosts親ディレクトリを確認できません: %v", err)
+			return fmt.Errorf("Unable to inspect the hosts parent directory: %v", err)
 		}
-		return fmt.Errorf("hosts親ディレクトリが不正です")
+		return fmt.Errorf("The hosts parent directory is invalid.")
 	}
 	tmp, err := os.CreateTemp(filepath.Dir(path), ".sbair-adblock-hosts-")
 	if err != nil {
@@ -254,10 +254,10 @@ func writeAdblockHosts() error {
 		return err
 	}
 	if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
-		return fmt.Errorf("hostsファイルが通常ファイルではありません")
+		return fmt.Errorf("The hosts path is not a regular file.")
 	}
 	if info.Mode().Perm() != 0644 {
-		return fmt.Errorf("hostsファイルのmodeが0644ではありません")
+		return fmt.Errorf("The hosts file mode must be 0644.")
 	}
 	return nil
 }
@@ -343,12 +343,12 @@ func applyAdblockRules() error {
 		return removeAdblockRules()
 	}
 	if !adblockDNSReadyFn() {
-		baseErr := fmt.Errorf("専用dnsmasq(%s/udp)がLISTENしていません。DNATは適用しません", adblockDNSPort)
+		baseErr := fmt.Errorf("The dedicated DNS service is unavailable; DNAT was not applied.")
 		return errors.Join(baseErr, removeAdblockRules())
 	}
 	ip := adblockBrlanIPFn()
 	if ip == "" {
-		return fmt.Errorf("br-lanのIPアドレスを取得できません")
+		return fmt.Errorf("Unable to get the br-lan IP address.")
 	}
 	dest := ip + ":" + adblockDNSPort
 
@@ -399,20 +399,20 @@ func adblockBoot() map[string]any {
 		if cleanupErr := removeAdblockRules(); cleanupErr != nil {
 			err = errors.Join(err, cleanupErr)
 		}
-		return map[string]any{"error": fmt.Sprintf("hosts書き出し失敗: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to write the hosts file: %v", err)}
 	}
 	if err := applyAdblockRules(); err != nil {
 		if cleanupErr := removeAdblockRules(); cleanupErr != nil {
 			err = errors.Join(err, cleanupErr)
 		}
-		return map[string]any{"error": fmt.Sprintf("ルール反映失敗: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to apply firewall rules: %v", err)}
 	}
 	return map[string]any{"result": "ok", "domains": strings.Count(adblockDomainsRaw, "\n")}
 }
 
 func adblockStop() map[string]any {
 	if err := removeAdblockRules(); err != nil {
-		return map[string]any{"error": fmt.Sprintf("広告ブロックDNATを解除できません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to remove ad-block DNAT rules: %v", err)}
 	}
 	return map[string]any{"result": "stopped"}
 }

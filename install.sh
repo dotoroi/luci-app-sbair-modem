@@ -13,12 +13,26 @@
 # rpcd の起動時にしか列挙されない**ので、これを飛ばすと画面が
 # "Object not found" になる。
 set -eu
+
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+[ -f "$SCRIPT_DIR/tools/check-shell-lf.sh" ] || {
+	echo "!! shell line-ending checker is missing; refusing installation" >&2
+	exit 1
+}
+sh "$SCRIPT_DIR/tools/check-shell-lf.sh"
+
 SELF=$(cd "$(dirname "$0")" && pwd)
 ROOT="${1:-}"
 
 [ -n "$ROOT" ] || { echo "使い方: $0 <rootfs ツリー | />" >&2; exit 2; }
 [ -d "$ROOT" ] || { echo "!! $ROOT が無い" >&2; exit 1; }
 [ -f "$SELF/out/sbair-modem" ] || { echo "!! out/sbair-modem が無い。先に ./build.sh" >&2; exit 1; }
+for lang in ja ko; do
+	[ -s "$SELF/out/i18n/luci-app-sbair-modem.$lang.lmo" ] || {
+		echo "!! $lang 言語カタログがありません。先に PO2LMO または LUCI_ROOT を指定して ./tools/build-i18n.sh を実行してください。" >&2
+		exit 1
+	}
+done
 
 sha256_file() {
 	if command -v sha256sum >/dev/null 2>&1; then
@@ -142,6 +156,15 @@ mkdir -p "$ROOT/usr/bin" \
          "$ROOT/usr/share/sbair" \
          "$ROOT/etc/uci-defaults"
 
+# English is the source locale and needs no LMO file. Require the translated
+# catalogs before installation so the advertised Japanese and Korean choices work.
+mkdir -p "$ROOT/usr/lib/lua/luci/i18n"
+for lang in ja ko; do
+	catalog="$SELF/out/i18n/luci-app-sbair-modem.$lang.lmo"
+	cp "$catalog" "$ROOT/usr/lib/lua/luci/i18n/"
+	chmod 0644 "$ROOT/usr/lib/lua/luci/i18n/$(basename "$catalog")"
+done
+
 put() {   # put <src> <dst> <mode>
 	cp "$1" "$2"
 	chmod "$3" "$2"
@@ -149,7 +172,7 @@ put() {   # put <src> <dst> <mode>
 
 put "$SELF/out/sbair-modem"             "$ROOT/usr/bin/sbair-modem"          0755
 put "$SELF/root/usr/sbin/sbair-netmode" "$ROOT/usr/sbin/sbair-netmode"       0755
-for module in common.sh state.sh apply.sh status.sh; do
+for module in common.sh state.sh apply.sh status.sh usb-lan.sh; do
 	put "$SELF/root/usr/libexec/sbair/netmode/$module" \
 	    "$ROOT/usr/libexec/sbair/netmode/$module" 0755
 done
@@ -258,6 +281,26 @@ if [ ! -f "$ROOT/etc/config/ql_ril_service" ]; then
 fi
 
 if [ "$ROOT" = "/" ]; then
+	# Make the three app-supported locales selectable immediately after a live
+	# install; keep an administrator's existing display names and current choice.
+	command -v uci >/dev/null 2>&1 || { echo "!! uci is required for live installation" >&2; exit 1; }
+	command -v ubus >/dev/null 2>&1 || { echo "!! ubus is required for live installation" >&2; exit 1; }
+	uci -q get luci.languages.en >/dev/null 2>&1 || uci -q set luci.languages.en='English'
+	uci -q get luci.languages.ja >/dev/null 2>&1 || uci -q set luci.languages.ja='日本語 (Japanese)'
+	uci -q get luci.languages.ko >/dev/null 2>&1 || uci -q set luci.languages.ko='한국어 (Korean)'
+	uci -q commit luci || { echo "!! could not save LuCI language choices; files were copied but install is incomplete" >&2; exit 1; }
+	for lang in en ja ko; do
+		uci -q get "luci.languages.$lang" >/dev/null 2>&1 || {
+			echo "!! LuCI language choice is missing: $lang; files were copied but install is incomplete" >&2
+			exit 1
+		}
+	done
+	for lang in ja ko; do
+		[ -s "/usr/lib/lua/luci/i18n/luci-app-sbair-modem.$lang.lmo" ] || {
+			echo "!! installed Floop3 catalog is missing: $lang; install is incomplete" >&2
+			exit 1
+		}
+	done
 	# Register the named package include without appending arbitrary text to
 	# /etc/config/firewall. The uci-defaults copy remains for image/tree installs.
 	if command -v uci >/dev/null 2>&1; then
@@ -271,7 +314,27 @@ if [ "$ROOT" = "/" ]; then
 	# menu.d を読み直させる。消しておけば LuCI が作り直す。
 	rm -f /tmp/luci-indexcache 2>/dev/null || true
 	rm -rf /tmp/luci-modulecache 2>/dev/null || true
-	/etc/init.d/rpcd restart 2>/dev/null || true
+	/etc/init.d/rpcd restart 2>/dev/null || {
+		echo "!! rpcd restart failed; files were copied but the RPC backend may be unavailable" >&2
+		exit 1
+	}
+	# rpcd restarts asynchronously on some newer OpenWrt builds. Poll briefly
+	# for the plugin object instead of reporting a false failure on the first
+	# ubus query immediately after init.d/rpcd restart returns.
+	rpcd_ready=0
+	rpcd_wait=0
+	while [ "$rpcd_wait" -lt 10 ]; do
+		if ubus list 2>/dev/null | grep -qx sbair; then
+			rpcd_ready=1
+			break
+		fi
+		sleep 1
+		rpcd_wait=$((rpcd_wait + 1))
+	done
+	[ "$rpcd_ready" -eq 1 ] || {
+		echo "!! rpcd did not register the sbair object; inspect /usr/libexec/rpcd/sbair and logs" >&2
+		exit 1
+	}
 	/etc/init.d/sbair-apn enable 2>/dev/null || true
 	/etc/init.d/sbair-netfix enable 2>/dev/null || true
 	/etc/init.d/sbair-netfix start 2>/dev/null || true

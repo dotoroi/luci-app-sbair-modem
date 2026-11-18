@@ -48,7 +48,7 @@ command_or_die() {
 release_value() {
 	# /etc/openwrt_release uses shell assignments with single-quoted values.
 	key=$1
-	sed -n "s/^$key='//; s/'\$//; p" /etc/openwrt_release 2>/dev/null | head -n 1
+	grep "^${key}=" /etc/openwrt_release 2>/dev/null | head -n 1 | cut -d= -f2 | tr -d "'"
 }
 
 require_platform() {
@@ -115,17 +115,23 @@ require_stage() {
 
 make_backup() {
 	BACKUP="/root/sba6-pre-luci-$(date +%Y%m%d-%H%M%S).$$"
-	mkdir -p "$BACKUP" || die "cannot create backup directory: $BACKUP"
-	opkg list-installed >"$BACKUP/opkg.before.txt" 2>/dev/null || true
-	tar -czf "$BACKUP/config.before.tgz" \
-		/etc/config \
-		/etc/firewall.user \
-		/etc/opkg.conf \
-		/etc/opkg \
-		/usr/lib/opkg/status \
-		2>/dev/null || true
-	[ -e /usr/lib/libnl-tiny.so ] &&
-		cp -p /usr/lib/libnl-tiny.so "$BACKUP/libnl-tiny.so.before" 2>/dev/null || true
+	(umask 077; mkdir -p "$BACKUP") || die "cannot create backup directory: $BACKUP"
+	chmod 0700 "$BACKUP" || die "cannot protect backup directory: $BACKUP"
+	opkg list-installed >"$BACKUP/opkg.before.txt" 2>/dev/null || die "could not record installed packages"
+	[ -s "$BACKUP/opkg.before.txt" ] || die "installed-package backup is empty"
+	paths=
+	for path in /etc/config /etc/firewall.user /etc/opkg.conf /etc/opkg /usr/lib/opkg/status; do
+		[ -e "$path" ] && paths="$paths $path"
+	done
+	[ -n "$paths" ] || die "no configuration paths are available to back up"
+	# The path list above is a fixed set of system paths; include only those that exist.
+	tar -czf "$BACKUP/config.before.tgz" $paths 2>/dev/null || die "configuration backup failed"
+	tar -tzf "$BACKUP/config.before.tgz" >/dev/null 2>&1 || die "configuration backup archive is invalid"
+	chmod 0600 "$BACKUP/opkg.before.txt" "$BACKUP/config.before.tgz" || die "could not protect backup files"
+	if [ -e /usr/lib/libnl-tiny.so ]; then
+		cp -p /usr/lib/libnl-tiny.so "$BACKUP/libnl-tiny.so.before" 2>/dev/null || die "could not back up existing libnl-tiny.so"
+		chmod 0600 "$BACKUP/libnl-tiny.so.before" || die "could not protect libnl-tiny.so backup"
+	fi
 	say "backup: $BACKUP"
 }
 

@@ -46,13 +46,21 @@ for path in \
 	[ -f "$rootfs$path" ] || { echo "missing $path" >&2; exit 1; }
 done
 
-# An exact historical Floop3 helper is still app-owned and may be updated.
+# The parent revision is not in the installer's exact-hash app-owned allowlist.
+# Unknown historical helpers must fail closed instead of being guessed as ours.
 old_rootfs="$tmp/old-rootfs"
 mkdir -p "$old_rootfs/usr/sbin"
 legacy_commit=$(git rev-parse HEAD^)
 git show "$legacy_commit:root/usr/sbin/sbair-netmode" > "$old_rootfs/usr/sbin/sbair-netmode"
-sh "$repo/install.sh" "$old_rootfs" >/dev/null
-sh "$old_rootfs/usr/sbin/sbair-netmode" version | grep -q '^implementation=luci-app-sbair-modem$'
+old_before=$(shasum -a 256 "$old_rootfs/usr/sbin/sbair-netmode" | awk '{print $1}')
+if sh "$repo/install.sh" "$old_rootfs" >"$tmp/old-install.out" 2>&1; then
+	echo 'unrecognized historical sbair-netmode was overwritten' >&2
+	exit 1
+fi
+old_after=$(shasum -a 256 "$old_rootfs/usr/sbin/sbair-netmode" | awk '{print $1}')
+[ "$old_before" = "$old_after" ]
+[ ! -e "$old_rootfs/usr/bin/sbair-modem" ]
+grep -q '未知の外部実装' "$tmp/old-install.out"
 
 # An unknown existing implementation must remain byte-for-byte untouched and
 # must stop before the installer creates or copies any other app file.
@@ -102,9 +110,10 @@ grep -q 'wifi_txpower_max' "$repo/src/sbair-modem/rpcd.go"
 grep -q 'wifi_txpower_default' "$repo/src/sbair-modem/rpcd.go"
 grep -q 'uci.*delete.*txpower' "$repo/src/sbair-modem/wifi.go"
 grep -q 'regulatory_settings_kept' "$repo/src/sbair-modem/wifi.go"
-grep -q '全てのネットワーク接続が失われ' "$repo/htdocs/luci-static/resources/tools/sbair.js"
-grep -q 'Wi-Fiやネットワーク設定の切り替えや設定変更' "$repo/htdocs/luci-static/resources/tools/sbair.js"
-grep -q '接続モードの切り替えや設定変更' "$repo/htdocs/luci-static/resources/tools/sbair.js"
+grep -Fq '_("If you switch or change Wi-Fi or network settings' "$repo/htdocs/luci-static/resources/tools/sbair.js"
+grep -Fq '_("If you switch connection modes or change settings' "$repo/htdocs/luci-static/resources/tools/sbair.js"
+grep -Fq 'msgstr "Wi-Fiやネットワークの設定を切り替えたり変更したりすると' "$repo/po/ja/luci-app-sbair-modem.po"
+grep -Fq 'msgstr "接続モードを切り替えたり設定を変更したりすると' "$repo/po/ja/luci-app-sbair-modem.po"
 grep -q 'uci.*sbair.wifi_drift.enabled.*= 1' "$repo/root/etc/init.d/sbair-wifidrift"
 
 # Network-mode mutation remains owned by the target helper; Go only invokes it

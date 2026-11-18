@@ -88,7 +88,7 @@ func parsePortSpec(spec string) []int {
 func scanPorts(ip, ports string) map[string]any {
 	networks, self, err := currentBridgeIPv4()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("br-lanのIPv4ネットワークを取得できません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to get the br-lan IPv4 network: %v", err)}
 	}
 	targetIP, err := validateLANPeer(ip, networks, self)
 	if err != nil {
@@ -98,12 +98,12 @@ func scanPorts(ip, ports string) map[string]any {
 	clients, ok := clientsResult["clients"].([]clientEntry)
 	if !ok {
 		if message, exists := clientsResult["error"]; exists {
-			return map[string]any{"error": fmt.Sprintf("接続機器一覧を確認できないため走査を拒否しました: %v", message)}
+			return map[string]any{"error": fmt.Sprintf("Scan rejected because the connected-device list could not be verified: %v", message)}
 		}
-		return map[string]any{"error": "接続機器一覧を確認できないため走査を拒否しました"}
+		return map[string]any{"error": "Cannot scan because the connected-device list is unavailable."}
 	}
 	if !observedClientIP(targetIP.String(), clients) {
-		return map[string]any{"error": "現在のbr-lan接続機器一覧にないIPは走査できません"}
+		return map[string]any{"error": "Cannot scan an IP address that is not in the current br-lan client list."}
 	}
 
 	targets := map[int]string{}
@@ -118,7 +118,7 @@ func scanPorts(ip, ports string) map[string]any {
 			}
 		}
 		if len(targets) == 0 {
-			return map[string]any{"error": "ポート指定を解釈できません(例: 1-1024,8080)"}
+			return map[string]any{"error": "Could not parse the port selection. Example: 1-1024,8080."}
 		}
 	}
 

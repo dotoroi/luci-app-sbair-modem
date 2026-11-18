@@ -47,31 +47,29 @@ return network.registerProtocol('ql_datacall', {
 		// 永続させたいなら SIM 関連ページ (sbair) の APN 設定を使う —
 		// あちらは lte.* も一緒に書く。
 		o = s.taboption('general', form.Value, 'apn', _('APN'),
-			_('⚠ ここでの変更は再起動で出荷時の値に戻ります(ベンダの knsh が ' +
-			  '/etc/config/lte から上書きするため)。永続させるには ' +
-			  'SIM 関連ページの APN 設定を使ってください。'));
-		o.placeholder = _('例: uno.au-net.ne.jp');
+			_('Changes made here are temporary. The vendor knsh service overwrites this value from /etc/config/lte on reboot. Use the APN setting under SIM in the SoftBank Air menu to keep it persistent.'));
+		o.placeholder = _('Example: uno.au-net.ne.jp');
 		o.rmempty = false;
 
-		o = s.taboption('general', form.ListValue, 'auth', _('認証方式'));
-		o.value('0', _('なし'));
+		o = s.taboption('general', form.ListValue, 'auth', _('Authentication method'));
+		o.value('0', _('None'));
 		o.value('1', 'PAP');
 		o.value('2', 'CHAP');
 		o.value('3', 'PAP/CHAP');
 		o.default = '0';
 
-		o = s.taboption('general', form.Value, 'username', _('ユーザ名'));
+		o = s.taboption('general', form.Value, 'username', _('Username'));
 		o.depends({ auth: '1' });
 		o.depends({ auth: '2' });
 		o.depends({ auth: '3' });
 
-		o = s.taboption('general', form.Value, 'password', _('パスワード'));
+		o = s.taboption('general', form.Value, 'password', _('Password'));
 		o.password = true;
 		o.depends({ auth: '1' });
 		o.depends({ auth: '2' });
 		o.depends({ auth: '3' });
 
-		o = s.taboption('general', form.ListValue, 'iptype', _('IP の種別'));
+		o = s.taboption('general', form.ListValue, 'iptype', _('IP address type'));
 		o.value('1', 'IPv4');
 		o.value('2', 'IPv6');
 		o.value('3', 'IPv4v6');
@@ -85,19 +83,18 @@ return network.registerProtocol('ql_datacall', {
 		// 減らない)。WAN の setup がそこで止まり、外からは「上がらない」と
 		// しか見えない。
 		o = s.taboption('advanced', form.Flag, 'auto_conf',
-			_('SIM から APN を自動設定する'),
-			_('⚠ 有効にするとベンダの処理が SIM の応答次第で終わらなくなり、' +
-			  'WAN が上がらなくなることがあります。APN を手で入れるなら無効のまま。'));
+			_('Configure APN automatically from SIM'),
+			_('Enabling this may cause the vendor routine to wait indefinitely for a SIM response and prevent the WAN from coming up. Leave it disabled when entering the APN manually.'));
 		o.enabled = '1';
 		o.disabled = '0';
 		o.default = o.disabled;
 
-		o = s.taboption('advanced', form.ListValue, 'rattype', _('接続方式'));
-		o.value('0', _('自動 (NR + LTE + UMTS)'));
-		o.value('19', _('4G / 5G のみ'));
+		o = s.taboption('advanced', form.ListValue, 'rattype', _('Radio access technology'));
+		o.value('0', _('Automatic (NR + LTE + UMTS)'));
+		o.value('19', _('4G / 5G only'));
 		o.optional = true;
 
-		o = s.taboption('advanced', form.Value, 'plmn', _('PLMN の指定'));
+		o = s.taboption('advanced', form.Value, 'plmn', _('PLMN override'));
 		o.optional = true;
 
 		o = s.taboption('advanced', form.Value, 'mtu', _('MTU'));
@@ -105,18 +102,18 @@ return network.registerProtocol('ql_datacall', {
 		o.optional = true;
 		o.placeholder = '0';
 
-		o = s.taboption('advanced', form.Flag, 'dataroaming', _('ローミング時もデータ接続する'));
+		o = s.taboption('advanced', form.Flag, 'dataroaming', _('Allow data while roaming'));
 		o.enabled = '1';
 		o.disabled = '0';
 		o.default = o.disabled;
 
-		o = s.taboption('advanced', form.Value, 'retry', _('再試行回数'));
+		o = s.taboption('advanced', form.Value, 'retry', _('Retry count'));
 		o.datatype = 'uinteger';
 		o.optional = true;
 		o.placeholder = '5';
 
 		o = s.taboption('advanced', form.Value, 'pdu_timeout_interval',
-			_('PDU のタイムアウト (秒)'));
+			_('PDU timeout (seconds)'));
 		o.datatype = 'uinteger';
 		o.optional = true;
 		o.placeholder = '30';

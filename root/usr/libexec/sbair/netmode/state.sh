@@ -79,6 +79,122 @@ clear_sim_profile() {
 	set_opt sbair.bridge.backup_ready 0
 }
 
+find_switch_vlan() {
+	local wanted index section
+	wanted=$1
+	index=0
+	while [ "$index" -lt 16 ]; do
+		section="@switch_vlan[$index]"
+		if [ "$(get "network.$section.device")" = switch0 ] && [ "$(get "network.$section.vlan")" = "$wanted" ]; then
+			printf '%s\n' "$section"
+			return 0
+		fi
+		index=$((index + 1))
+	done
+	return 1
+}
+
+find_firewall_zone() {
+	local wanted index section
+	wanted=$1
+	index=0
+	while [ "$index" -lt 16 ]; do
+		section="@zone[$index]"
+		[ "$(get "firewall.$section.name")" = "$wanted" ] && { printf '%s\n' "$section"; return 0; }
+		index=$((index + 1))
+	done
+	return 1
+}
+
+remember_vlanwan_value() {
+	local key path value
+	key=$1; path=$2
+	if value=$(uci -q get "$path" 2>/dev/null); then
+		set_opt "sbair.bridge.vlanwan_orig_${key}" "$value" || return 1
+		set_opt "sbair.bridge.vlanwan_orig_${key}_present" 1 || return 1
+	else
+		del_opt "sbair.bridge.vlanwan_orig_${key}"
+		set_opt "sbair.bridge.vlanwan_orig_${key}_present" 0 || return 1
+	fi
+}
+
+save_vlanwan_baseline() {
+	local section wan_zone key path opt
+	if [ "$(get sbair.bridge.vlanwan_orig_ready)" = 1 ] && [ "$(get sbair.bridge.mode)" = vlanwan ]; then return 0; fi
+	section=$(find_switch_vlan 1) || { printf '%s\n' 'error=VLAN 1 switch section was not found'; return 1; }
+	wan_zone=$(find_firewall_zone wan) || { printf '%s\n' 'error=wan firewall zone was not found'; return 1; }
+	set_opt sbair.bridge.vlanwan_orig_vlan1_section "$section" || return 1
+	set_opt sbair.bridge.vlanwan_orig_wan_zone "$wan_zone" || return 1
+	remember_vlanwan_value vlan1_ports "network.$section.ports" || return 1
+	for key in ethwan_vlan_type ethwan_vlan_device ethwan_vlan_vlan ethwan_vlan_ports; do
+		case "$key" in
+			ethwan_vlan_type) path=network.ethwan_vlan;;
+			ethwan_vlan_*) opt=${key#ethwan_vlan_}; path="network.ethwan_vlan.$opt";;
+		esac
+		remember_vlanwan_value "$key" "$path" || return 1
+	done
+	for key in ethernetwan_type ethernetwan_proto ethernetwan_device ethernetwan_ifname ethernetwan_auto ethernetwan_disabled; do
+		case "$key" in
+			ethernetwan_type) path=network.ethernetwan;;
+			ethernetwan_*) opt=${key#ethernetwan_}; path="network.ethernetwan.$opt";;
+		esac
+		remember_vlanwan_value "$key" "$path" || return 1
+	done
+	remember_vlanwan_value firewall_wan_network "firewall.$wan_zone.network" || return 1
+	set_opt sbair.bridge.vlanwan_orig_ready 1 || return 1
+	commit sbair
+}
+
+restore_vlanwan_baseline() {
+	local key path present value section wan_zone token original
+	[ "$(get sbair.bridge.vlanwan_orig_ready)" = 1 ] || return 0
+	section=$(get sbair.bridge.vlanwan_orig_vlan1_section)
+	[ -n "$section" ] || return 1
+	present=$(get sbair.bridge.vlanwan_orig_vlan1_ports_present)
+	if [ "$present" = 1 ]; then set_opt "network.$section.ports" "$(get sbair.bridge.vlanwan_orig_vlan1_ports)" || return 1; fi
+	for key in ethwan_vlan_type ethwan_vlan_device ethwan_vlan_vlan ethwan_vlan_ports; do
+		case "$key" in
+			ethwan_vlan_type) path=network.ethwan_vlan;;
+			ethwan_vlan_*) opt=${key#ethwan_vlan_}; path="network.ethwan_vlan.$opt";;
+		esac
+		present=$(get "sbair.bridge.vlanwan_orig_${key}_present")
+		if [ "$present" = 1 ]; then
+			value=$(get "sbair.bridge.vlanwan_orig_${key}")
+			if [ "$key" = ethwan_vlan_type ]; then uci -q set "network.ethwan_vlan=$value" || return 1; else set_opt "$path" "$value" || return 1; fi
+		elif [ "$key" = ethwan_vlan_type ]; then
+			del_opt network.ethwan_vlan
+		else
+			snapshot_delete "$path" || return 1
+		fi
+	done
+	for key in ethernetwan_type ethernetwan_proto ethernetwan_device ethernetwan_ifname ethernetwan_auto ethernetwan_disabled; do
+		case "$key" in
+			ethernetwan_type) path=network.ethernetwan;;
+			ethernetwan_*) opt=${key#ethernetwan_}; path="network.ethernetwan.$opt";;
+		esac
+		present=$(get "sbair.bridge.vlanwan_orig_${key}_present")
+		if [ "$present" = 1 ]; then
+			value=$(get "sbair.bridge.vlanwan_orig_${key}")
+			if [ "$key" = ethernetwan_type ]; then uci -q set "network.ethernetwan=$value" || return 1; else set_opt "$path" "$value" || return 1; fi
+		elif [ "$key" = ethernetwan_type ]; then
+			del_opt network.ethernetwan
+		else
+			snapshot_delete "$path" || return 1
+		fi
+	done
+	wan_zone=$(get sbair.bridge.vlanwan_orig_wan_zone)
+	if [ -n "$wan_zone" ]; then
+		uci -q delete "firewall.$wan_zone.network" >/dev/null 2>&1 || true
+		if [ "$(get sbair.bridge.vlanwan_orig_firewall_wan_network_present)" = 1 ]; then
+			original=$(get sbair.bridge.vlanwan_orig_firewall_wan_network)
+			for token in $original; do uci -q add_list "firewall.$wan_zone.network=$token" || return 1; done
+		fi
+	fi
+	commit network || return 1
+	commit firewall || return 1
+	return 0
+}
+
 snapshot_path() {
 	case "$1" in
 		mode) printf '%s\n' sbair.bridge.mode;;
@@ -134,6 +250,13 @@ snapshot_path() {
 		dhcp_lan_leasetime) printf '%s\n' dhcp.lan.leasetime;;
 		network_wan_disabled) printf '%s\n' network.wan.disabled;;
 		network_wan_auto) printf '%s\n' network.wan.auto;;
+		network_wan_proto) printf '%s\n' network.wan.proto;;
+		network_wan_device) printf '%s\n' network.wan.device;;
+		network_wan6_proto) printf '%s\n' network.wan6.proto;;
+		network_wan6_device) printf '%s\n' network.wan6.device;;
+		network_wan6_disabled) printf '%s\n' network.wan6.disabled;;
+		network_wan6_auto) printf '%s\n' network.wan6.auto;;
+		eth1_lan_member) printf '%s\n' '@eth1_lan_member';;
 		*) return 1;;
 	esac
 }
@@ -143,6 +266,13 @@ snapshot_option() {
 	prefix=$1
 	key=$2
 	path=$3
+	if [ "$key" = eth1_lan_member ]; then
+		value=$(uci -q get 'network.@device[0].ports' 2>/dev/null || true)
+		case " $value " in *' eth1 '*) value=1;; *) value=0;; esac
+		set_opt "sbair.bridge.${prefix}${key}" "$value" || return 1
+		set_opt "sbair.bridge.${prefix}${key}_present" 1 || return 1
+		return 0
+	fi
 	if value=$(uci -q get "$path" 2>/dev/null); then
 		set_opt "sbair.bridge.${prefix}${key}" "$value" || return 1
 		set_opt "sbair.bridge.${prefix}${key}_present" 1 || return 1
@@ -150,6 +280,51 @@ snapshot_option() {
 		snapshot_delete "sbair.bridge.${prefix}${key}" || return 1
 		set_opt "sbair.bridge.${prefix}${key}_present" 0 || return 1
 	fi
+}
+
+save_ethwan_baseline() {
+	local key path
+	if [ "$(get sbair.bridge.ethwan_orig_ready)" = 1 ]; then
+		[ "$(get network.wan.device)" = eth1 ] && return 0
+		for key in network_wan_proto network_wan_device network_wan_disabled network_wan_auto \
+			network_wan6_proto network_wan6_device network_wan6_disabled network_wan6_auto eth1_lan_member; do
+			snapshot_delete "sbair.bridge.ethwan_orig_${key}" || return 1
+			snapshot_delete "sbair.bridge.ethwan_orig_${key}_present" || return 1
+		done
+		del_opt sbair.bridge.ethwan_orig_ready
+	fi
+	for key in network_wan_proto network_wan_device network_wan_disabled network_wan_auto \
+		network_wan6_proto network_wan6_device network_wan6_disabled network_wan6_auto eth1_lan_member; do
+		path=$(snapshot_path "$key") || return 1
+		snapshot_option ethwan_orig_ "$key" "$path" || return 1
+	done
+	set_opt sbair.bridge.ethwan_orig_ready 1 || return 1
+	commit sbair
+}
+
+restore_ethwan_baseline() {
+	local key path present value
+	[ "$(get sbair.bridge.ethwan_orig_ready)" = 1 ] || return 1
+	for key in network_wan_proto network_wan_device network_wan_disabled network_wan_auto \
+		network_wan6_proto network_wan6_device network_wan6_disabled network_wan6_auto; do
+		path=$(snapshot_path "$key") || return 1
+		present=$(get "sbair.bridge.ethwan_orig_${key}_present")
+		if [ "$present" = 1 ]; then
+			value=$(get "sbair.bridge.ethwan_orig_${key}")
+			set_opt "$path" "$value" || return 1
+		else
+			snapshot_delete "$path" || return 1
+		fi
+	done
+	value=$(get sbair.bridge.ethwan_orig_eth1_lan_member)
+	uci -q del_list 'network.@device[0].ports=eth1' >/dev/null 2>&1 || true
+	if [ "$value" = 1 ]; then
+		uci -q add_list 'network.@device[0].ports=eth1' >/dev/null 2>&1 || return 1
+	fi
+	commit network || return 1
+	# Keep the baseline until the mode transaction is confirmed. A failed
+	# SIM/AP transition may roll back to ethwan and still need these values.
+	return 0
 }
 
 snapshot_abort() {
@@ -262,6 +437,12 @@ restore_snapshot_option() {
 	key=$2
 	path=$(snapshot_path "$key") || return 1
 	present=$(get "sbair.bridge.${prefix}${key}_present")
+	if [ "$key" = eth1_lan_member ]; then
+		value=$(get "sbair.bridge.${prefix}${key}")
+		uci -q del_list 'network.@device[0].ports=eth1' >/dev/null 2>&1 || true
+		[ "$value" != 1 ] || uci -q add_list 'network.@device[0].ports=eth1' >/dev/null 2>&1
+		return $?
+	fi
 	if [ "$present" = 1 ]; then
 		value=$(get "sbair.bridge.${prefix}${key}")
 		set_opt "$path" "$value"
@@ -289,6 +470,9 @@ restore_transaction_snapshot() {
 	elif uci -q get network.wan >/dev/null 2>&1; then
 		ifup wan >/dev/null 2>&1 || true
 	fi
+	if uci -q get network.wan6 >/dev/null 2>&1; then
+		if [ "$(get network.wan6.disabled)" = 1 ]; then ifdown wan6 >/dev/null 2>&1 || true; else ifup wan6 >/dev/null 2>&1 || true; fi
+	fi
 	if [ "$previous_mode" = ap ] && [ "$previous_managed" = 1 ]; then
 		dhcp_guard_enable || return 1
 		[ -f "$DHCP_START_FILE" ] || safe_runtime_write "$DHCP_START_FILE" "$(date +%s)" || return 1
@@ -304,6 +488,9 @@ restore_transaction_snapshot() {
 	fi
 	if [ "$previous_mode" = ap ] && [ "$previous_managed" = 1 ]; then
 		ensure_fallback
+	fi
+	if [ "$previous_mode" = vlanwan ] && [ "$previous_managed" = 1 ]; then
+		apply_vlanwan_config || return 1
 	fi
 }
 

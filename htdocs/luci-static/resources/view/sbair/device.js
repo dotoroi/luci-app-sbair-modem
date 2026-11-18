@@ -14,7 +14,7 @@ var callOverview = rpc.declare({ object: 'sbair', method: 'overview' });
 
 function tempTable(list) {
 	if (!list || !list.length)
-		return E('p', {}, '温度を取得できませんでした。');
+		return E('p', {}, _("Can't get temperature."));
 
 	// 27 個あるので、一番熱いものを先頭に。数値にならないものは末尾へ。
 	var sorted = list.slice().sort(function(a, b) {
@@ -25,8 +25,8 @@ function tempTable(list) {
 	});
 
 	var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-		E('th', { 'class': 'th' }, 'センサ'),
-		E('th', { 'class': 'th' }, '温度')
+		E('th', { 'class': 'th' }, _("sensor")),
+		E('th', { 'class': 'th' }, _("temperature"))
 	]) ];
 	sorted.forEach(function(t) {
 		var v = parseFloat(t.celsius);
@@ -35,7 +35,7 @@ function tempTable(list) {
 			E('td', { 'class': 'td left' }, [
 				isNaN(v) ? String(t.celsius) : (v.toFixed(1) + ' ℃'),
 				(!isNaN(v) && v >= 80)
-					? E('span', { 'class': 'ifacebadge', 'style': 'margin-left:.5em' }, '高温')
+					? E('span', { 'class': 'ifacebadge', 'style': 'margin-left:.5em' }, _("high temperature"))
 					: ''
 			])
 		]));
@@ -47,16 +47,16 @@ function render(data) {
 	data = data || {};
 	var body = [];
 
-	body.push(sbair.section('モデム', [ sbair.table([
-		sbair.row('メーカー', data.manufacturer),
-		sbair.row('機種', data.model),
-		sbair.row('ファームウェア', data.revision),
-		sbair.row('IMEI', sbair.mask(data.imei))
+	body.push(sbair.section(_("modem"), [ sbair.table([
+		sbair.row('', data.manufacturer),
+		sbair.row(_("emphysema"), data.model),
+		sbair.row(_("firmware"), data.revision),
+		sbair.row(_('IMEI'), sbair.mask(data.imei))
 	]) ]));
 
 	// ATI は Quectel と名乗るが中身は MediaTek。セル情報系のベンダ AT は
 	// この機体が答える数少ないベンダコマンドの 1 つ。
-	body.push(sbair.section('温度 (AT+QTEMP)', [ tempTable(data.temperatures) ]));
+	body.push(sbair.section(_("Temperature (AT+QTEMP)"), [ tempTable(data.temperatures) ]));
 
 	body.push(sbair.errorBox(data.errors));
 	return body;
@@ -65,7 +65,7 @@ function render(data) {
 return view.extend({
 	load: function() {
 		return callOverview().catch(function(err) {
-			return { errors: [ String(err) ] };
+			return { errors: [ sbair.errorText(err) ] };
 		});
 	},
 
@@ -81,17 +81,17 @@ return view.extend({
 				self.data = res;
 				redraw();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'warning');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'warning');
 			});
 		};
 
 		return E('div', { 'class': 'cbi-map' }, [
-			sbair.revealToggle('識別子 (IMEI) を表示する', redraw),
+			sbair.revealToggle(_("Display identifier (IMEI)"), redraw),
 			E('div', { 'style': 'margin-bottom:1em' }, [
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral',
 					'click': ui.createHandlerFn(this, reload)
-				}, '再読み込み')
+				}, _("reload"))
 			]),
 			container
 		]);

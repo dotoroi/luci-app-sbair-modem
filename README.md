@@ -1,8 +1,31 @@
 # luci-app-sbair-modem
 
-**SoftBank Air 6（RG620T-SBK / RUDOLF）専用のLuCIアプリ**です。
+**SoftBank Air 6（RG620T-SBK / RUDOLF）のvendor OpenWrt向けLuCIアプリ**です。
 モデムの状態表示、eSIM管理、SIMロック、APN、SMSの受信に加えて、
-SoftBank Air 6を安全にAP / Bridgeとして運用するための接続モード管理を扱います。
+SoftBank Air 6のAP / Bridgeおよびeth1有線WANルーターモードを扱います。
+導入対象はvendor OpenWrt 21.02.7で、vendor MT-WiFi構成に対応する管理・補助機能が必要な場合です。
+最新OpenWrtを使う場合はFloop3を導入しない運用を基本とします。
+
+## LuCI language catalogs
+
+English source messages and Japanese and Korean gettext catalogs are under `po/`. Compile the translated catalogs
+with LuCI's `po2lmo` using `PO2LMO=/path/to/po2lmo ./tools/build-i18n.sh` (or
+`LUCI_ROOT=/path/to/luci ./tools/build-i18n.sh`), then run `install.sh` against
+a rootfs tree to stage the catalogs. English uses the source message IDs and needs no `.lmo`; installation stops if either translated catalog is missing.
+The live-device installer registers `en`, `ja` and `ko` in Language and Style
+immediately, preserving the current selection; image/tree installs register
+them on first boot through uci-defaults. All dedicated LuCI views and menu
+labels use English gettext message IDs with English, Japanese and Korean
+catalogs. The optional SBA6 LuCI bootstrap also installs the standard LuCI
+`luci-i18n-base-ja` and `luci-i18n-base-ko` packages. Dynamic modem and firmware
+diagnostics may still contain vendor-provided text returned by the backend
+rather than rendered from static UI strings.
+
+インストール後のroot/LuCIパスワードの扱い、HTTP/8080の制限、初回確認は
+[韓国語のアクセス・パスワード指針](docs/INSTALL-ACCESS-KO.md)を参照してください。
+
+Codexを使わず一般のLinux/macOS/WSLからビルド・SSH配備する手順は
+[Codexなしのインストール手順](docs/INSTALL-NON-CODEX-KO.md)を参照してください。
 
 ---
 
@@ -11,7 +34,7 @@ SoftBank Air 6を安全にAP / Bridgeとして運用するための接続モー�
 | | |
 |---|---|
 | 機体 | SoftBank Air 6 / RG620T-SBK（MediaTek MT6990 + MD800内蔵モデム） |
-| OS | OpenWrt 21.02.7（ベンダー改造版） |
+| 対象OS | OpenWrt 21.02.7（ベンダー改造版。最新OpenWrt向けではない） |
 | ATの入口 | **`/dev/adb_atci_socket`**（`atcid`がlistenするUNIXソケット） |
 | SIM | 物理スロット1 + 内蔵eSIM 1。**同時に有効にできるのは1つ**（`AT+ESIMMAP?`） |
 | 搭載されていないもの | `ttyUSB*` / `cdc-wdm*` / `qmi_wwan` / `cdc_mbim` |
@@ -28,7 +51,7 @@ LuCI標準の子画面があります。
 | **モバイル回線** | **状態**（回線概要 / 電波 / バンド / IMS / 詳細操作）、**SIM / eSIM**、**SMS**を子画面に分離 |
 | **Wi-Fi** | **基本設定**（SSID / Radio / 適用）、**詳細設定**（無線出力 / Steering / Isolation / 11r / MACフィルタ / WPS）、**診断**（UCI / vendor persistent / runtime / Known-good）を子画面に分離 |
 | **接続機器** | 有線・無線端末の一覧、メモ、ポートスキャン、一時切断、端末ごとの広告ブロックを1画面で管理 |
-| **ネットワーク** | **接続モード**（AP / Bridge・未管理・Safe Apply）、**LANサービス**（LAN DHCPサーバー）、**診断**（Bridge / NIC / USB Ethernet候補）を子画面に分離 |
+| **ネットワーク** | **接続モード**（AP / Bridge・eth1有線WANルーター・未管理・Safe Apply）、**LANサービス**（LAN DHCPサーバー）、**診断**（Bridge / NIC / USB Ethernet候補）を子画面に分離 |
 | **本体** | **本体情報**（機種 / ファームウェア / IMEI / 温度）、**USB機器**、**アップデート管理**（OTA / FOTA）を子画面に分離 |
 
 **識別子（IMEI / IMSI / ICCID / EID / Cell ID / 電話番号 / SMSの送信者）は、既定では伏せて表示します。**
@@ -67,8 +90,11 @@ sbair-modem at [-r] [-t SEC] '<AT>'   ATコマンドを1本送信
             apn [apply|probe]         APNの表示 / 適用 / SIMから読み出す
             netmode show|get-config   接続モードの状態 / 設定
             netmode netdev-status     有線 / USB・Kernel能力の読み取り専用診断
+            netmode usb-lan-list      アプリがLANへ追加したUSBポート
+            netmode usb-lan-add IFACE USB Host Ethernetをbr-lanへ追加
+            netmode usb-lan-remove IFACE USB Host Ethernetをbr-lanから削除
             netmode set-config ...     非推奨。draftだけを保存（ネットワーク変更なし）
-            netmode apply sim|ap      Safe Apply（正常性確認後に自動確定 / 最大120秒でrollback）
+            netmode apply sim|ap|ethwan|vlanwan Safe Apply（AP自動確認、他は最大120秒でrollback）
             netmode confirm|rollback|repair
             netmode recover            192.168.3.1 + ローカルDHCPへ緊急復旧
             wifi-drift status|logs|mark-good|save-test|restart-test
@@ -87,20 +113,31 @@ sbair-modem at [-r] [-t SEC] '<AT>'   ATコマンドを1本送信
 ## ビルドと導入
 
 ```sh
-./build.sh              # out/sbair-modemをaarch64向けにビルド
-./install.sh /          # 稼働中の実機へ導入
-./install.sh <tree>     # 展開済みrootfsツリーへ導入
+PO2LMO=/path/to/po2lmo ./build.sh  # aarch64バイナリ + en/ja/koカタログ
+./tools/check-i18n.sh              # 全JSビュー・プロトコル・メニューのキーを検査
+./install.sh /                     # 稼働中の実機へ導入
+./install.sh <tree>                # 展開済みrootfsツリーへ導入
 ```
+
+`PO2LMO` または `LUCI_ROOT` を指定しないビルドではカタログ生成を省略します。
+その場合、`install.sh` は言語選択肢だけが登録される不完全な導入を防ぐため停止します。
 
 本体のGoバイナリは、CGOを無効にした静的リンクでビルドします。そのため、ビルドホストがglibc環境でも
 OpenWrt（musl）上で実行できます。ビルドにはGo 1.25以上が必要です（OpenWrt 21.02に含まれるgolangは1.18のため不足します）。
 goenvを使う場合は、`export PATH=$HOME/.goenv/bin:$HOME/.goenv/shims:$PATH`を実行してください。
 
-### LuCI未導入の純正SoftBank Air 6向け（任意）
+### vendor MT-WiFi向け構成でLuCIがない場合（条件付き）
 
-純正のAir 6へLuCI実行環境を追加する補助installerは、アプリ本体とは独立した
-[`extras/luci-bootstrap/`](extras/luci-bootstrap/) にあります。既存LuCI環境へ
-アプリだけ導入する場合は不要です。
+Floop3本体はvendor OpenWrt 21.02.7上のvendor MT-WiFi連携を対象にしたアプリです。
+最新OpenWrtではFloop3自体を導入しません。
+
+LuCI bootstrapはそれとは別の前提条件です。vendor OpenWrt 21.02.7にLuCIがない場合だけ、
+LuCIを追加するため[`extras/luci-bootstrap/`](extras/luci-bootstrap/)を先に使います。
+LuCIがすでにあるvendor環境ではbootstrapだけを省略します。最新OpenWrtや別release/SNAPSHOT
+にはbootstrapの固定package manifestを適用しません。
+
+bootstrapはMT-WiFiドライバーの修復・移植をしません。vendor Wi-Fi関連ABIを置換しない
+方針でLuCI依存関係を共存させます。
 
 ```sh
 ./extras/luci-bootstrap/install.sh root@<現在のAir6管理IP>

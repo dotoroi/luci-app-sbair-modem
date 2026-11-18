@@ -32,17 +32,17 @@ function badge(text, color) {
 
 function statusBadge(status) {
 	var labels = {
-		ok: [ '正常', 'green' ], config_drift: [ '設定差異あり', 'red' ],
-		runtime_drift: [ 'Runtime差異あり', 'red' ], '6g_attention': [ '6GHz要確認', 'yellow' ],
-		no_baseline: [ '正常状態未記録', 'yellow' ]
+		ok: [ _("normal"), 'green' ], config_drift: [ _("There are differences in settings"), 'red' ],
+		runtime_drift: [ _("Runtime difference"), 'red' ], '6g_attention': [ _("Check the 6GHz factor"), 'yellow' ],
+		no_baseline: [ _("Normal state not recorded"), 'yellow' ]
 	};
-	var item = labels[status] || [ '不明', 'gray' ];
+	var item = labels[status] || [ _("unknown"), 'gray' ];
 	return badge(item[0], item[1]);
 }
 
 function featureValue(features, key) {
 	var v = features && features[key];
-	return v === 'on' ? badge('ON', 'gray') : (v === 'off' ? badge('OFF', 'gray') : badge('不明', 'gray'));
+	return v === 'on' ? badge('ON', 'gray') : (v === 'off' ? badge('OFF', 'gray') : badge(_("unknown"), 'gray'));
 }
 
 function runtimeValue(r, field) {
@@ -66,8 +66,8 @@ function bandRow(label, uci, vendor, runtime) {
 
 function vendorValue(data) {
 	var files = vendorFiles(data);
-	if (!files.length) return '未検出（' + value(data.current && data.current.vendor_discovery) + '）';
-	return '未解析（hash / mtime / sizeのみ監視）';
+	if (!files.length) return _("Not detected (") + value(data.current && data.current.vendor_discovery) + '）';
+	return _("Not analyzed (monitors only hash/mtime/size)");
 }
 
 function vendorFiles(data) {
@@ -81,10 +81,10 @@ function vendorFilesSection(data) {
 	var files = (data.current && data.current.files) || {};
 	var paths = vendorFiles(data);
 	if (!paths.length)
-		return E('p', {}, 'Vendor persistentは未検出。内容は解析せず、存在するファイルのmetadataだけを監視します。');
+		return E('p', {}, _("Vendor persistent not detected. It does not parse the content; it only monitors the metadata of existing files."));
 	var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-		E('th', { 'class': 'th' }, 'path'), E('th', { 'class': 'th' }, 'sha256'),
-		E('th', { 'class': 'th' }, 'mtime'), E('th', { 'class': 'th' }, 'size')
+		E('th', { 'class': 'th' }, _('path')), E('th', { 'class': 'th' }, _('sha256')),
+		E('th', { 'class': 'th' }, _('mtime')), E('th', { 'class': 'th' }, _('size'))
 	]) ];
 	paths.forEach(function(path) {
 		var file = files[path] || {};
@@ -100,28 +100,28 @@ function driftTable(data) {
 	var current = data.current || {};
 	var currentBands = current.bands || {};
 	var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-		E('th', { 'class': 'th' }, '項目'), E('th', { 'class': 'th' }, 'UCI設定'),
-		E('th', { 'class': 'th' }, 'Vendor persistent'), E('th', { 'class': 'th' }, 'Runtime')
+		E('th', { 'class': 'th' }, _("item")), E('th', { 'class': 'th' }, _("UCI settings")),
+		E('th', { 'class': 'th' }, _("Vendor persistent")), E('th', { 'class': 'th' }, _("Runtime"))
 	]) ];
 	bands.forEach(function(band) {
 		var b = currentBands[band] || {};
 		var vendor = vendorValue(data);
 		var prefix = bandLabel[band] + ' ';
-		rows.push(bandRow(prefix + 'Radio / AP interface', value(b.radio) + ' / ' + value(b.ap_interface), vendor, runtimeValue(b.runtime, 'interface')));
-		rows.push(bandRow(prefix + 'Enabled', b.enabled, vendor, runtimeValue(b.runtime, 'hostapd')));
-		rows.push(bandRow(prefix + 'Protocol', b.protocol, vendor, runtimeValue(b.runtime, 'protocol')));
-		rows.push(bandRow(prefix + 'HTMode', b.htmode, vendor, '-'));
-		rows.push(bandRow(prefix + 'Channel', value(b.channel_policy) + ' / ' + value(b.configured_channel), vendor, runtimeValue(b.runtime, 'channel')));
-		rows.push(bandRow(prefix + 'Bandwidth', value(b.bandwidth_policy) + ' / ' + value(b.configured_bandwidth), vendor, runtimeValue(b.runtime, 'width')));
-		rows.push(bandRow(prefix + 'Frequency (primary / center)', '-', vendor, runtimeValue(b.runtime, 'frequency')));
+		rows.push(bandRow(prefix + _("Radio / AP interface"), value(b.radio) + ' / ' + value(b.ap_interface), vendor, runtimeValue(b.runtime, 'interface')));
+		rows.push(bandRow(prefix + _("Enabled"), b.enabled, vendor, runtimeValue(b.runtime, 'hostapd')));
+		rows.push(bandRow(prefix + _("Protocol"), b.protocol, vendor, runtimeValue(b.runtime, 'protocol')));
+		rows.push(bandRow(prefix + _("HTMode"), b.htmode, vendor, '-'));
+		rows.push(bandRow(prefix + _("Channel"), value(b.channel_policy) + ' / ' + value(b.configured_channel), vendor, runtimeValue(b.runtime, 'channel')));
+		rows.push(bandRow(prefix + _("Bandwidth"), value(b.bandwidth_policy) + ' / ' + value(b.configured_bandwidth), vendor, runtimeValue(b.runtime, 'width')));
+		rows.push(bandRow(prefix + _("Frequency (primary / center)"), '-', vendor, runtimeValue(b.runtime, 'frequency')));
 		rows.push(bandRow(prefix + 'Hostapd', '-', vendor, runtimeValue(b.runtime, 'hostapd')));
 		rows.push(bandRow(prefix + 'MAC / BSSID', '-', vendor, runtimeValue(b.runtime, 'mac_bssid')));
-		rows.push(bandRow(prefix + 'Beacon / Tx power', '-', vendor, runtimeValue(b.runtime, 'beacon_power')));
-		rows.push(bandRow(prefix + 'Association count', '-', vendor, runtimeValue(b.runtime, 'association_count')));
+		rows.push(bandRow(prefix + _("Beacon / Tx power"), '-', vendor, runtimeValue(b.runtime, 'beacon_power')));
+		rows.push(bandRow(prefix + _("Association count"), '-', vendor, runtimeValue(b.runtime, 'association_count')));
 	});
-	rows.push(E('tr', { 'class': 'tr' }, [ E('td', { 'class': 'td left' }, 'MLO'), E('td', { 'class': 'td left' }, '-'),
+	rows.push(E('tr', { 'class': 'tr' }, [ E('td', { 'class': 'td left' }, _('MLO')), E('td', { 'class': 'td left' }, '-'),
 		E('td', { 'class': 'td left' }, featureValue(current.features, 'mlo')), E('td', { 'class': 'td left' }, '-') ]));
-	rows.push(E('tr', { 'class': 'tr' }, [ E('td', { 'class': 'td left' }, 'Band Steering'), E('td', { 'class': 'td left' }, '-'),
+	rows.push(E('tr', { 'class': 'tr' }, [ E('td', { 'class': 'td left' }, _("Band Steering")), E('td', { 'class': 'td left' }, '-'),
 		E('td', { 'class': 'td left' }, featureValue(current.features, 'bandsteering')), E('td', { 'class': 'td left' }, '-') ]));
 	return sbair.table(rows);
 }
@@ -131,13 +131,13 @@ function changeSummary(data) {
 	var last = data.last_change || {};
 	var first = last.changes && last.changes[0];
 	return sbair.table([
-		sbair.row('最後の変化日時', value(last.timestamp)),
-		sbair.row('変化したlayer / 項目', value(first && first.layer) + ' / ' + value(first && first.field)),
-		sbair.row('起動後の変化時点', value(first && first.uptime_sec) + ' 秒'),
-		sbair.row('UCI hash changed?', s.uci_hash_changed ? 'yes' : 'no'),
-		sbair.row('Vendor persistent changed?', s.vendor_persistent_changed ? 'yes' : 'no'),
-		sbair.row('Runtime only changed?', s.runtime_only_changed ? 'yes' : 'no'),
-		sbair.row('Known-good profile', value(data.baseline_recorded_at))
+		sbair.row(_("Date and time of last change"), value(last.timestamp)),
+		sbair.row(_("Layers/Items Changed"), value(first && first.layer) + ' / ' + value(first && first.field)),
+		sbair.row(_("Time of change after startup"), value(first && first.uptime_sec) + _("candle")),
+		sbair.row(_("UCI hash changed?"), s.uci_hash_changed ? 'yes' : 'no'),
+		sbair.row(_("Vendor persistent changed?"), s.vendor_persistent_changed ? 'yes' : 'no'),
+		sbair.row(_("Runtime only changed?"), s.runtime_only_changed ? 'yes' : 'no'),
+		sbair.row(_("Known-good profile"), value(data.baseline_recorded_at))
 	]);
 }
 
@@ -155,50 +155,50 @@ function render(data, opts) {
 	var current = data.current || {};
 	var body = [];
 	body.push(sbair.softBrickWarning('wifi'));
-	body.push(sbair.section('監視', [ sbair.table([
-		sbair.row('モード', E('label', {}, [ E('input', { 'type': 'checkbox', 'checked': monitor.enabled ? '' : null,
-			'change': function(ev) { opts.onEnable(ev.target.checked); } }), ' Monitor only（既定）' ]),
-			monitor.enabled ? badge('監視中', 'green') : badge('OFF', 'gray'))
+	body.push(sbair.section(_("monitoring"), [ sbair.table([
+		sbair.row(_("mode"), E('label', {}, [ E('input', { 'type': 'checkbox', 'checked': monitor.enabled ? '' : null,
+			'change': function(ev) { opts.onEnable(ev.target.checked); } }), _("Monitor only (default)") ]),
+			monitor.enabled ? badge(_("Monitoring"), 'green') : badge('OFF', 'gray'))
 	]) ]));
-	body.push(sbair.section('総合状態', [ sbair.table([
-		sbair.row('状態', statusBadge(data.status)),
-		sbair.row('UCI / vendor検出', value(current.vendor_discovery))
+	body.push(sbair.section(_("overall status"), [ sbair.table([
+		sbair.row(_("situation"), statusBadge(data.status)),
+		sbair.row(_("UCI/vendor detection"), value(current.vendor_discovery))
 	]) ]));
-	body.push(sbair.section('直近の変化 / Known-good', [ changeSummary(data) ]));
-	body.push(details('設定詳細（UCI / Vendor persistent / Runtime）', [
-		E('p', { 'style': 'opacity:.8' }, 'UCI設定、vendor persistent、実動作(runtime)を別layerとして表示します。Vendor persistentのband別実値は未解析で、hash / mtime / sizeだけを監視します。AUTOのチャンネル/帯域幅がACSで変化してもdriftとは判定しません。'),
-		sbair.section('設定比較', [ driftTable(data) ]),
-		details('Vendor persistent metadata', [ vendorFilesSection(data) ])
+	body.push(sbair.section(_("Recent changes / Known-good"), [ changeSummary(data) ]));
+	body.push(details(_("Setting details (UCI/Vendor persistent/Runtime)"), [
+		E('p', { 'style': 'opacity:.8' }, _("UCI settings, vendor persistence, and actual operation (runtime) are displayed as separate layers. The actual value of each vendor persistent band is not interpreted, but only hash/mtime/size is monitored. Even if the channel/bandwidth of AUTO changes to ACS, it is not judged as drift.")),
+		sbair.section(_("Compare settings"), [ driftTable(data) ]),
+		details(_("Vendor persistent metadata"), [ vendorFilesSection(data) ])
 	]));
 
 	var troubleshooting = [
 		E('div', { 'class': 'sbair-button-group', 'style': 'margin-bottom:.75em' }, [
-			E('button', { 'class': 'cbi-button cbi-button-positive', 'click': opts.onMarkGood }, '現在を正常状態として記録'),
-			E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': opts.onLogs }, '診断ログを表示'),
-			E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': opts.onSaveTest }, '安全な knsh save 差分テスト'),
+			E('button', { 'class': 'cbi-button cbi-button-positive', 'click': opts.onMarkGood }, _("Record the present as normal")),
+			E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': opts.onLogs }, _("View diagnostic log")),
+			E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': opts.onSaveTest }, _("Safe knsh save difference test")),
 			E('button', { 'class': 'cbi-button cbi-button-neutral', 'disabled': data.restart_test && data.restart_test.state === 'running' ? '' : null,
-				'click': opts.onRestartTest }, data.restart_test && data.restart_test.state === 'running' ? 'Wi-Fi restart診断を実行中…' : '差分確認後にWi-Fi restartして比較')
+				'click': opts.onRestartTest }, data.restart_test && data.restart_test.state === 'running' ? _("Wi-Fi restart Running diagnostics...") : _("After checking the difference, restart Wi-Fi and compare"))
 		])
 	];
 	if (data.restart_test)
-		troubleshooting.push(sbair.section('restart診断', [ sbair.table([
-			sbair.row('状態', value(data.restart_test.state)),
-			sbair.row('knsh wlan restart', data.restart_test.command_succeeded ? '成功' : '失敗'),
-			sbair.row('比較結果', value((data.restart_test.differences || []).length) + ' 件')
+		troubleshooting.push(sbair.section(_("restart diagnosis"), [ sbair.table([
+			sbair.row(_("situation"), value(data.restart_test.state)),
+			sbair.row('knsh wlan restart', data.restart_test.command_succeeded ? _("success") : _("failure")),
+			sbair.row(_("Comparison results"), value((data.restart_test.differences || []).length) + _("case"))
 		]) ]));
 	if (opts.logs)
-		troubleshooting.push(sbair.section('診断ログ（直近）', [ E('pre', { 'style': 'white-space:pre-wrap;max-height:30em;overflow:auto' }, opts.logs) ]));
-	body.push(details('トラブルシューティング', troubleshooting, !!opts.logs || !!data.restart_test));
+		troubleshooting.push(sbair.section(_("Diagnostic log (recent)"), [ E('pre', { 'style': 'white-space:pre-wrap;max-height:30em;overflow:auto' }, opts.logs) ]));
+	body.push(details(_("problem solving"), troubleshooting, !!opts.logs || !!data.restart_test));
 
 	if (data.differences && data.differences.length) {
 		var diffRows = [ E('tr', { 'class': 'tr table-titles' }, [
-			E('th', { 'class': 'th' }, 'layer'), E('th', { 'class': 'th' }, 'band'), E('th', { 'class': 'th' }, '項目'), E('th', { 'class': 'th' }, 'old'), E('th', { 'class': 'th' }, 'new')
+			E('th', { 'class': 'th' }, _('layer')), E('th', { 'class': 'th' }, _('band')), E('th', { 'class': 'th' }, _("item")), E('th', { 'class': 'th' }, _('old')), E('th', { 'class': 'th' }, _('new'))
 		]) ];
 		diffRows = diffRows.concat(data.differences.slice(0, 80).map(function(d) { return E('tr', { 'class': 'tr' }, [
 			E('td', { 'class': 'td left' }, value(d.layer)), E('td', { 'class': 'td left' }, value(d.band)),
 			E('td', { 'class': 'td left' }, value(d.field)), E('td', { 'class': 'td left' }, value(d.old)), E('td', { 'class': 'td left' }, value(d.new))
 		]); }));
-		body.push(details('Known-goodとの差分（' + data.differences.length + '件）', [ sbair.section('差分一覧', [ sbair.table(diffRows) ]) ]));
+		body.push(details(_("Differences from Known-Good (") + data.differences.length + _("case)"), [ sbair.section(_("list of differences"), [ sbair.table(diffRows) ]) ]));
 	}
 	return body;
 }
@@ -209,24 +209,24 @@ return view.extend({
 		var self = this, container = E('div', {}), logs = null;
 		function reload() {
 			return callStatus().then(function(res) { self.data = res; logs = null; redraw(); })
-				.catch(function(err) { ui.addNotification(null, E('p', {}, String(err)), 'warning'); });
+				.catch(function(err) { ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'warning'); });
 		}
 		function report(res) {
-			if (res && res.error) ui.addNotification(null, E('p', {}, res.error), 'danger');
+			if (res && res.error) ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'danger');
 			return reload();
 		}
 		function redraw() {
 			dom.content(container, render(self.data, {
 				logs: logs, onEnable: function(v) { callSet(v ? '1' : '0').then(report); },
-				onMarkGood: function() { if (confirm('現在のWi-Fi状態をKnown-goodとして記録しますか?')) callMarkGood().then(report); },
+				onMarkGood: function() { if (confirm(_("Would you like to record the current Wi-Fi status as Known-good?"))) callMarkGood().then(report); },
 				onLogs: function() { callLogs().then(function(res) { logs = res && res.log || ''; redraw(); }); },
 				onSaveTest: function() {
-					if (!confirm('knsh saveだけを実行します。Wi-Fi restartは実行しません。続行しますか?')) return;
-					callSaveTest().then(function(res) { if (res && res.error) throw new Error(res.error); ui.addNotification(null, E('p', {}, 'knsh save前後の差分を取得しました。Wi-Fi restartはしていません。'), 'info'); return reload(); })
-						.catch(function(err) { ui.addNotification(null, E('p', {}, String(err)), 'danger'); });
+					if (!confirm(_("Just run knsh save. Wi-Fi restart does not work. Do you want to continue?"))) return;
+					callSaveTest().then(function(res) { if (res && res.error) throw new Error(res.error); ui.addNotification(null, E('p', {}, _("Obtained the difference before and after knsh save. Wi-Fi restart is not performed.")), 'info'); return reload(); })
+						.catch(function(err) { ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger'); });
 				},
 				onRestartTest: function() {
-					if (!confirm('明示的にknsh wlan restartを実行し、runtimeを比較します。Wi-Fiは一時切断されます。続行しますか?')) return;
+					if (!confirm(_("Explicitly run knsh wlan restart and compare runtimes. Wi-Fi will be temporarily disconnected. Do you want to continue?"))) return;
 					callRestartTest().then(report);
 				}
 			}));
@@ -234,7 +234,7 @@ return view.extend({
 		self.data = data || {};
 		redraw();
 		return E('div', { 'class': 'cbi-map' }, [ E('div', { 'style': 'margin-bottom:1em' }, [
-			E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': reload }, '再読み込み')
+			E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': reload }, _("reload"))
 		]), container ]);
 	},
 	handleSave: null, handleSaveApply: null, handleReset: null

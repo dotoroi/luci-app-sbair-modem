@@ -5,6 +5,7 @@ package main
 
 import (
 	"errors"
+	"strings"
 	"testing"
 )
 
@@ -154,4 +155,68 @@ func TestWiFi11rCommitAndAuthoritativeReadback(t *testing.T) {
 			t.Fatalf("11r readback mismatch result = %#v", result)
 		}
 	})
+}
+
+func TestBandsteeringStopsBeforeMutationWhenSettingsPending(t *testing.T) {
+	setupWiFiAdvancedTest(t)
+	mutated := false
+	uciRunner = func(args ...string) ([]byte, error) {
+		if len(args) == 1 && args[0] == "changes" {
+			return []byte("wireless.ra0.key='secret'"), nil
+		}
+		mutated = true
+		return nil, nil
+	}
+	wifiCommandRun = func(string, ...string) (string, error) {
+		mutated = true
+		return "", nil
+	}
+	res := bandsteeringSet("0")
+	if res["error"] == nil || mutated {
+		t.Fatalf("expected preflight failure before mutation: %#v, mutated=%v", res, mutated)
+	}
+	if strings.Contains(res["error"].(string), "secret") {
+		t.Fatal("pending setting value was exposed")
+	}
+}
+
+func TestBandsteeringStockSaveSequence(t *testing.T) {
+	setupWiFiAdvancedTest(t)
+	var calls []string
+	uciRunner = func(args ...string) ([]byte, error) {
+		calls = append(calls, "uci "+strings.Join(args, " "))
+		if len(args) == 2 && args[0] == "get" && args[1] == "knos.network.bandsteering" {
+			return []byte("0"), nil
+		}
+		return nil, nil
+	}
+	wifiCommandRun = func(name string, args ...string) (string, error) {
+		calls = append(calls, name+" "+strings.Join(args, " "))
+		if len(args) == 2 && args[0] == "wlan" && args[1] == "mlo" {
+			count := 0
+			for _, call := range calls {
+				if call == "knsh wlan mlo" {
+					count++
+				}
+			}
+			if count == 1 {
+				return "MLO : 1 (Enable)", nil
+			}
+			return "MLO : 0 (Disable)", nil
+		}
+		return "", nil
+	}
+	res := bandsteeringSet("0")
+	if res["result"] != "ok" || res["restart_required"] != true || res["runtime_verified"] != false {
+		t.Fatalf("unexpected result: %#v", res)
+	}
+	joined := strings.Join(calls, "|")
+	for _, wanted := range []string{"uci changes", "knsh wlan bandsteering 0", "knsh wlan mlo 0", "uci commit", "knsh save"} {
+		if !strings.Contains(joined, wanted) {
+			t.Fatalf("missing %s: %s", wanted, joined)
+		}
+	}
+	if strings.Index(joined, "uci commit") > strings.Index(joined, "knsh save") {
+		t.Fatalf("incorrect save order: %s", joined)
+	}
 }

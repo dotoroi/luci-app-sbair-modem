@@ -1,8 +1,10 @@
 # SBA6 LuCI bootstrap (optional)
 
-これは純正 SoftBank Air 6 に LuCI 実行環境を追加する補助機能です。
+これは **純正 SoftBank Air 6 の vendor OpenWrt 21.02.7** で、vendor MT-WiFi 構成を残したまま LuCI 実行環境を追加する補助機能です。
 `luci-app-sbair-modem` 本体の [../../install.sh](../../install.sh) とは独立しています。
-すでにLuCIが動いている個体では、このbootstrapは不要です。
+Floop3本体はvendor MT-WiFi向けのvendor OpenWrt環境で使うもので、最新OpenWrtでは導入しません。bootstrapはFloop3本体とは別に、対象vendor環境にLuCIがない場合に限って使います。LuCIがすでに入っているvendor環境ではbootstrapを省略します。
+
+このbootstrapはMT-WiFiドライバーを導入・修復・置換するものではありません。vendorの `libiwinfo.so.20230701` と `libnl-tiny.so.1` を保護し、LuCIに必要な別ABIを共存させる設計です。別のOpenWrt release / SNAPSHOTには固定済みpackage manifestが適合しないため適用しません。
 
 ## 標準操作
 
@@ -23,6 +25,13 @@ AP化などで現在のIPが別の場合は、そのIPを使います。
 検証してから、SSH経由で `/tmp/sba6-luci-bootstrap/` へ転送します。Air6側は
 転送済みファイルだけを使うため、Air6自身のdefault route/DNS/Internet接続は
 不要です。SSHで到達できることだけが必要です。
+
+bootstrapにはOpenWrt標準LuCIの韓国語・日本語カタログ
+(`luci-i18n-base-ko`, `luci-i18n-base-ja`)も固定版・SHA256付きで含まれます。
+Floop3専用メニューの翻訳は別カタログです。アプリの `install.sh` が韓国語・日本語の
+`.lmo` を配置し、English・한국어・日本語を言語選択肢に登録します。標準LuCIと
+Floop3専用メニューは、それぞれ対応するカタログを使用します。
+rootパスワードとHTTP/8080の注意事項は[インストール後のアクセス指針](../../docs/INSTALL-ACCESS-KO.md)を参照してください。
 
 インストールは自動rebootしません。完了後に表示される現在のLAN IPへ、次のURLで
 アクセスします。

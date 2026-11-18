@@ -228,7 +228,7 @@ func clientList() map[string]any {
 	case v := <-ch:
 		return v
 	case <-time.After(clientListBudget):
-		return map[string]any{"error": "接続機器一覧の取得がタイムアウトしました。この機体のLANが混み合っている可能性があります。しばらくしてからもう一度お試しください。"}
+		return map[string]any{"error": "The connected-device scan timed out. The LAN may be busy; try again shortly."}
 	}
 }
 

@@ -6,27 +6,26 @@
 			"type": "firstchild"
 		},
 		"depends": {
-			"acl": [ "luci-app-sbair-modem" ]
+			"acl": [
+				"luci-app-sbair-modem"
+			]
 		}
 	},
-
 	"admin/sbair/mobile": {
-		"title": "モバイル回線",
+		"title": "Cellular",
 		"order": 10,
 		"action": {
 			"type": "firstchild"
 		}
 	},
-
 	"admin/sbair/mobile/status": {
-		"title": "状態",
+		"title": "Status",
 		"order": 10,
 		"action": {
 			"type": "view",
 			"path": "sbair/signal"
 		}
 	},
-
 	"admin/sbair/mobile/sim": {
 		"title": "SIM / eSIM",
 		"order": 20,
@@ -35,7 +34,6 @@
 			"path": "sbair/sim"
 		}
 	},
-
 	"admin/sbair/mobile/sms": {
 		"title": "SMS",
 		"order": 30,
@@ -44,7 +42,6 @@
 			"path": "sbair/sms"
 		}
 	},
-
 	"admin/sbair/wifi": {
 		"title": "Wi-Fi",
 		"order": 20,
@@ -52,106 +49,94 @@
 			"type": "firstchild"
 		}
 	},
-
 	"admin/sbair/wifi/basic": {
-		"title": "基本設定",
+		"title": "Basic settings",
 		"order": 10,
 		"action": {
 			"type": "view",
 			"path": "sbair/wifi"
 		}
 	},
-
 	"admin/sbair/wifi/advanced": {
-		"title": "詳細設定",
+		"title": "Advanced settings",
 		"order": 20,
 		"action": {
 			"type": "view",
 			"path": "sbair/wifi_advanced"
 		}
 	},
-
 	"admin/sbair/wifi/diagnostics": {
-		"title": "診断",
+		"title": "Diagnostics",
 		"order": 30,
 		"action": {
 			"type": "view",
 			"path": "sbair/wifi_drift"
 		}
 	},
-
 	"admin/sbair/clients": {
-		"title": "接続機器",
+		"title": "Connected devices",
 		"order": 30,
 		"action": {
 			"type": "view",
 			"path": "sbair/clients"
 		}
 	},
-
 	"admin/sbair/network": {
-		"title": "ネットワーク",
+		"title": "Network",
 		"order": 40,
 		"action": {
 			"type": "firstchild"
 		}
 	},
-
 	"admin/sbair/network/netmode": {
-		"title": "接続モード",
+		"title": "Connection mode",
 		"order": 10,
 		"action": {
 			"type": "view",
 			"path": "sbair/netmode"
 		}
 	},
-
 	"admin/sbair/network/lan-services": {
-		"title": "LANサービス",
+		"title": "LAN services",
 		"order": 20,
 		"action": {
 			"type": "view",
 			"path": "sbair/lan_services"
 		}
 	},
-
 	"admin/sbair/network/diagnostics": {
-		"title": "診断",
+		"title": "Diagnostics",
 		"order": 30,
 		"action": {
 			"type": "view",
 			"path": "sbair/network_diagnostics"
 		}
 	},
-
 	"admin/sbair/device": {
-		"title": "本体",
+		"title": "Device",
 		"order": 50,
 		"action": {
 			"type": "firstchild"
 		}
 	},
-
 	"admin/sbair/device/info": {
-		"title": "本体情報",
+		"title": "Device information",
 		"order": 10,
 		"action": {
 			"type": "view",
 			"path": "sbair/device"
 		}
 	},
-
 	"admin/sbair/device/usb": {
-		"title": "USB機器",
+		"title": "USB devices",
 		"order": 20,
 		"action": {
 			"type": "view",
 			"path": "sbair/usb"
 		}
 	},
-
 	"admin/sbair/device/update": {
-		"title": "アップデート管理",
+		"title": "Update management",
 		"order": 30,
 		"action": {
 			"type": "view",

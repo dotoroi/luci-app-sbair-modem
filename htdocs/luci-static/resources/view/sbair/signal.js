@@ -37,24 +37,24 @@ function imsSection(self) {
 
 	if (d.imsBusy)
 		children.push(E('div', { 'class': 'alert-message' }, [
-			E('span', { 'class': 'spinning' }, ' '), '切り替えています…'
+			E('span', { 'class': 'spinning' }, ' '), _("Transitioning…")
 		]));
 	else if (d.imsNote)
-		children.push(E('div', { 'class': 'alert-message success' }, d.imsNote));
+		children.push(E('div', { 'class': 'alert-message success' }, sbair.errorText(d.imsNote)));
 
 	var rows = [
-		sbair.row('登録状態', on ? '登録済み' : '未登録',
-			on ? null : 'この状態では SMS が届きません'),
-		sbair.row('使えるサービス', (ims.services && ims.services.length)
+		sbair.row(_("registration status"), on ? _("registered") : _("Not registered"),
+			on ? null : _("In this state, you will not receive SMS.")),
+		sbair.row(_("Available services"), (ims.services && ims.services.length)
 			? ims.services.join(' / ') : null),
 	];
 	// **生の応答と参考値はデバッグ表示のときだけ。** 参考値は登録状態と
 	// 食い違うことがあり、並べると「どちらが本当か」を迷わせる。
 	if (sbair.isDebug())
 		rows.push(
-			sbair.row('+CIREG (生)', ims.cireg),
-			sbair.row('モデムの設定値', ims.config ? String(ims.config).trim() : null,
-				'参考値。登録状態と食い違うことがあります'));
+			sbair.row(_("+CIREG (live)"), ims.cireg),
+			sbair.row(_("Modem settings"), ims.config ? String(ims.config).trim() : null,
+				_("Reference value. May be inconsistent with registration status")));
 	children.push(sbair.table(rows));
 
 	children.push(E('div', {}, [
@@ -62,22 +62,22 @@ function imsSection(self) {
 			'class': 'cbi-button ' + (on ? 'cbi-button-remove' : 'cbi-button-action'),
 			'disabled': d.imsBusy ? '' : null,
 			'click': ui.createHandlerFn(self, function() { return self.setIms(!on); })
-		}, ims.config_on ? 'IMS を無効にする' : 'IMS を有効にする')
+		}, ims.config_on ? _("Disable IMS") : _("Use IMS"))
 	]));
 
 	children.push(E('div', { 'class': 'cbi-value-description' }, [
-		E('strong', {}, 'SMS は IMS 経由で配送されます。'),
-		' 未登録だと 1 通も届きません。出荷状態では無効です。',
+		E('strong', {}, _("SMS is delivered via IMS.")),
+		_("If it is not registered, not a single message will arrive. Not valid as shipped."),
 		E('br'),
-		'再起動をまたぎます。ただし設定を初期化すると SIM ロックが出荷既定に戻り、' +
-		'圏外になるので IMS も登録できなくなります。',
+		_("Moving on to rebooting. However, if you reset the settings, the SIM lock will return to default shipping.") +
+		_("Since it is out of scope, you will not be able to register with IMS."),
 		E('br'),
-		'⚠ このスイッチはモデムの VoLTE フラグです。未登録から有効にすると ' +
-		'10〜30 秒で登録しますが、登録済みの状態で無効にしても ' +
-		'登録と SMS over IMS は残ることがあります。'
+		_("⚠ This switch is the modem's VoLTE flag. If you activate it without registering") +
+		_("Registration takes 10 to 30 seconds, but even if it is invalidated in the registered state,") +
+		_("Registration and SMS over IMS may remain.")
 	]));
 
-	return subsection('IMS', children);
+	return subsection(_('IMS'), children);
 }
 
 function sameSet(a, b) {
@@ -104,8 +104,8 @@ function bandTile(label, on, serving, onClick) {
 		'class': 'ifacebadge',
 		'style': 'margin:.15em .3em 0 0' + (on ? '' : ';opacity:.45') +
 			(onClick ? ';cursor:pointer;user-select:none' : ''),
-		'title': onClick ? (on ? 'クリックで無効にする' : 'クリックで有効にする')
-		                 : (on ? '有効' : '対応しているが無効')
+		'title': onClick ? (on ? _("Disable with a click") : _("Activate with a click"))
+		                 : (on ? _("effectiveness") : _("Corresponding but invalid"))
 	};
 	if (onClick)
 		attrs.click = onClick;
@@ -152,45 +152,45 @@ function bandSection(self) {
 	if (running)
 		children.push(E('div', { 'class': 'alert-message' }, [
 			E('span', { 'class': 'spinning' }, ' '),
-			'適用中: ' + (job.step || '') + ' — 30〜60 秒かかります。'
+			_("Applying:") + (job.step || '') + _("— It takes 30 to 60 seconds.")
 		]));
 	else if (job.state === 'error')
 		children.push(E('div', { 'class': 'alert-message warning' },
-			(job.step ? job.step + ': ' : '') + (job.message || '失敗しました。')));
+			(job.step ? job.step + ': ' : '') + (job.message || _("Failed."))));
 	else if (job.state === 'done')
-		children.push(E('div', { 'class': 'alert-message success' }, job.message || '完了しました。'));
+		children.push(E('div', { 'class': 'alert-message success' }, job.message || _("You are done.")));
 
 	var serving = null;
 	if (b.serving_bands && b.serving_bands.length)
 		serving = (b.serving_rat ? b.serving_rat + ' ' : '') +
 			b.serving_bands.map(function(n) { return 'B' + n; }).join(' + ');
 
-	var rows = [ sbair.row('接続中のバンド', serving,
-		serving ? null : 'モデムが報告していません') ];
+	var rows = [ sbair.row(_("Band connecting"), serving,
+		serving ? null : _("Modem not reporting")) ];
 
 	// 搬送波ごとの内訳。**CA が効いているかはここでしか分からない。**
 	if (b.carriers && b.carriers.length)
-		rows.push(sbair.row('搬送波', E('span', {}, b.carriers.map(function(c, i) {
+		rows.push(sbair.row(_("carrier"), E('span', {}, b.carriers.map(function(c, i) {
 			return E('span', { 'style': 'display:inline-block;margin-right:1.2em' }, [
 				E('strong', {}, c.role + ' B' + c.band),
 				' EARFCN ' + c.earfcn + ' / PCI ' + c.pci
 			]);
-		})), b.carriers.length > 1 ? 'CA ' + b.carriers.length + ' 波' : null));
+		})), b.carriers.length > 1 ? 'CA ' + b.carriers.length + _("green onion") : null));
 	var lte = bandTiles(self, 'lte', 'B', b.lte_supported, b.lte_enabled, b.serving_bands, editable);
 	// **5G のタイルに接続中のバンドを渡さない。** +ECBDINFO は接続中の RAT の
 	// バンドしか返さないので、LTE につながっているときの 41 を n41 として光らせてしまう。
 	var nr = bandTiles(self, 'nr', 'n', b.nr_supported, b.nr_enabled, null, editable);
 	if (lte)
-		rows.push(sbair.row('LTE', lte));
+		rows.push(sbair.row(_('LTE'), lte));
 	if (nr)
-		rows.push(sbair.row('5G NR', nr));
+		rows.push(sbair.row(_('5G NR'), nr));
 	if (sbair.isDebug()) {
 		if (b.dmfapp)
-			rows.push(sbair.row('+EDMFAPP 6,3 (生)', b.dmfapp));
+			rows.push(sbair.row(_("+ EDMFAPP 6,3 (live)"), b.dmfapp));
 		if (b.ecbdinfo)
-			rows.push(sbair.row('+ECBDINFO (生)', b.ecbdinfo));
+			rows.push(sbair.row(_("+ECBDINFO (raw)"), b.ecbdinfo));
 		if (b.epbseh)
-			rows.push(sbair.row('+EPBSEH (生)', b.epbseh));
+			rows.push(sbair.row(_("+EPBSEH (live)"), b.epbseh));
 	}
 	children.push(sbair.table(rows));
 
@@ -202,7 +202,7 @@ function bandSection(self) {
 			'class': 'cbi-button cbi-button-action important',
 			'disabled': (running || !dirty) ? '' : null,
 			'click': ui.createHandlerFn(self, 'confirmBands')
-		}, '適用'),
+		}, _("apply")),
 		' ',
 		E('button', {
 			'class': 'cbi-button',
@@ -214,7 +214,7 @@ function bandSection(self) {
 				};
 				self.redraw();
 			})
-		}, '対応バンドを全部選ぶ')
+		}, _("Select all corresponding bands"))
 	];
 	if (dirty)
 		buttons.push(' ', E('button', {
@@ -227,7 +227,7 @@ function bandSection(self) {
 				};
 				self.redraw();
 			})
-		}, '選び直しをやめる'));
+		}, _("Cancel selection")));
 	// 直前の設定はバックエンドが uci に残している。**再起動をまたいで戻せる。**
 	if (!dirty && (b.prev_lte || b.prev_nr))
 		buttons.push(' ', E('button', {
@@ -237,20 +237,20 @@ function bandSection(self) {
 				self.bandSel = { lte: (b.prev_lte || []).slice(), nr: (b.prev_nr || []).slice() };
 				self.redraw();
 			})
-		}, '変更前の組み合わせに戻す'));
+		}, _("Revert to previous combination")));
 	children.push(E('div', {}, buttons));
 
 	var note = [
-		'番号を押すと選び直せます。薄い番号は', E('strong', {}, '無効'),
-		'、● が付いているものがいま掴んでいるバンドです。',
+		_("You can select by pressing the number. The thin number is"), E('strong', {}, _("deactivate")),
+		_("The band with , ● attached is the band you are currently holding."),
 		E('br'),
-		E('strong', {}, '適用すると数秒だけ電波が切れます。'),
-		' 時間内にネットワークにつながらなければ', E('strong', {}, '自動で元の設定に巻き戻します'), '。',
+		E('strong', {}, _("When applied, radio waves will be interrupted for only a few seconds.")),
+		_("If you do not connect to the network in time"), E('strong', {}, _("Automatically rewind to original settings")), '。',
 		E('br'),
-		'この画面と SSH は LAN 側なので、バンドを外して通信できなくなっても操作は続けられます。',
+		_("Since this screen and SSH are on the LAN side, operation continues even if the bands are separated and communication is not possible."),
 		E('br'),
-		'モデム側の設定は再起動で出荷既定に戻りますが、選んだ組み合わせは保存してあり、' +
-		'起動時に自動で入れ直します。'
+		_("The settings on the modem side will return to the factory default upon reboot, but the selected combination will be saved.") +
+		_("Automatically resets upon startup.")
 	];
 
 	// **「接続方式 NR5G」なのに接続中のバンドが LTE、は矛盾ではない。**
@@ -260,11 +260,11 @@ function bandSection(self) {
 	if (b.serving_rat === 'LTE' && self.data.access_tech &&
 	    self.data.access_tech.indexOf('NR') >= 0 && !(b.nr_rsrp && b.nr_rsrp.length))
 		note.push(E('br'), E('em', {},
-			'接続方式が NR5G でも、5G NSA では LTE のアンカーに繋いでから 5G を足します。' +
-			'いまは 5G 側の測定値が空なので、まだ足されていません。'));
+			_("Even if the connection method is NR5G, 5G NSA connects to the LTE anchor and then adds 5G.") +
+			_("For now, measurements on the 5G side are empty, so there's no shortage yet.")));
 
 	children.push(E('div', { 'class': 'cbi-value-description' }, note));
-	return subsection('バンド', children);
+	return subsection(_("band"), children);
 }
 
 function resetSection(self) {
@@ -275,28 +275,28 @@ function resetSection(self) {
 	if (running) {
 		children.push(E('div', { 'class': 'alert-message' }, [
 			E('span', { 'class': 'spinning' }, ' '),
-			'リセット中: ' + (job.step || '') + ' — 30〜60 秒かかります。'
+			_("Resetting:") + (job.step || '') + _("— It takes 30 to 60 seconds.")
 		]));
 	} else if (job.state === 'error') {
 		children.push(E('div', { 'class': 'alert-message warning' },
-			(job.step ? job.step + ': ' : '') + (job.message || '失敗しました。')));
+			(job.step ? job.step + ': ' : '') + (job.message || _("Failed."))));
 	} else if (job.state === 'done') {
 		children.push(E('div', { 'class': 'alert-message success' },
-			job.message || '完了しました。'));
+			job.message || _("You are done.")));
 	}
 
 	children.push(E('button', {
 		'class': 'cbi-button cbi-button-action',
 		'disabled': running ? '' : null,
 		'click': ui.createHandlerFn(self, 'confirmReset')
-	}, 'モデムをリセット'));
+	}, _("Modem reset")));
 
 	children.push(E('div', { 'class': 'cbi-value-description' }, [
-		'電波を落として上げ直し (AT+CFUN=0 → 1)、WAN を張り直します。',
+		_("Drop the radio waves, raise them again (AT+CFUN=0 → 1), and spread out the WAN again."),
 		E('br'),
-		E('strong', {}, 'データコールの失敗のしかたによってはモデム側のセッションが詰まり、' +
-			'netifd がいくら再試行しても上がらなくなることがあります。'),
-		' APN が正しいのに繋がらないときはこれで抜けられます。'
+		E('strong', {}, _("Depending on how the data call fails, the modem side session is blocked.") +
+			_("netifd may not go up even if you retry.")),
+		_("This is missing when the APN is correct but the connection doesn't work.")
 	]));
 
 	return children;
@@ -316,7 +316,7 @@ function statusRow(self) {
 			sbair.signalBadge(dbm, data.rsrp_dbm ? 'RSRP' : (data.rssi_dbm ? 'RSSI' : '')),
 			E('span', {}, data.registered
 				? ((data.operator || '') + ' ' + (data.access_tech || '')).trim()
-				: '未登録')
+				: _("Not registered"))
 		]));
 }
 
@@ -324,24 +324,24 @@ function render(self) {
 	var data = self.data || {};
 	var body = [];
 
-	body.push(sbair.section('回線概要', [
+	body.push(sbair.section(_("Line Overview"), [
 		statusRow(self),
 		sbair.table([
-			sbair.row('登録状態', data.registration, data.registered ? null : '通信できません'),
-			sbair.row('登録先', data.reg_domain),
-			sbair.row('事業者', data.operator),
-			sbair.row('接続方式', data.access_tech),
-			sbair.row('TAC', data.tac),
-			sbair.row('Cell ID', sbair.mask(data.cell_id))
+			sbair.row(_("registration status"), data.registration, data.registered ? null : _("Unable to communicate")),
+			sbair.row(_("Registrar"), data.reg_domain),
+			sbair.row(_("business person"), data.operator),
+			sbair.row(_("Connection method"), data.access_tech),
+			sbair.row(_('TAC'), data.tac),
+			sbair.row(_("Cell ID"), sbair.mask(data.cell_id))
 			])
 	]));
 
 	// セル情報系のベンダ拡張は無いので PCI は取りようがない。
 	// +CSQ / +CESQ に加えて、AT+QNWCFG がアンテナごとの値を持っている。
 	var rows = [
-		sbair.row('RSSI', data.rssi_dbm ? data.rssi_dbm + ' dBm' : null),
-		sbair.row('RSRP', data.rsrp_dbm ? data.rsrp_dbm + ' dBm' : null),
-		sbair.row('RSRQ', data.rsrq_db ? data.rsrq_db + ' dB' : null)
+		sbair.row(_('RSSI'), data.rssi_dbm ? data.rssi_dbm + ' dBm' : null),
+		sbair.row(_('RSRP'), data.rsrp_dbm ? data.rsrp_dbm + ' dBm' : null),
+		sbair.row(_('RSRQ'), data.rsrq_db ? data.rsrq_db + ' dB' : null)
 	];
 
 	// **アンテナごとの値は +CESQ より細かい。** つながっていない RAT は
@@ -351,18 +351,18 @@ function render(self) {
 		if (!arr || !arr.length)
 			return;
 		rows.push(sbair.row(label, arr.map(function(v) { return v + ' ' + unit; }).join(' / '),
-			'アンテナ ' + arr.length + ' 本'));
+			_("antenna") + arr.length + _("book")));
 	};
-	perAnt('RSRP (LTE 各アンテナ)', band.lte_rsrp, 'dBm');
-	perAnt('SINR (LTE 各アンテナ)', band.lte_sinr, 'dB');
-	perAnt('RSRP (5G 各アンテナ)', band.nr_rsrp, 'dBm');
-	perAnt('SINR (5G 各アンテナ)', band.nr_sinr, 'dB');
+	perAnt(_("RSRP (LTE each antenna)"), band.lte_rsrp, 'dBm');
+	perAnt(_("SINR (LTE each antenna)"), band.lte_sinr, 'dB');
+	perAnt(_("RSRP (5G each antenna)"), band.nr_rsrp, 'dBm');
+	perAnt(_("SINR (5G each antenna)"), band.nr_sinr, 'dB');
 
 	if (data.signal_note)
-		rows.push(sbair.row('注記', data.signal_note));
+		rows.push(sbair.row(_("main"), data.signal_note));
 	// 規格外の余りフィールドは意味を確かめていないので生で出す。
 	if (sbair.isDebug() && data.cesq)
-		rows.push(sbair.row('+CESQ (生)', data.cesq));
+		rows.push(sbair.row(_("+CESQ (live)"), data.cesq));
 
 	// **ネットワークに登録されていないときに素の数字だけ出さない。**
 	// 登録されていなくても +CESQ は見えているセルの測定値を返すので、
@@ -370,16 +370,16 @@ function render(self) {
 	var signal = [];
 	if (!data.registered)
 		signal.push(E('div', { 'class': 'alert-message warning' },
-			'ネットワークに登録されていません。以下は受信できているセルの測定値で、' +
-			'接続中の回線の品質ではありません。'));
+			_("Not registered on the network. Below are the measurements of cells that can be received:") +
+			_("The quality of the line during the connection is not good.")));
 	signal.push(sbair.table(rows));
-	body.push(sbair.section('電波', signal));
+	body.push(sbair.section(_("spread"), signal));
 
 	var bands = bandSection(self);
-	body.push(sbair.section('バンド / IMS', [ bands || '', imsSection(self) ]));
-	body.push(sbair.section('詳細操作', [
+	body.push(sbair.section(_("Band / IMS"), [ bands || '', imsSection(self) ]));
+	body.push(sbair.section(_("detailed operation"), [
 		E('details', {}, [
-			E('summary', {}, 'モデムのリセット'),
+			E('summary', {}, _("modem reset")),
 			E('div', {}, resetSection(self))
 		])
 	]));
@@ -390,7 +390,7 @@ function render(self) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			callOverview().catch(function(err) { return { errors: [ String(err) ] }; }),
+			callOverview().catch(function(err) { return { errors: [ sbair.errorText(err) ] }; }),
 			callResetStatus().catch(function() { return { state: 'idle' }; }),
 			callImsStatus().catch(function() { return {}; }),
 			callBandStatus().catch(function() { return { state: 'idle' }; })
@@ -477,7 +477,7 @@ return view.extend({
 		}, 15);
 
 		return E('div', { 'class': 'cbi-map' }, [
-			sbair.revealToggle('識別子 (Cell ID) を表示する', redraw),
+			sbair.revealToggle(_("Display identifier (Cell ID)"), redraw),
 			container,
 			sbair.debugToggle(redraw)
 		]);
@@ -493,12 +493,12 @@ return view.extend({
 		return callImsSet(on).then(function(res) {
 			self.data.imsBusy = false;
 			if (res && res.error) {
-				ui.addNotification(null, E('p', {}, res.error), 'warning');
+				ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 				self.redraw();
 				return;
 			}
 			self.data.ims = res;
-			self.data.imsNote = res.note;
+		self.data.imsNote = res.note ? sbair.errorText(res.note) : null;
 			self.redraw();
 			if (!on) return;
 			var tries = 0;
@@ -521,13 +521,13 @@ return view.extend({
 	confirmBands: function() {
 		var self = this, b = self.data.band || {};
 		var fmt = function(prefix, arr) {
-			return (arr && arr.length) ? arr.map(function(n) { return prefix + n; }).join(' ') : 'なし';
+			return (arr && arr.length) ? arr.map(function(n) { return prefix + n; }).join(' ') : _("doesn't exist");
 		};
 		var line = function(label, prefix, before, after) {
 			var same = sameSet(before, after);
 			return E('li', {}, [
 				label + ': ' + fmt(prefix, before),
-				same ? ' (変更なし)' : E('span', {}, [ ' → ', E('strong', {}, fmt(prefix, after)) ])
+				same ? _("(no change)") : E('span', {}, [ ' → ', E('strong', {}, fmt(prefix, after)) ])
 			]);
 		};
 		// 接続中のバンドを外すのは止めない(戻せるので)が、**必ず名指しする。**
@@ -536,7 +536,7 @@ return view.extend({
 		});
 
 		var body = [
-			E('p', {}, '有効にするバンドを次のように変更します。'),
+			E('p', {}, _("Change the band you want to activate as follows:")),
 			E('ul', {}, [
 				line('LTE', 'B', self.bandApplied.lte, self.bandSel.lte),
 				line('5G NR', 'n', self.bandApplied.nr, self.bandSel.nr)
@@ -544,17 +544,17 @@ return view.extend({
 		];
 		if (dropping.length)
 			body.push(E('div', { 'class': 'alert-message warning' }, [
-				E('strong', {}, 'いま掴んでいる B' + dropping.join(' / B') + ' を外します。'),
-				' 別のバンドに移れなければ圏外になりますが、その場合は自動で元に戻します。'
+				E('strong', {}, _("I'm holding B right now") + dropping.join(' / B') + _("Remove .")),
+				_("If you cannot move to another band, it will be out of range, but in that case it will be automatically restored.")
 			]));
 		body.push(E('ul', {}, [
-			E('li', {}, '数秒だけ電波が切れます (再スキャンが走ります)'),
-			E('li', {}, '30〜60 秒かかります'),
-			E('li', {}, '時間内にネットワークにつながらなければ自動で巻き戻します'),
-			E('li', {}, 'この画面と SSH は LAN 側なので切れません')
+			E('li', {}, _("Radio waves will be lost for a few seconds (a rescan will be performed).")),
+			E('li', {}, _("It takes 30~60 seconds")),
+			E('li', {}, _("Automatically rewinds if no network connection is reached in time")),
+			E('li', {}, _("This screen and SSH are on the LAN side so they don't drop out."))
 		]));
 		body.push(E('div', { 'class': 'right' }, [
-			E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, 'やめる'),
+			E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, _("stop")),
 			' ',
 			E('button', {
 				'class': 'cbi-button cbi-button-action important',
@@ -563,30 +563,30 @@ return view.extend({
 						.then(function(res) {
 							ui.hideModal();
 							if (res && res.error) {
-								ui.addNotification(null, E('p', {}, res.error), 'warning');
+								ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 								return;
 							}
-							self.data.bandJob = { state: 'running', step: '起動' };
+							self.data.bandJob = { state: 'running', step: _("movement") };
 							poll.add(self.watchBand, 3);
 							self.redraw();
 						});
 				})
-			}, '適用する')
+			}, _("Apply selected band changes"))
 		]));
-		return ui.showModal('バンドの変更', body);
+		return ui.showModal(_("change band"), body);
 	},
 
 	confirmReset: function() {
 		var self = this;
-		return ui.showModal('モデムのリセット', [
-			E('p', {}, 'モデムの電波を一度落として上げ直し、WAN を張り直します。'),
+		return ui.showModal(_("modem reset"), [
+			E('p', {}, _("Turn the modem's radio waves down once and then up again to turn the WAN back on.")),
 			E('ul', {}, [
-				E('li', {}, '通信が切れます (AT+CFUN=0 → 1)'),
-				E('li', {}, '30〜60 秒かかります'),
-				E('li', {}, 'APN の設定は変わりません')
+				E('li', {}, _("Communication is lost (AT+CFUN=0 → 1)")),
+				E('li', {}, _("It takes 30~60 seconds")),
+				E('li', {}, _("APN settings will not change."))
 			]),
 			E('div', { 'class': 'right' }, [
-				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, 'やめる'),
+				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, _("stop")),
 				' ',
 				E('button', {
 					'class': 'cbi-button cbi-button-action',
@@ -594,15 +594,15 @@ return view.extend({
 						return callResetStart().then(function(res) {
 							ui.hideModal();
 							if (res && res.error) {
-								ui.addNotification(null, E('p', {}, res.error), 'warning');
+								ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 								return;
 							}
-							self.data.reset = { state: 'running', step: '起動' };
+							self.data.reset = { state: 'running', step: _("movement") };
 							poll.add(self.watchReset, 3);
 							self.redraw();
 						});
 					})
-				}, 'リセットする')
+				}, _("reset"))
 			])
 		]);
 	},

@@ -65,6 +65,8 @@ sbair call <method>     → 引数を JSON で stdin、結果を stdout
 | `modem_reset_status` | — | 進捗。**AT に触らない** |
 | `netmode_status` | — | 接続モード、DHCP/UDP67、Bridge、Cellular経路、Wi-Fi実状態 |
 | `netmode_netdev_status` | — | ネットワーク > 診断で使う、有線 / USB Host Ethernet候補とKernel能力の読み取り専用診断。汎用USB機器一覧は返すが、専用画面では表示しない |
+| `netmode_usb_lan_add` | `iface` | 接続中でUSB Host Ethernetとして確認できるnetdevだけを既存`br-lan`に追加。WAN/WAN6、別bridge、kernel moduleは変更しない |
+| `netmode_usb_lan_remove` | `iface` | このアプリが追加したUSB LAN memberだけをbridgeから外す。USB未接続でも保存設定を削除できる |
 | `netmode_get_config` | — | `/etc/config/sbair` の接続モード設定 |
 | `wifi_drift_status` | — | UCI / vendor persistent / runtimeのMonitor only状態と差分 |
 | `wifi_drift_logs` | — | 直近の安全化済みイベント/相関ログ |
@@ -73,7 +75,7 @@ sbair call <method>     → 引数を JSON で stdin、結果を stdout
 | `wifi_drift_save_test` | — | 明示確認後に`knsh save`だけ実行し前後を比較。restartしない |
 | `wifi_drift_restart_test` | — | 明示確認後に`knsh wlan restart`を実行しruntimeを比較 |
 | `netmode_set_config` | `proto` `ipaddr` `netmask` `gateway` `dns` `fallback_enabled` `fallback_ip` `fallback_netmask` `fallback_timeout` | 非推奨互換API。draftだけを保存し、ネットワークは変更しない |
-| `netmode_apply` | `mode` (`sim` / `ap`) と管理IP/Fallback一式 | Safe Applyを開始。APの管理経路が実機側で正常と確認できれば自動確定し、確認できない場合だけ120秒以内のconfirmが必要 |
+| `netmode_apply` | `mode` (`sim` / `ap` / `ethwan` / `vlanwan`) と管理IP/Fallback一式 | Safe Applyを開始。APは管理経路の正常性確認後に自動確定する場合があり、SIM/Ethernet WAN各モードは120秒以内に手動confirmが必要 |
 | `netmode_confirm` | — | 保留中の変更を確定 |
 | `netmode_rollback` | — | 保留中の変更を旧設定へ戻す |
 | `netmode_repair` | — | APモードのDHCP、IPv6配布、Cellular経路、Fallbackを補正 |
@@ -144,11 +146,54 @@ DHCP clientが15秒以内に管理IPを取得できない場合だけ、ARP prob
 `network.lan1` の `172.16.255.254` は変更しない。SIMモード復帰時はdnsmasqを再起動し、
 UDP/67がLISTENしたことを確認する。
 
+## 유선 WAN 공유기 모드 (`ethwan`)
+
+`ethwan`은 별도 Ethernet 인터페이스 `eth1`을 WAN DHCP client로 사용한다. `network.wan`
+및 존재하는 `network.wan6`을 `eth1`로 연결하고, `eth1`이 LAN device ports에 들어 있으면
+분리한다. LAN의 고정 사설 주소, DHCP 범위, Wi-Fi/`br-lan` 구성은 유지하고, 순정 firewall에서
+LAN→WAN forwarding, WAN masquerade, WAN 입력 DROP/REJECT가 확인될 때만 전환한다.
+기존 WAN의 proto/device/enable 및 eth1의 원래 LAN membership은 전환 전에 저장하고,
+모뎀 라우터 또는 AP 모드로 돌아갈 때 원래 WAN 설정과 `eth1` LAN 브리지 소속을 복원한다.
+전환은 120초 수동 확인/롤백 절차를 항상 거친다.
+
+이 모드는 DHCP 기반 Ethernet uplink용이며, `eth1`과 연결된 실제 잭을 먼저 확인해야 한다.
+모뎀 WAN을 대체하며 dual-WAN/failover, PPPoE, Ethernet WAN static addressing을 구성하지 않는다.
+WAN DHCP 주소/기본 경로가 실제로 생기는지 UI에서 확인 후 Safe Apply를 확정해야 한다.
+
+## 자체 VLAN WAN 공유기 모드 (`vlanwan`)
+
+이 방식은 기존 LAN CPU 인터페이스 `eth0.1`을 WAN으로 재사용하지 않는다. `eth0.1`은
+`br-lan`의 구성원이므로 WAN으로 동시에 묶으면 LAN 브리지와 WAN L3 소유권이 충돌한다.
+기록된 구성에 따라 `switch0`에 VID 3을 만들고 스위치 포트 1을 VLAN 1에서 빼서 VID 3에
+untagged로 넣으며 CPU 포트 5는 tagged로 연결한다. 그러면 커널 VLAN 장치 `eth0.3`이 만들어진다.
+
+별도 `network.ethernetwan` 인터페이스가 `eth0.3`에서 DHCP를 수행하고, WAN firewall zone에
+연결되어 기존 masquerade/NAT와 WAN 입력 DROP/REJECT 정책을 사용한다. 셀룰러 `network.wan`
+및 `ccmni` 설정은 그대로 유지한다. 따라서 `eth1`을 WAN으로 쓰고 셀룰러 WAN을 대체하는
+Floop3 `ethwan`과 다르다. LAN `br-lan`, 사설 주소, DHCP 서버는 유지된다.
+
+적용 전 VLAN 1의 스위치 포트 목록과 기존 `ethwan_vlan`, `ethernetwan`, WAN zone을 저장한다.
+포트 1이 VLAN 1에서 VLAN 3으로 이동 가능한 상태가 아니거나, 다른 VLAN에도 중복되어 있거나,
+방화벽 WAN zone의 입력 차단/NAT가 확인되지 않으면 적용을 거부한다. 이미 포트 1이 VLAN 3에 있고
+CPU 포트 5 tagged가 확인되면 기존 구성을 검증해 재사용한다. Safe Apply는 120초 안에 확정되지 않으면 저장한 VLAN 및
+인터페이스 설정으로 복구한다. 기록은 switch port 1 매핑에 한정되며 다른 기기/잭의 포트 번호를
+자동 추론하지 않는다. 부팅 후 WAN DHCP 주소와 기본 경로를 확인하기 전에는 확정하지 않는다.
+
+화면의 `sim` 선택은 저장된 셀룰러 라우터 프로필(SIM/`ccmni`)을 복원하는 동작이다. 외부 Ethernet 포트를
+감지해 WAN/LAN을 자동 판별하는 순정 기능이 확인된 것은 아니다. `unmanaged`는 현재 설정을 그대로 두고
+sbair 제어만 해제하므로 `sim` 복원과 구별된다. 따라서 순정 셀룰러 프로필, Floop3 `ethwan`, 이 프로젝트의
+VLAN 3 WAN을 각각 선택할 수 있다.
+
+VLAN 3 모드는 셀룰러 인터페이스를 유지하지만 기본 경로 우선순위나 자동 failover를 설정하지 않는다.
+두 uplink에서 기본 경로가 동시에 생길 수 있으므로 실제 기본 경로를 확인한 뒤 Safe Apply를 확정한다.
+
 Wi-Fi、MLO、Band Steering、SSID、チャンネル、帯域幅はこの機能の補正対象外である。
 有線 / USBの診断は `sbair-modem netmode netdev-status` または
-`netmode_netdev_status` で参照できる。sysfs、`network.wan` のプロトコル / device、
-必要なら `ubus network.interface.wan status` だけを根拠にし、自動でWAN/LAN、bridge、
-USB Host Ethernetやkernel moduleを割り当てたり変更したりしない。USBの `bus_speed` は
+`netmode_netdev_status` で参照できる。USB Ethernet候補は設定画面に自動表示するが、
+LANへの追加はユーザーが明示操作したときだけ行う。追加時は候補が現在接続されたUSB Host
+netdevであることを再確認し、既存`br-lan`のportsとアプリ管理リストだけを変更する。
+WAN/WAN6やkernel moduleは操作しない。USB未接続時もアプリ管理memberを画面から外せる。
+USBの `bus_speed` は
 実際にsysfsが報告した交渉速度であり、ポートの外観や「USB 3」と書かれた端子だけから
 USB 3対応とは表示しない。`usb_controllers` は実際のhost controllerの詳細ではなく、
 `/sys/bus/usb/devices/usbN` のUSB bus / root hubを表示する。USB network candidateは

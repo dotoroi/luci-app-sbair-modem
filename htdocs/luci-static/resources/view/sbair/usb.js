@@ -31,12 +31,12 @@ function list(value) {
 
 function interfaceRows(interfaces) {
 	var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-		E('th', { 'class': 'th' }, 'interface'),
-		E('th', { 'class': 'th' }, 'class / subclass / protocol'),
-		E('th', { 'class': 'th' }, 'driver'),
-		E('th', { 'class': 'th' }, 'netdev'),
-		E('th', { 'class': 'th' }, 'block device'),
-		E('th', { 'class': 'th' }, 'modalias')
+		E('th', { 'class': 'th' }, _('interface')),
+		E('th', { 'class': 'th' }, _('class / subclass / protocol')),
+		E('th', { 'class': 'th' }, _('driver')),
+		E('th', { 'class': 'th' }, _('netdev')),
+		E('th', { 'class': 'th' }, _('block device')),
+		E('th', { 'class': 'th' }, _('modalias'))
 	]) ];
 	(interfaces || []).forEach(function(iface) {
 		rows.push(E('tr', { 'class': 'tr' }, [
@@ -56,18 +56,18 @@ function interfaceRows(interfaces) {
 function driverSection(device) {
 	var plan = device.driver_management || {};
 	var disabledReason = valueOrDash(plan.reason);
-	return sbair.section('USB Hostドライバ管理（読み取り専用）', [ sbair.table([
-		sbair.row('判定対象', plan.device_class_allowed ? '既知のUSB Host Ethernet候補' : '対象外 / 未確定'),
-		sbair.row('Provenance', valueOrDash(plan.provenance)),
-		sbair.row('期待ドライバ', valueOrDash(plan.expected_driver)),
-		sbair.row('bundle', plan.bundle_available ? 'あり' : 'なし'),
-		sbair.row('理由', disabledReason),
+	return sbair.section(_("USB Host Driver Management (Read Only)"), [ sbair.table([
+		sbair.row(_("Judgment target"), plan.device_class_allowed ? _("Known USB Host Ethernet Candidates") : _("Excluded / Not confirmed")),
+		sbair.row(_("Provenance"), valueOrDash(plan.provenance)),
+		sbair.row(_("expected driver"), valueOrDash(plan.expected_driver)),
+		sbair.row(_('bundle'), plan.bundle_available ? _("Yes") : _("doesn't exist")),
+		sbair.row(_("reason"), disabledReason),
 		E('tr', { 'class': 'tr' }, [
-			E('td', { 'class': 'td left' }, '操作'),
+			E('td', { 'class': 'td left' }, _("functioning")),
 			E('td', { 'class': 'td left' }, [
-				E('button', { 'class': 'cbi-button cbi-button-neutral', 'disabled': '' }, 'インストール'), ' ',
-				E('button', { 'class': 'cbi-button cbi-button-neutral', 'disabled': '' }, '削除'),
-				E('p', { 'style': 'opacity:.7;margin:.3em 0 0' }, 'USB Host側のアプリ管理bundleのみ操作対象。現在はbundle未提供のため無効です。')
+				E('button', { 'class': 'cbi-button cbi-button-neutral', 'disabled': '' }, _("installation")), ' ',
+				E('button', { 'class': 'cbi-button cbi-button-neutral', 'disabled': '' }, _("delete")),
+				E('p', { 'style': 'opacity:.7;margin:.3em 0 0' }, _("Only the app management bundle on the USB Host side is subject to manipulation. It is invalid because bundle is not currently provided."))
 			])
 		]) ])
 	]);
@@ -76,17 +76,17 @@ function driverSection(device) {
 function deviceSection(device) {
 	return sbair.section(valueOrDash(device.name) + ' — ' + valueOrDash(device.kind), [
 		sbair.table([
-			sbair.row('VID:PID', valueOrDash(device.vid_pid)),
-			sbair.row('メーカー / 製品', valueOrDash(device.manufacturer) + ' / ' + valueOrDash(device.product)),
-			sbair.row('USB speed', speed(device.bus_speed)),
-			sbair.row('bcdUSB / device class', valueOrDash(device.bcd_usb) + ' / ' + valueOrDash(device.device_class)),
-			sbair.row('parent / sysfs', valueOrDash(device.parent) + ' / ' + valueOrDash(device.sysfs_path)),
-			sbair.row('driver', valueOrDash(device.driver)),
-			sbair.row('network candidate', device.network_candidate ? 'yes' : 'no')
+			sbair.row(_('VID:PID'), valueOrDash(device.vid_pid)),
+			sbair.row(_("Manufacturer/Product"), valueOrDash(device.manufacturer) + ' / ' + valueOrDash(device.product)),
+			sbair.row(_("USB speed"), speed(device.bus_speed)),
+			sbair.row(_("bcdUSB / device class"), valueOrDash(device.bcd_usb) + ' / ' + valueOrDash(device.device_class)),
+			sbair.row(_('parent / sysfs'), valueOrDash(device.parent) + ' / ' + valueOrDash(device.sysfs_path)),
+			sbair.row(_('driver'), valueOrDash(device.driver)),
+			sbair.row(_('network candidate'), device.network_candidate ? _('yes') : _('no'))
 		]),
 		device.interfaces && device.interfaces.length
 			? sbair.table(interfaceRows(device.interfaces))
-			: E('p', {}, 'USB interfaceは未検出'),
+			: E('p', {}, _("USB interface not detected")),
 		driverSection(device)
 	]);
 }
@@ -101,10 +101,10 @@ function nicState(nic) {
 
 function nicDisplay(kind, state) {
 	var labels = {
-		bundle: { missing: '未導入', installed: '導入済み / 無効', 'invalid-hash': '導入済みだが検証失敗' },
-		profile: { missing: '未設定', invalid: '不正', valid: '有効' },
-		runtime: { disabled: '導入済み / 無効', active: '有効', 'preflight-ng': 'Preflight NG', 'rollback-required': 'Rollback required' },
-		preflight: { ok: 'Preflight OK', ng: 'Preflight NG' }
+		bundle: { missing: _("Not introduced"), installed: _("Introduce/Disable"), 'invalid-hash': _("Introduced but failed verification") },
+		profile: { missing: _("Not set"), invalid: _("injustice"), valid: _("effectiveness") },
+		runtime: { disabled: _("Introduce/Disable"), active: _("effectiveness"), 'preflight-ng': _("Preflight NG"), 'rollback-required': _("Rollback required") },
+		preflight: { ok: _("Preflight OK"), ng: _("Preflight NG") }
 	};
 	return labels[kind] && labels[kind][state] ? labels[kind][state] : nicValue(state);
 }
@@ -127,49 +127,49 @@ function usbNICSection(nic, reload) {
 	var enableButton;
 
 	var warning = E('div', { 'style': 'border:2px solid #d9534f;padding:.8em;margin-bottom:1em' }, [
-		E('strong', {}, '⚠ 実験的・高リスク機能'),
+		E('strong', {}, _("⚠ Experimental high-risk features")),
 		E('p', { 'style': 'margin:.5em 0 0' },
-			'USB UDC / ConfigFSの所有状態を変更し、Air6をUSB CDC-NCM gadgetとして動作させます。' +
-			'USB側を管理経路として仮定せず、別のLANまたはWi-Fi管理経路とUART等の復旧手段を確保してください。'),
+			_("Change the ownership state of USB UDC/ConfigFS and make Air6 act as a USB CDC-NCM gadget.") +
+			_("Do not assume the USB side as the management path, but secure a recovery method such as another LAN or Wi-Fi management path and UART.")),
 		E('p', { 'style': 'margin:.5em 0 0' },
-			'USBホスト機器を切断してから操作してください。LAN/WAN、br-lan、DHCP、Wi-Fi、firewallは自動変更せず、' +
-			'起動時の自動有効化も行いません。')
+			_("Disconnect the USB host device before operating it. LAN/WAN, br-lan, DHCP, Wi-Fi, and firewall do not change automatically.") +
+			_("Automatic validation upon startup is also not performed."))
 	]);
 
 	var rows = [
-		sbair.row('Bundle', nicDisplay('bundle', bundleState) + bundleReason),
-		sbair.row('Support level', nicValue(nic.support_level || driver.support_level)),
-		sbair.row('Kernel', nicValue(nic.kernel || driver.kernel)),
-		sbair.row('Architecture', nicValue(nic.architecture || driver.architecture)),
-		sbair.row('Driver SHA256', nicValue(nic.driver_sha256 || driver.sha256)),
-		sbair.row('Driver vermagic', nicValue(nic.driver_vermagic || driver.vermagic)),
-		sbair.row('License', nicValue(nic.license || driver.license)),
-		sbair.row('Upstream revision', nicValue(nic.upstream_revision || driver.upstream_revision)),
-		sbair.row('UDC', nicValue(udc.name)),
-		sbair.row('UDC state / speed', nicValue(udc.state) + ' / ' + nicValue(udc.current_speed)),
-		sbair.row('UDC binding', nicValue(udc.bound_gadget)),
-		sbair.row('Loaded USB modules', nicValue(nic.loaded_usb_modules)),
-		sbair.row('Activation profile', nicDisplay('profile', profileState) + ' (' + nicValue(profile.path) + ')'),
-		sbair.row('Runtime', nicDisplay('runtime', runtimeState)),
-		sbair.row('usb0', nicValue(usb0.state) + ' / carrier: ' + nicValue(usb0.carrier)),
-		sbair.row('Management path', nicValue(nic.management_path)),
-		sbair.row('Preflight', nicDisplay('preflight', preflightState) + (preflight.reason ? ' (' + preflight.reason + ')' : ''))
+		sbair.row(_("Bundle"), nicDisplay('bundle', bundleState) + bundleReason),
+		sbair.row(_("Support level"), nicValue(nic.support_level || driver.support_level)),
+		sbair.row(_("Kernel"), nicValue(nic.kernel || driver.kernel)),
+		sbair.row(_("Architecture"), nicValue(nic.architecture || driver.architecture)),
+		sbair.row(_("Driver SHA256"), nicValue(nic.driver_sha256 || driver.sha256)),
+		sbair.row(_("Driver vermagic"), nicValue(nic.driver_vermagic || driver.vermagic)),
+		sbair.row(_("License"), nicValue(nic.license || driver.license)),
+		sbair.row(_("Upstream revision"), nicValue(nic.upstream_revision || driver.upstream_revision)),
+		sbair.row(_('UDC'), nicValue(udc.name)),
+		sbair.row(_("UDC state / speed"), nicValue(udc.state) + ' / ' + nicValue(udc.current_speed)),
+		sbair.row(_("UDC binding"), nicValue(udc.bound_gadget)),
+		sbair.row(_("Loaded USB modules"), nicValue(nic.loaded_usb_modules)),
+		sbair.row(_("Activation profile"), nicDisplay('profile', profileState) + ' (' + nicValue(profile.path) + ')'),
+		sbair.row(_("Runtime"), nicDisplay('runtime', runtimeState)),
+		sbair.row(_('usb0'), nicValue(usb0.state) + ' / carrier: ' + nicValue(usb0.carrier)),
+		sbair.row(_("Management path"), nicValue(nic.management_path)),
+		sbair.row(_("Preflight"), nicDisplay('preflight', preflightState) + (preflight.reason ? ' (' + preflight.reason + ')' : ''))
 	];
 
 	var reason = '';
 	if (bundleState !== 'installed')
-		reason = '固定SHA256/vermagicを満たすbundleが導入されていません。';
+		reason = _("No bundle has been introduced that satisfies fixed SHA256/vermagic.");
 	else if (profileState !== 'valid')
-		reason = 'レビュー済みactivation profileが無いか不正です' + (profile.reason ? ' (' + profile.reason + ')' : '') + '。値を推測して有効化することはできません。';
+		reason = _("Reviewed Activation profile is missing or invalid.") + (profile.reason ? ' (' + profile.reason + ')' : '') + _(". You cannot guess the value and activate it.");
 	else if (preflightState !== 'ok')
-		reason = 'read-only preflightが未完了または失敗しています: ' + nicValue(preflight.reason);
+		reason = _("The read-only preflight did not complete or failed.") + nicValue(preflight.reason);
 	else
-		reason = 'Enable前に、下の3項目をすべて確認してください。';
+		reason = _("Please check all three items below before enabling.");
 
 	var checks = [
-		'USB UDC / ConfigFSを変更する実験的機能であることを理解しました',
-		'LANまたはWi-Fiの独立した管理経路を確保しています',
-		'USBホストを切断し、物理的な復旧手段を確保しています'
+		_("I understand that this is an experimental feature that changes USB UDC/ConfigFS."),
+		_("Secure independent management path for LAN or Wi-Fi"),
+		_("Disconnect the USB host and obtain a means of physical recovery.")
 	].map(function(label, index) {
 		return E('label', { 'style': 'display:block;margin:.4em 0' }, [
 			E('input', { 'type': 'checkbox', 'class': 'cbi-input-checkbox', 'change': function(ev) {
@@ -190,42 +190,42 @@ function usbNICSection(nic, reload) {
 		'class': 'cbi-button cbi-button-action',
 		'disabled': canEnable() ? null : '',
 		'click': function() {
-			if (!canEnable() || !confirm('USB UDC / ConfigFSを変更します。独立した管理経路を確保していますか？'))
+			if (!canEnable() || !confirm(_("Change USB UDC/ConfigFS. Do you have an independent management path?")))
 				return;
 			return callNICEnable(true).then(function(res) {
 				if (res && res.error)
-					ui.addNotification(null, E('p', {}, String(res.error)), 'error');
+					ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'error');
 				return reload ? reload() : res;
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'error');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'error');
 			});
 		}
-	}, 'Enable（明示的に有効化）');
+	}, _("Enable"));
 
 	var disableButton = E('button', {
 		'class': 'cbi-button cbi-button-warning',
 		'disabled': runtimeState === 'active' ? null : '',
 		'click': function() {
-			if (!confirm('USB Gadgetを無効化し、専用ConfigFS topologyを削除しますか？'))
+			if (!confirm(_("Do you want to disable USB Gadget and delete the dedicated ConfigFS topology?")))
 				return;
 			return callNICDisable().then(function(res) {
 				if (res && res.error)
-					ui.addNotification(null, E('p', {}, String(res.error)), 'error');
+					ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'error');
 				return reload ? reload() : res;
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'error');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'error');
 			});
 		}
-	}, 'Disable（限定rollback）');
+	}, _("Disable (limited rollback)"));
 
-	return sbair.section('USB Gadget（CDC-NCM NIC）', [
+	return sbair.section(_("USB Gadget（CDC-NCM NIC）"), [
 		warning,
 		sbair.table(rows),
 		E('p', { 'style': 'opacity:.8' }, reason),
 		E('div', { 'style': 'margin:.8em 0' }, checks),
 		E('div', {}, [ enableButton, ' ', disableButton ]),
 		E('p', { 'style': 'font-size:90%;opacity:.75' },
-			'候補v1はupstreamのlive-validated binaryですが、source/binary対応はB2 provenance扱いで新規用途には非推奨です。')
+			_("Candidate v1 is a live-validated binary from upstream, but the source/binary correspondence is treated as B2 provenance and is not recommended for new uses."))
 	]);
 }
 
@@ -249,9 +249,9 @@ function render(data, reload) {
 	var devices = inventory.usb_devices || [];
 	var controllers = inventory.usb_controllers || [];
 	var controllerRows = [ E('tr', { 'class': 'tr table-titles' }, [
-		E('th', { 'class': 'th' }, 'USB bus / root hub'),
-		E('th', { 'class': 'th' }, 'driver'),
-		E('th', { 'class': 'th' }, 'reported speed')
+		E('th', { 'class': 'th' }, _("USB bus / root hub")),
+		E('th', { 'class': 'th' }, _('driver')),
+		E('th', { 'class': 'th' }, _('reported speed'))
 	]) ];
 	controllers.forEach(function(controller) {
 		controllerRows.push(E('tr', { 'class': 'tr' }, [
@@ -262,15 +262,15 @@ function render(data, reload) {
 	});
 
 	var body = [ E('p', { 'style': 'opacity:.8' },
-		'USB Host（Air 6に接続された機器）として、hub、storage、serial、vendor-specific、unknownを含む全USB device/interfaceを表示します。' +
-		'USB Host Ethernetのドライバ導入とbridge/WAN/LAN割り当ては別機能であり、この画面から変更しません。USB Gadget機能は下の別セクションで扱います。') ];
+		_("Displays all USB devices/interfaces including hub, storage, serial, vendor-specific, and unknown as USB Host (device connected to Air 6).") +
+		_("USB Host Ethernet driver introduction and bridge/WAN/LAN assignment are separate functions and will not be changed on this screen. USB Gadget features are covered in other sections below.")) ];
 	body.push(controllers.length
-		? sbair.section('USB Host buses / root hubs', [ sbair.table(controllerRows) ])
-		: E('p', {}, 'USB busは未検出'));
+		? sbair.section(_("USB Host buses / root hubs"), [ sbair.table(controllerRows) ])
+		: E('p', {}, _("USB bus not detected")));
 	if (devices.length)
 		body = body.concat(devices.map(deviceSection));
 	else
-		body.push(E('p', {}, 'USB deviceは未検出'));
+		body.push(E('p', {}, _("USB device not detected")));
 	body.push(usbNICSection(nic, reload));
 	return body;
 }
@@ -278,7 +278,7 @@ function render(data, reload) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			callStatus().catch(function(err) { return { error: String(err) }; }),
+			callStatus().catch(function(err) { return { error: sbair.errorText(err) }; }),
 			safeNICStatus()
 		]).then(function(values) {
 			return { inventory: values[0], usb_nic: values[1] };
@@ -297,13 +297,13 @@ return view.extend({
 				self.data = { inventory: values[0], usb_nic: values[1] };
 				dom.content(container, render(self.data, reload));
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'warning');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'warning');
 			});
 		};
 		container = E('div', {}, render(data, reload));
 		return E('div', { 'class': 'cbi-map' }, [
 			E('div', { 'style': 'margin-bottom:1em' }, [
-				E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': ui.createHandlerFn(this, reload) }, '再読み込み')
+				E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': ui.createHandlerFn(this, reload) }, _("reload"))
 			]),
 			container
 		]);

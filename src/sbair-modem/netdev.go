@@ -606,15 +606,61 @@ func netdevUSBControllers(root string) []netdevUSBController {
 func netdevStatus() map[string]any {
 	bridge := netdevPathEnv("SBAIR_NETDEV_BRIDGE", "br-lan")
 	root := netdevSysClassNet()
+	managedPorts := []string{}
+	if fields, err := netmodeFields("usb-lan-list"); err == nil {
+		for key, value := range fields {
+			if strings.HasPrefix(key, "usb_lan_port") && value != "" {
+				managedPorts = append(managedPorts, value)
+			}
+		}
+		sort.Strings(managedPorts)
+	}
 	report := map[string]any{
 		"result":          "ok",
 		"kernel":          collectNetdevKernelStatus(),
 		"bridge":          netdevBridgeStatus{Name: bridge, Members: netdevBridgeMembers(root, bridge)},
+		"managed_usb_lan_ports": managedPorts,
 		"usb_controllers": netdevUSBControllers(netdevUSBRoot()),
 		"usb_devices":     netdevUSBDeviceStatus(netdevUSBRoot()),
 		"network_devices": netdevNetworkDevices(root, bridge),
 	}
 	return report
+}
+
+// netdevUSBHostInterface requires a real, bound USB host Ethernet netdev. It
+// deliberately excludes USB gadget interfaces and class-only USB guesses.
+func netdevUSBHostInterface(name string) bool {
+	if name == "" || len(name) > 15 || strings.Trim(name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-") != "" {
+		return false
+	}
+	var deviceFound, networkFound, boundFound bool
+	for _, device := range netdevNetworkDevices(netdevSysClassNet(), netdevPathEnv("SBAIR_NETDEV_BRIDGE", "br-lan")) {
+		if device.Name == name && device.USBDevice && device.USBVIDPID != "" {
+			deviceFound = true
+			boundFound = device.Driver != "" && device.Driver != "unknown" && device.Driver != "unbound"
+			break
+		}
+	}
+	if !deviceFound || !boundFound {
+		return false
+	}
+	for _, device := range netdevUSBDeviceStatus(netdevUSBRoot()) {
+		if !device.NetworkCandidate {
+			continue
+		}
+		for _, iface := range device.Interfaces {
+			if iface.Driver == "" || iface.Driver == "unbound" {
+				continue
+			}
+			for _, netdev := range iface.Netdevs {
+				if netdev == name {
+					networkFound = true
+					break
+				}
+			}
+		}
+	}
+	return networkFound
 }
 
 func usbStatus() map[string]any {
