@@ -1,5 +1,7 @@
 [English](README.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
+[User manuals / 사용자 안내서 / ユーザーマニュアル](docs/MANUALS.md)
+
 # luci-app-sbair-modem
 
 SoftBank Air 6 (RG620T-SBK / RUDOLF)의 벤더 수정 OpenWrt 21.02.7 펌웨어를 위한 LuCI 앱입니다. 모뎀 상태와 제어, SIM/eSIM 관리, APN 및 SMS, Wi-Fi와 연결 기기 관리, AP/브리지 및 유선 WAN 모드, USB 기기 정보, OTA/FOTA 유지보수 기능을 제공합니다.
@@ -30,4 +32,5 @@ SoftBank Air 6 (RG620T-SBK / RUDOLF)의 벤더 수정 OpenWrt 21.02.7 펌웨어�
 ## 라이선스
 
 [LICENSE](LICENSE)를 참고하세요.
+
 

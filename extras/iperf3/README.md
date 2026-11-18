@@ -1,3 +1,5 @@
+[English](README.en.md) | [한국어](README.ko.md) | [日本語](README.md)
+
 # Air6 iperf3 installer
 
 \`air6-install-iperf3.sh\` は、Mac側でOpenWrt 21.02.7の公式
@@ -136,3 +138,5 @@ Air6ローカルiperf3の結果は、
 `Mac Wi-Fi → Air6 bridge/vendor datapath → 外部サーバー` のAP転送性能と同じではありません。
 `--reference-host` の比較を使っても、ネットワーク設定を変更せずに別経路の差を観測する
 だけです。永続的な性能調整は、再現性のある測定結果が得られるまで追加しません。
+
+

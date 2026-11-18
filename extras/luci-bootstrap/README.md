@@ -1,3 +1,5 @@
+[English](README.en.md) | [한국어](README.ko.md) | [日本語](README.md)
+
 # SBA6 LuCI bootstrap (optional)
 
 これは **純正 SoftBank Air 6 の vendor OpenWrt 21.02.7** で、vendor MT-WiFi 構成を残したまま LuCI 実行環境を追加する補助機能です。
@@ -91,3 +93,5 @@ target側はBusyBox `/bin/sh`互換です。`install(1)`には依存しません
 
 `.ipk` 自体はリポジトリへ同梱せず、公式OpenWrt archiveから取得します。固定URLと
 hashだけを `packages.lock` で管理するため、vendor packageの再配布は行いません。
+
+

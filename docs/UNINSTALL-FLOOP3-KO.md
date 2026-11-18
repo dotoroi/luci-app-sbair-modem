@@ -1,3 +1,5 @@
+[English](UNINSTALL-FLOOP3-EN.md) | [한국어](UNINSTALL-FLOOP3-KO.md) | [日本語](UNINSTALL-FLOOP3-JA.md)
+
 # Floop3 제거 절차 (Air Terminal 6)
 
 `tools/uninstall-floop3.sh`는 수동 설치한 Floop3 파일과 등록만 제거한다. OpenWrt, LuCI, `luci-app-air6-modem`, 네트워크·Wi-Fi·root 계정 설정은 제거 대상이 아니다. 재부팅은 하지 않는다.
@@ -26,3 +28,5 @@ ip -4 addr show br-lan           # 기존 LAN 주소가 유지되어야 함
 ```
 
 제거 백업의 `before-remove.tar.gz`와 `paths.txt`는 검토·복구 자료다. 이를 통째로 `/`에 풀면 현재 설정을 덮어쓸 수 있으므로, 복구가 필요하면 개별 경로를 확인해 복원한다.
+
+

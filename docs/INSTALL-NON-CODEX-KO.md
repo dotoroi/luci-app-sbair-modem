@@ -1,3 +1,5 @@
+[English](INSTALL-NON-CODEX-EN.md) | [한국어](INSTALL-NON-CODEX-KO.md) | [日本語](INSTALL-NON-CODEX-JA.md)
+
 # Codex 없이 Floop3 설치하기
 
 이 문서는 일반 Linux/macOS/WSL 터미널에서 Floop3를 빌드해 Air Terminal 6에 설치하는 절차입니다. Codex 기능이나 원격 저장소 계정은 필요하지 않습니다.
@@ -50,4 +52,6 @@ AIR6_SSH_OPTS='-o ConnectTimeout=5' bash tools/deploy-floop3.sh root@<AIR6_LAN_I
 오류가 나면 출력된 /root/sbair-backups/floop3-preinstall-<UTC시각>/ 경로를 보존하십시오. 이 디렉터리의 before-install.tar.gz에는 기존 설정과 설치 경로 사본이 있습니다. 네트워크나 방화벽을 초기화하지 말고, SSH/UART 중 동작하는 관리 경로에서 백업 내용을 검토한 뒤 복원합니다. 설치 도중 실패하면 임시 파일은 진단을 위해 /tmp/floop3-deploy-*에 남을 수 있습니다.
 
 스크립트는 WSL/Linux/macOS에서 실행합니다. Windows에서는 WSL 터미널에서 프로젝트 디렉터리로 이동해 위 명령을 사용하면 됩니다.
+
+
 

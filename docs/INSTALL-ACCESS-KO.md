@@ -1,3 +1,5 @@
+[English](INSTALL-ACCESS-EN.md) | [한국어](INSTALL-ACCESS-KO.md) | [日本語](INSTALL-ACCESS-JA.md)
+
 # 설치 후 로그인 및 비밀번호 원칙
 
 ## 계정 동작
@@ -21,4 +23,6 @@
 - Language and Style에서 English, 한국어, 日本語가 보이는지 확인합니다.
 - 각 언어에서 LuCI 기본 화면과 Floop3 전용 메뉴가 함께 번역되는지 확인합니다. 기본 UI 카탈로그와 Floop3 자체 카탈로그는 별도 파일입니다.
 - 변경 후 브라우저의 기존 세션을 로그아웃하고 새로 로그인해 언어·인증 동작을 확인합니다.
+
+
 

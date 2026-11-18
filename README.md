@@ -1,5 +1,7 @@
 [English](README.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
+[User manuals / 사용자 안내서 / ユーザーマニュアル](docs/MANUALS.md)
+
 # luci-app-sbair-modem
 
 A LuCI application for the SoftBank Air 6 (RG620T-SBK / RUDOLF), designed for the vendor-modified OpenWrt 21.02.7 firmware. It provides modem status and controls, SIM/eSIM management, APN and SMS functions, Wi-Fi and client management, AP/Bridge and wired WAN modes, USB device information, and OTA/FOTA maintenance.
@@ -30,4 +32,5 @@ The translated LuCI catalogs are under `po/`. Build them with LuCI's `po2lmo` us
 ## License
 
 See [LICENSE](LICENSE).
+
 

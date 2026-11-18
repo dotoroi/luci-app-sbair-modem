@@ -1,3 +1,5 @@
+[English](TROUBLESHOOTING.en.md) | [한국어](TROUBLESHOOTING.ko.md) | [日本語](TROUBLESHOOTING.md)
+
 # Troubleshooting
 
 ## SSHで到達できない
@@ -80,3 +82,5 @@ platformとvendor package statusを確認してください。`opkg upgrade`で�
 公式21.02.7の `libnl-tiny1` はopkg installされず、`data.tar.gz`から一時展開されます。
 失敗時はvendorの `/usr/lib/libnl-tiny.so.1` を変更せず停止します。Air6上で、
 vendor package statusと空き容量を確認してから再実行してください。
+
+

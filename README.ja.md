@@ -1,5 +1,7 @@
 [English](README.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
+[User manuals / 사용자 안내서 / ユーザーマニュアル](docs/MANUALS.md)
+
 # luci-app-sbair-modem
 
 **SoftBank Air 6（RG620T-SBK / RUDOLF）のvendor OpenWrt向けLuCIアプリ**です。
@@ -244,5 +246,6 @@ OTA / FOTAを無効にすると、`fota.config.enabled=0`と`fota.provision.enab
 ## ライセンス
 
 MIT（→ [LICENSE](LICENSE)）。第三者ソフトウェアの扱いは[NOTICE.md](NOTICE.md)を参照してください。
+
 
 

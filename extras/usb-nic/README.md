@@ -1,3 +1,5 @@
+[English](README.en.md) | [한국어](README.ko.md) | [日本語](README.md)
+
 # SBA6 USB NIC（CDC-NCM Gadget）— experimental optional bundle
 
 これは、SoftBank Air 6 / SBA6D 自身を USB CDC-NCM gadget として動かすための
@@ -76,3 +78,5 @@ Enable 前には read-only preflight、profile、module hash、kernel/vermagic�
 行いません。
 
 復旧手順は [docs/RECOVERY.md](docs/RECOVERY.md) を参照してください。
+
+
