@@ -64,8 +64,8 @@ To return to cellular routing, choose **Stock cellular router (SIM / ccmni)** in
 - **Management IP DHCP client**: the Air 6 itself obtains a management address from an upstream router. This is for AP/Bridge management and is separate from WAN DHCP.
 - **LAN DHCP server**: the Air 6 assigns addresses to local clients. It must remain enabled in router mode. It is managed under **Network → LAN Services**; the Connection Mode screen does not arbitrarily toggle WAN/LAN DHCP.
 
-
 ## Personal note: logs in `/tmp`
 
 Logs and temporary files stored under `/tmp` on the Air 6 consume memory. Leaving verbose/debug logging enabled or accumulating large logs for a long time can exhaust memory and make LuCI, network services, or app functions unstable or unavailable. Collect only the diagnostic logs you need for a short period. For long-term retention, copy them to a PC and then clear the device's temporary logs.
+
 
