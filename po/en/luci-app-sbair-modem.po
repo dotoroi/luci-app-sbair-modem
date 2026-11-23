@@ -3975,3 +3975,15 @@ msgstr "not-bound"
 
 msgid "The standard fields reported an unknown value. Extra modem fields contain values, but their units are unverified. See the raw response."
 msgstr "The standard fields reported an unknown value. Extra modem fields contain values, but their units are unverified. See the raw response."
+
+msgid "Missing PDU in modem message: "
+msgstr "Missing PDU in modem message: "
+
+msgid "Unable to read modem messages: "
+msgstr "Unable to read modem messages: "
+
+msgid "Unable to delete modem message: "
+msgstr "Unable to delete modem message: "
+
+msgid "Unable to enter PDU mode: "
+msgstr "Unable to enter PDU mode: "

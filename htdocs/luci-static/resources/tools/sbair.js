@@ -20,6 +20,10 @@ var debugMode = false;
 
 // Keep dynamic modem details intact while translating the stable message prefix.
 var localizedErrorPrefixes = [
+	{ source: 'Missing PDU in modem message: ', translated: _('Missing PDU in modem message: ') },
+	{ source: 'Unable to read modem messages: ', translated: _('Unable to read modem messages: ') },
+	{ source: 'Unable to delete modem message: ', translated: _('Unable to delete modem message: ') },
+	{ source: 'Unable to enter PDU mode: ', translated: _('Unable to enter PDU mode: ') },
 	{ source: 'Skipped because the time limit expired: ', translated: _('Skipped because the time limit expired: ') },
 	{ source: 'Unable to read eSIM profiles: ', translated: _('Unable to read eSIM profiles: ') },
 	{ source: 'Unable to connect to the modem: ', translated: _('Unable to connect to the modem: ') },

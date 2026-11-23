@@ -141,7 +141,7 @@ func parseCMGL(lines []string) ([]smsPart, []string) {
 			}
 		}
 		if body == "" {
-			bad = append(bad, fmt.Sprintf("#%d: PDU が見つかりません", idx))
+			bad = append(bad, fmt.Sprintf("Missing PDU in modem message: #%d", idx))
 			continue
 		}
 		p, err := decodeDeliver(body)

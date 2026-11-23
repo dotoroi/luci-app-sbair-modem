@@ -30,7 +30,7 @@ while IFS= read -r path; do
 		usr/share/rpcd/acl.d/luci-app-sbair-modem.json|usr/share/luci/menu.d/luci-app-sbair-modem.json|\
 		usr/lib/lua/luci/i18n/luci-app-sbair-modem.ko.lmo|usr/lib/lua/luci/i18n/luci-app-sbair-modem.ja.lmo|\
 		www/luci-static/resources/sbair-release.json|www/luci-static/resources/view/sbair/*.js|\
-		www/luci-static/resources/tools/sbair.js|www/luci-static/resources/tools/sbair-i18n.js|+		www/luci-static/resources/protocol/ql_datacall.js) ;;
+		www/luci-static/resources/tools/sbair.js|www/luci-static/resources/tools/sbair-i18n.js|www/luci-static/resources/protocol/ql_datacall.js) ;;
 		*) echo "Unrecognized path: $path" >&2; exit 1 ;;
 	esac
 done < "$receipt"

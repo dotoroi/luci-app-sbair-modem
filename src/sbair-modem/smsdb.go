@@ -468,14 +468,14 @@ func smsPurge(ch *ATChannel, iccid string) map[string]any {
 func wipeModem(ch *ATChannel) (int, []string) {
 	lines, err := ch.Command("AT+CMGL=4")
 	if err != nil {
-		return 0, []string{fmt.Sprintf("モデムを読めません: %v", err)}
+		return 0, []string{fmt.Sprintf("Unable to read modem messages: %v", err)}
 	}
 	parts, _ := parseCMGL(lines)
 	gone := 0
 	var notes []string
 	for _, p := range parts {
 		if _, err := ch.Command(fmt.Sprintf("AT+CMGD=%d", p.Index)); err != nil {
-			notes = append(notes, fmt.Sprintf("#%d を消せません: %v", p.Index, err))
+			notes = append(notes, fmt.Sprintf("Unable to delete modem message: #%d: %v", p.Index, err))
 			continue
 		}
 		gone++
@@ -534,11 +534,11 @@ func deleteFromModem(ch *ATChannel, raws map[string]bool) (int, []string) {
 		return 0, nil
 	}
 	if _, err := ch.Command("AT+CMGF=0"); err != nil {
-		return 0, []string{fmt.Sprintf("PDU モードにできません: %v", err)}
+		return 0, []string{fmt.Sprintf("Unable to enter PDU mode: %v", err)}
 	}
 	lines, err := ch.Command("AT+CMGL=4")
 	if err != nil {
-		return 0, []string{fmt.Sprintf("モデムを読めません: %v", err)}
+		return 0, []string{fmt.Sprintf("Unable to read modem messages: %v", err)}
 	}
 	parts, _ := parseCMGL(lines)
 
@@ -549,7 +549,7 @@ func deleteFromModem(ch *ATChannel, raws map[string]bool) (int, []string) {
 			continue
 		}
 		if _, err := ch.Command(fmt.Sprintf("AT+CMGD=%d", p.Index)); err != nil {
-			notes = append(notes, fmt.Sprintf("#%d を消せません: %v", p.Index, err))
+			notes = append(notes, fmt.Sprintf("Unable to delete modem message: #%d: %v", p.Index, err))
 			continue
 		}
 		gone++

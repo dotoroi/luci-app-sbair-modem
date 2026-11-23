@@ -3714,3 +3714,15 @@ msgstr "연결되지 않음"
 
 msgid "The standard fields reported an unknown value. Extra modem fields contain values, but their units are unverified. See the raw response."
 msgstr "표준 필드에서 알 수 없는 값을 반환했습니다. 모뎀 추가 필드에 값이 있지만 단위를 확인하지 못했습니다. 원시 응답을 확인하세요."
+
+msgid "Missing PDU in modem message: "
+msgstr "모뎀 메시지에 PDU가 없습니다: "
+
+msgid "Unable to read modem messages: "
+msgstr "모뎀 메시지를 읽을 수 없습니다: "
+
+msgid "Unable to delete modem message: "
+msgstr "모뎀 메시지를 삭제할 수 없습니다: "
+
+msgid "Unable to enter PDU mode: "
+msgstr "PDU 모드로 전환할 수 없습니다: "
