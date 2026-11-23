@@ -68,7 +68,7 @@ cd floop3
 ./build.sh
 ```
 
-`./build.sh`는 Go 백엔드를 빌드합니다. 별도로 번역 카탈로그를 만들고, 검사·백업 절차가 포함된 배포 도구를 사용합니다.
+`./build.sh`는 Go 백엔드와 일본어·한국어 LuCI 카탈로그를 만듭니다. 영어는 소스의 문구를 사용합니다.
 
 ### WSL 없는 Windows 네이티브 빌드
 
@@ -84,7 +84,6 @@ cd floop3
 Python 명령이 `python`이라면 `PYTHON3=python ./tools/package-release.sh vX.Y.Z`를 사용합니다. 패키징 명령은 백엔드를 다시 빌드하고 `out/release/floop3-vX.Y.Z-air6-linux-arm64.tar.gz`와 `.sha256`을 만듭니다. `vX.Y.Z`는 실제 릴리스 태그로 바꾸십시오. Git Bash에서 먼저 `go version`, 사용할 Python 명령의 `--version`, `git status --short`를 확인합니다. PowerShell만으로는 스크립트가 요구하는 POSIX 셸 명령을 제공하지 않습니다.
 
 ```sh
-sh ./tools/build-i18n.sh
 ./tools/deploy-floop3.sh root@<AIR6_LAN_IP>
 ```
 

@@ -36,7 +36,7 @@ cd floop3
 ./build.sh
 ```
 
-現状の`./build.sh`はGoバックエンド(`out/sbair-modem`)のみをビルドします。
+`./build.sh`はGoバックエンド(`out/sbair-modem`)と日本語・韓国語のLuCIカタログを生成します。英語はソースの文字列を使用します。
 
 ### WSLを使わないWindowsネイティブビルド
 
@@ -76,7 +76,7 @@ sh ./install.sh /
 
 インストーラーは、非対応ファームウェア、未適用のfirewall変更、所有者不明のネットワークhelper、`/overlay`の空き容量が24 MiB未満の場合に停止します。原因を解消して再検査し、この確認を回避しないでください。
 
-ソースからビルドする場合はGo 1.25.5以上を使い、`./build.sh`と`sh ./tools/build-i18n.sh`を実行した後、事前検査付きの`tools/deploy-floop3.sh`を使用します。UIや翻訳が異なるソース版のGoバイナリだけをコピーしないでください。
+ソースからビルドする場合はGo 1.25.5以上を使い、`./build.sh`を実行した後、事前検査付きの`tools/deploy-floop3.sh`を使用します。UIや翻訳が異なるソース版のGoバイナリだけをコピーしないでください。
 
 インストール後、`http://<AIR6_LAN_IP>/cgi-bin/luci/`を開きます。アプリは**Services → SoftBank Air 6**にあります。**System → Language and Style**でEnglish、한국어、日本語を選べます。
 

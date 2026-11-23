@@ -4,6 +4,12 @@ set -eu
 SELF=$(cd "$(dirname "$0")/.." && pwd)
 OUT="$SELF/out/i18n"
 PO2LMO=${PO2LMO:-}
+PYTHON3=${PYTHON3:-python3}
+
+command -v "$PYTHON3" >/dev/null 2>&1 || {
+	echo "Python 3 command not found: $PYTHON3 (set PYTHON3=python if needed)" >&2
+	exit 1
+}
 
 sh "$SELF/tools/check-i18n.sh"
 
@@ -25,7 +31,7 @@ mkdir -p "$OUT"
 # LuCI already renders the English message IDs directly.
 for lang in ja ko; do
 	if [ "$PO2LMO" = "$SELF/tools/po2lmo-fallback.py" ]; then
-		python3 "$PO2LMO" "$SELF/po/$lang/luci-app-sbair-modem.po" "$OUT/luci-app-sbair-modem.$lang.lmo"
+		"$PYTHON3" "$PO2LMO" "$SELF/po/$lang/luci-app-sbair-modem.po" "$OUT/luci-app-sbair-modem.$lang.lmo"
 	else
 		"$PO2LMO" "$SELF/po/$lang/luci-app-sbair-modem.po" "$OUT/luci-app-sbair-modem.$lang.lmo"
 	fi

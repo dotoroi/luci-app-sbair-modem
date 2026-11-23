@@ -19,9 +19,5 @@ command -v go >/dev/null || {
 ( cd "$SELF/src/sbair-modem" && CGO_ENABLED=0 GOOS=linux GOARCH=arm64 \
 	go build -trimpath -ldflags "-s -w" -o "$OUT/sbair-modem" . )
 
-if [ -n "${PO2LMO:-}" ] || [ -n "${LUCI_ROOT:-}" ] || command -v po2lmo >/dev/null 2>&1; then
-	sh "$SELF/tools/build-i18n.sh"
-else
-	echo "skip catalogs: set PO2LMO or LUCI_ROOT to compile English/Japanese/Korean catalogs"
-fi
+sh "$SELF/tools/build-i18n.sh"
 echo "built: out/sbair-modem  ($(wc -c < "$OUT/sbair-modem") bytes)"

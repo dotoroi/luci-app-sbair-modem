@@ -2,12 +2,13 @@
 set -eu
 
 SELF=$(cd "$(dirname "$0")/.." && pwd)
+PYTHON3=${PYTHON3:-python3}
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT INT TERM
 
 # Always validate full KO/JA content, including msgstr == msgid and static JS keys.
 # The stdlib checker also works on hosts where gettext utilities are absent.
-python3 "$SELF/tools/check-translations.py"
+"$PYTHON3" "$SELF/tools/check-translations.py"
 
 MISSING=""
 for tool in xgettext msgcmp msgfmt msgattrib; do
@@ -19,7 +20,7 @@ if [ -n "$MISSING" ]; then
 fi
 
 find "$SELF/htdocs/luci-static/resources" -type f -name '*.js' -print > "$TMP/sources"
-python3 - "$SELF/root/usr/share/luci/menu.d/luci-app-sbair-modem.json" "$TMP/menu-titles.js" "$SELF/src/sbair-modem" "$TMP/backend-errors.js" <<'PY'
+"$PYTHON3" - "$SELF/root/usr/share/luci/menu.d/luci-app-sbair-modem.json" "$TMP/menu-titles.js" "$SELF/src/sbair-modem" "$TMP/backend-errors.js" <<'PY'
 import ast
 import json
 import pathlib

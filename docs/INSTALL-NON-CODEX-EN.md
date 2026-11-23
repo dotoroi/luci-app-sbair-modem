@@ -36,7 +36,7 @@ cd floop3
 ./build.sh
 ```
 
-`./build.sh` currently builds only the Go backend (`out/sbair-modem`).
+`./build.sh` builds the Go backend (`out/sbair-modem`) and the Japanese and Korean LuCI catalogs. English uses the source strings.
 
 ### Native Windows build (without WSL)
 
@@ -76,7 +76,7 @@ sh ./install.sh /
 
 The installer refuses unsupported firmware, pending firewall changes, unknown network-helper ownership, or less than 24 MiB free on `/overlay`. Resolve the reported condition and rerun the check; do not bypass it.
 
-For a source build, use Go 1.25.5 or later, run `./build.sh` and `sh ./tools/build-i18n.sh`, then use `tools/deploy-floop3.sh` for its checked installation flow. Do not copy only the Go binary when the UI and catalogs come from a different source revision.
+For a source build, use Go 1.25.5 or later, run `./build.sh`, then use `tools/deploy-floop3.sh` for its checked installation flow. Do not copy only the Go binary when the UI and catalogs come from a different source revision.
 
 After installation, open `http://<AIR6_LAN_IP>/cgi-bin/luci/`. The app is under **Services → SoftBank Air 6**. Choose English, 한국어, or 日本語 under **System → Language and Style**.
 
