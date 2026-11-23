@@ -36,22 +36,23 @@ function entry(path, title, action) {
   assert.strictEqual(menu[path].action.type, action);
 }
 
-entry('admin/sbair/mobile', 'モバイル回線', 'firstchild');
-entry('admin/sbair/mobile/status', '状態', 'view');
+entry('admin/sbair/mobile', 'Mobile network', 'firstchild');
+entry('admin/sbair/mobile/status', 'Status', 'view');
 entry('admin/sbair/mobile/sim', 'SIM / eSIM', 'view');
 entry('admin/sbair/mobile/sms', 'SMS', 'view');
 entry('admin/sbair/wifi', 'Wi-Fi', 'firstchild');
-entry('admin/sbair/wifi/basic', '基本設定', 'view');
-entry('admin/sbair/wifi/advanced', '詳細設定', 'view');
-entry('admin/sbair/wifi/diagnostics', '診断', 'view');
-entry('admin/sbair/network', 'ネットワーク', 'firstchild');
-entry('admin/sbair/network/netmode', '接続モード', 'view');
-entry('admin/sbair/network/lan-services', 'LANサービス', 'view');
-entry('admin/sbair/network/diagnostics', '診断', 'view');
-entry('admin/sbair/device', '本体', 'firstchild');
-entry('admin/sbair/device/info', '本体情報', 'view');
-entry('admin/sbair/device/usb', 'USB機器', 'view');
-entry('admin/sbair/device/update', 'アップデート管理', 'view');
+entry('admin/sbair/wifi/basic', 'Basic settings', 'view');
+entry('admin/sbair/wifi/advanced', 'Advanced settings', 'view');
+entry('admin/sbair/wifi/diagnostics', 'Diagnostics', 'view');
+entry('admin/sbair/clients', 'Connected devices', 'view');
+entry('admin/sbair/network', 'Network', 'firstchild');
+entry('admin/sbair/network/netmode', 'Connection mode', 'view');
+entry('admin/sbair/network/lan-services', 'LAN services', 'view');
+entry('admin/sbair/network/diagnostics', 'Diagnostics', 'view');
+entry('admin/sbair/device', 'Device', 'firstchild');
+entry('admin/sbair/device/info', 'Device information', 'view');
+entry('admin/sbair/device/usb', 'USB devices', 'view');
+entry('admin/sbair/device/update', 'Update management', 'view');
 assert.strictEqual(menu['admin/sbair/adblock'], undefined);
 assert.strictEqual(menu['admin/sbair/signal'], undefined);
 assert.strictEqual(menu['admin/sbair/sim_sms'], undefined);

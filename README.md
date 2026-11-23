@@ -2,6 +2,7 @@
 
 [사용자 안내서 / User manuals / ユーザーマニュアル](docs/MANUALS.ja.md)
 [Air 6 라우터 모드](docs/ROUTER-MODE.ja.md)
+[Overlay whiteoutの読み取り専用点検（韓国語）](docs/OVERLAY-WHITEOUT-AUDIT-KO.md)
 
 # luci-app-sbair-modem
 

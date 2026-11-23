@@ -28,6 +28,7 @@ SoftBank Air 6 (RG620T-SBK / RUDOLF)의 벤더 수정 OpenWrt 21.02.7 펌웨어�
 - [펌웨어 호환성 및 사전 빌드 바이너리 범위](docs/FIRMWARE-COMPATIBILITY-KO.md)
 - [신규 설치 및 업그레이드 정책](docs/RELEASE-INSTALL-POLICY-KO.md)
 - [접속 및 비밀번호 안내](docs/INSTALL-ACCESS-KO.md)
+- [오버레이 whiteout 읽기 전용 점검](docs/OVERLAY-WHITEOUT-AUDIT-KO.md)
 - [API 및 화면 참고](docs/API.md)
 
 번역 카탈로그는 `po/`에 있습니다. LuCI의 `po2lmo`를 지정해 `PO2LMO=/path/to/po2lmo ./tools/build-i18n.sh`로 빌드한 뒤 `install.sh`로 설치 대상 rootfs에 반영합니다.

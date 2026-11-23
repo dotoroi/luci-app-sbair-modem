@@ -11,7 +11,7 @@
 	},
 
 	"admin/sbair/mobile": {
-		"title": "モバイル回線",
+		"title": "Mobile network",
 		"order": 10,
 		"action": {
 			"type": "firstchild"
@@ -19,7 +19,7 @@
 	},
 
 	"admin/sbair/mobile/status": {
-		"title": "状態",
+		"title": "Status",
 		"order": 10,
 		"action": {
 			"type": "view",
@@ -54,7 +54,7 @@
 	},
 
 	"admin/sbair/wifi/basic": {
-		"title": "基本設定",
+		"title": "Basic settings",
 		"order": 10,
 		"action": {
 			"type": "view",
@@ -63,7 +63,7 @@
 	},
 
 	"admin/sbair/wifi/advanced": {
-		"title": "詳細設定",
+		"title": "Advanced settings",
 		"order": 20,
 		"action": {
 			"type": "view",
@@ -72,7 +72,7 @@
 	},
 
 	"admin/sbair/wifi/diagnostics": {
-		"title": "診断",
+		"title": "Diagnostics",
 		"order": 30,
 		"action": {
 			"type": "view",
@@ -81,7 +81,7 @@
 	},
 
 	"admin/sbair/clients": {
-		"title": "接続機器",
+		"title": "Connected devices",
 		"order": 30,
 		"action": {
 			"type": "view",
@@ -90,7 +90,7 @@
 	},
 
 	"admin/sbair/network": {
-		"title": "ネットワーク",
+		"title": "Network",
 		"order": 40,
 		"action": {
 			"type": "firstchild"
@@ -98,7 +98,7 @@
 	},
 
 	"admin/sbair/network/netmode": {
-		"title": "接続モード",
+		"title": "Connection mode",
 		"order": 10,
 		"action": {
 			"type": "view",
@@ -107,7 +107,7 @@
 	},
 
 	"admin/sbair/network/lan-services": {
-		"title": "LANサービス",
+		"title": "LAN services",
 		"order": 20,
 		"action": {
 			"type": "view",
@@ -116,7 +116,7 @@
 	},
 
 	"admin/sbair/network/diagnostics": {
-		"title": "診断",
+		"title": "Diagnostics",
 		"order": 30,
 		"action": {
 			"type": "view",
@@ -125,7 +125,7 @@
 	},
 
 	"admin/sbair/device": {
-		"title": "本体",
+		"title": "Device",
 		"order": 50,
 		"action": {
 			"type": "firstchild"
@@ -133,7 +133,7 @@
 	},
 
 	"admin/sbair/device/info": {
-		"title": "本体情報",
+		"title": "Device information",
 		"order": 10,
 		"action": {
 			"type": "view",
@@ -142,7 +142,7 @@
 	},
 
 	"admin/sbair/device/usb": {
-		"title": "USB機器",
+		"title": "USB devices",
 		"order": 20,
 		"action": {
 			"type": "view",
@@ -151,7 +151,7 @@
 	},
 
 	"admin/sbair/device/update": {
-		"title": "アップデート管理",
+		"title": "Update management",
 		"order": 30,
 		"action": {
 			"type": "view",

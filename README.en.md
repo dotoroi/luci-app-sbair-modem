@@ -28,6 +28,7 @@ See the repository documentation for prerequisites, build steps, and installatio
 
 - [Build and installation guide](docs/INSTALL-NON-CODEX-KO.md)
 - [Access and password guidance](docs/INSTALL-ACCESS-KO.md)
+- [Overlay whiteout read-only audit (Korean)](docs/OVERLAY-WHITEOUT-AUDIT-KO.md)
 - [API and UI reference](docs/API.md)
 
 The translated LuCI catalogs are under `po/`. Build them with LuCI's `po2lmo` using `PO2LMO=/path/to/po2lmo ./tools/build-i18n.sh`, then stage them with `install.sh`.

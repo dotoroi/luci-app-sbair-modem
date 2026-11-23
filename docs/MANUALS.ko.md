@@ -9,6 +9,7 @@
 | Floop3 제거 | [KO](UNINSTALL-FLOOP3-KO.md) | [EN](UNINSTALL-FLOOP3-EN.md) | [JA](UNINSTALL-FLOOP3-JA.md) |
 | Air 6 라우터 모드 | [KO](ROUTER-MODE.ko.md) | [EN](ROUTER-MODE.en.md) | [JA](ROUTER-MODE.ja.md) |
 | SSH 감시 및 모뎀 밴드 복원 | [KO](SSH-WATCHDOG-KO.md) | [EN](SSH-WATCHDOG-EN.md) | [JA](SSH-WATCHDOG-JA.md) |
+| 오버레이 whiteout 읽기 전용 점검 | [KO](OVERLAY-WHITEOUT-AUDIT-KO.md) | — | — |
 | 선택형 LuCI bootstrap | [KO](../extras/luci-bootstrap/README.ko.md) | [EN](../extras/luci-bootstrap/README.en.md) | [JA](../extras/luci-bootstrap/README.md) |
 | LuCI bootstrap 문제 해결 | [KO](../extras/luci-bootstrap/docs/TROUBLESHOOTING.ko.md) | [EN](../extras/luci-bootstrap/docs/TROUBLESHOOTING.en.md) | [JA](../extras/luci-bootstrap/docs/TROUBLESHOOTING.md) |
 | 선택형 IP 변경 | [KO](../extras/luci-bootstrap/docs/IP-MIGRATION.ko.md) | [EN](../extras/luci-bootstrap/docs/IP-MIGRATION.en.md) | [JA](../extras/luci-bootstrap/docs/IP-MIGRATION.md) |

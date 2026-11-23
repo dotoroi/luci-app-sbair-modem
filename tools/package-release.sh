@@ -42,7 +42,9 @@ cp "$SELF/out/sbair-modem" "$STAGE/out/"
 cp "$SELF/LICENSE" "$SELF/NOTICE.md" "$STAGE/"
 cp "$SELF/docs/FIRMWARE-COMPATIBILITY-KO.md" "$STAGE/"
 cp "$SELF/docs/INSTALL-NON-CODEX-KO.md" "$SELF/docs/UNINSTALL-FLOOP3-KO.md" "$STAGE/"
+cp "$SELF/docs/OVERLAY-WHITEOUT-AUDIT-KO.md" "$SELF/docs/OVERLAY-WHITEOUT-AUDIT-TEMPLATE-KO.md" "$STAGE/"
 mkdir -p "$STAGE/out/i18n" "$STAGE/extras"
+cp "$SELF/tools/overlay-whiteout-audit.sh" "$STAGE/tools/"
 cp -R "$SELF/extras/luci-bootstrap" "$STAGE/extras/"
 for lang in ja ko; do
 	name="luci-app-sbair-modem.$lang"
@@ -63,6 +65,8 @@ cat > "$STAGE/release-manifest.json" <<EOF
   "goos": "linux",
   "goarch": "arm64",
   "cgo_enabled": false,
+  "overlay_diagnostics_guide": "OVERLAY-WHITEOUT-AUDIT-KO.md",
+  "overlay_audit_script": "tools/overlay-whiteout-audit.sh",
   "firmware_compatibility": "See FIRMWARE-COMPATIBILITY-KO.md; metadata match is not a functional certification."
 }
 EOF

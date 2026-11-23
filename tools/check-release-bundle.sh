@@ -11,6 +11,11 @@ tar -xzf "$archive" -C "$tmp"
 cd "$tmp/$(basename "$archive" .tar.gz)"
 sha256sum -c SHA256SUMS >/dev/null
 test -s extras/luci-bootstrap/packages.lock
+test -s OVERLAY-WHITEOUT-AUDIT-KO.md
+test -s OVERLAY-WHITEOUT-AUDIT-TEMPLATE-KO.md
+test -s tools/overlay-whiteout-audit.sh
+grep -Fq '"overlay_diagnostics_guide": "OVERLAY-WHITEOUT-AUDIT-KO.md"' release-manifest.json
+grep -Fq '"overlay_audit_script": "tools/overlay-whiteout-audit.sh"' release-manifest.json
 mkdir "$tmp/rootfs"
 sh install.sh "$tmp/rootfs"
 cmp release-manifest.json "$tmp/rootfs/www/luci-static/resources/sbair-release.json"

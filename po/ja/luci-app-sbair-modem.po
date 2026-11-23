@@ -2555,6 +2555,9 @@ msgstr "接続モード"
 msgid "LAN services"
 msgstr "LANサービス"
 
+msgid "Mobile network"
+msgstr "モバイル回線"
+
 #: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:8
 msgid "Device"
 msgstr "本体"

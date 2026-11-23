@@ -9,6 +9,7 @@
 | Remove Floop3 | [EN](UNINSTALL-FLOOP3-EN.md) | [KO](UNINSTALL-FLOOP3-KO.md) | [JA](UNINSTALL-FLOOP3-JA.md) |
 | Air 6 router mode | [EN](ROUTER-MODE.en.md) | [KO](ROUTER-MODE.ko.md) | [JA](ROUTER-MODE.ja.md) |
 | SSH watchdog and modem band restore | [EN](SSH-WATCHDOG-EN.md) | [KO](SSH-WATCHDOG-KO.md) | [JA](SSH-WATCHDOG-JA.md) |
+| Overlay whiteout read-only audit | — | [KO](OVERLAY-WHITEOUT-AUDIT-KO.md) | — |
 | Optional LuCI bootstrap | [EN](../extras/luci-bootstrap/README.en.md) | [KO](../extras/luci-bootstrap/README.ko.md) | [JA](../extras/luci-bootstrap/README.md) |
 | LuCI bootstrap troubleshooting | [EN](../extras/luci-bootstrap/docs/TROUBLESHOOTING.en.md) | [KO](../extras/luci-bootstrap/docs/TROUBLESHOOTING.ko.md) | [JA](../extras/luci-bootstrap/docs/TROUBLESHOOTING.md) |
 | Optional IP migration | [EN](../extras/luci-bootstrap/docs/IP-MIGRATION.en.md) | [KO](../extras/luci-bootstrap/docs/IP-MIGRATION.ko.md) | [JA](../extras/luci-bootstrap/docs/IP-MIGRATION.md) |
