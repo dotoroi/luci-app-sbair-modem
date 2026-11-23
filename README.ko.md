@@ -25,6 +25,7 @@ SoftBank Air 6 (RG620T-SBK / RUDOLF)의 벤더 수정 OpenWrt 21.02.7 펌웨어�
 필요 조건과 빌드·설치 절차는 저장소 문서를 참고하세요.
 
 - [빌드 및 설치 안내](docs/INSTALL-NON-CODEX-KO.md)
+- [펌웨어 호환성 및 사전 빌드 바이너리 범위](docs/FIRMWARE-COMPATIBILITY-KO.md)
 - [접속 및 비밀번호 안내](docs/INSTALL-ACCESS-KO.md)
 - [API 및 화면 참고](docs/API.md)
 

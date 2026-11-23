@@ -20,6 +20,43 @@ ROOT="${1:-}"
 [ -d "$ROOT" ] || { echo "!! $ROOT が無い" >&2; exit 1; }
 [ -f "$SELF/out/sbair-modem" ] || { echo "!! out/sbair-modem が無い。先に ./build.sh" >&2; exit 1; }
 
+preflight_live_air6() {
+	[ "$(id -u)" = 0 ] || { echo '!! 実機への導入にはrootが必要です' >&2; return 1; }
+	[ -r /etc/openwrt_release ] || { echo '!! OpenWrt release metadata is missing' >&2; return 1; }
+	value() { awk -F"'" -v key="$1" '$1 == key { print $2; exit }' /etc/openwrt_release; }
+	release=$(value DISTRIB_RELEASE)
+	revision=$(value DISTRIB_REVISION)
+	target=$(value DISTRIB_TARGET)
+	arch=$(value DISTRIB_ARCH)
+	[ "$release" = '21.02.7' ] && [ "$revision" = 'r16847-f8282da11e' ] && \
+		[ "$target" = 'gem6xxx/evb6990_cpe_mt7990_emmc' ] && \
+		[ "$arch" = 'aarch64_cortex-a55_neon-vfpv4' ] || {
+		echo '!! 지원하지 않는 OpenWrt release/revision/target/architecture. 파일을 쓰지 않았습니다.' >&2
+		return 1
+	}
+	[ "$(cat /etc/knos-config/INPUT_BASE_MODULE 2>/dev/null)" = 'RG620TSBK' ] && \
+		[ "$(cat /etc/knos-config/INPUT_PROJECT 2>/dev/null)" = 'RUDOLF' ] || {
+		echo '!! Air Terminal 6(RG620TSBK/RUDOLF) 식별값이 맞지 않습니다. 파일을 쓰지 않았습니다.' >&2
+		return 1
+	}
+	knos=$(cat /etc/knos-config/INPUT_VERSION 2>/dev/null || true)
+	case "$knos" in
+		0.09.45|1.00.22|1.01.20|1.01.44|1.01.52) ;;
+		*) echo "!! 확인되지 않은 KNOS 버전 '${knos:-unknown}'. 파일을 쓰지 않았습니다." >&2; return 1 ;;
+	esac
+	available=$(df -Pk /overlay 2>/dev/null | awk 'NR==2 {print $4}')
+	case "$available" in ''|*[!0-9]*) echo '!! /overlay 여유 공간을 확인할 수 없습니다' >&2; return 1 ;; esac
+	[ "$available" -ge 24576 ] || {
+		echo "!! /overlay에 최소 24 MiB가 필요합니다 (현재 ${available} KiB). 파일을 쓰지 않았습니다." >&2
+		return 1
+	}
+	echo "대상 확인: KNOS $knos / OpenWrt $release $revision / $target / $arch"
+}
+
+if [ "$ROOT" = / ]; then
+	preflight_live_air6
+fi
+
 # Refuse to deploy shell inputs with CRLF. On this firmware, CRLF can break
 # shebang execution and rpcd method names even when files appear present.
 sh "$SELF/tools/check-shell-lf.sh"

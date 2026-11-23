@@ -12,7 +12,7 @@ Recommended setup: a Windows 11 host with WSL2 Ubuntu LTS. Use the WSL terminal 
 
 The Air 6 UART material currently includes a user-reported 1.8 V logic measurement, but the header's TX/RX/GND pin order has not been confirmed. **Use a 1.8 V-compatible adapter or a proper level shifter, and verify the pinout and voltage from device-specific information and measurements before connecting. Do not connect a 3.3 V adapter directly or apply power to the UART VCC pin.**
 
-This procedure does not rebuild or flash the Air 6 OpenWrt firmware. It builds the Floop3 Go backend and translation catalogs on the PC, then transfers them over SSH. This repository does not provide a separate prebuilt-only installation path, so the `./build.sh` step below is required unless you already have verified `out/` artifacts for the same version.
+This procedure does not rebuild or flash the Air 6 OpenWrt firmware. Tagged releases can include a prebuilt Go backend and installation bundle. The checked target is limited to stock SBA6D versions in the compatibility matrix; full feature validation on each version is pending.
 
 ## Requirements
 
@@ -34,24 +34,11 @@ Clone the official source and build it:
 git clone https://github.com/Floop3/luci-app-sbair-modem.git floop3
 cd floop3
 ./build.sh
-./tools/check-i18n.sh
 ```
 
-`./build.sh` uses `po2lmo` when installed, otherwise the bundled Python 3 converter. Set `PO2LMO=/path/to/po2lmo` if needed. The output should include `out/sbair-modem` and Japanese/Korean `.lmo` catalogs. English uses source messages.
+`./build.sh` currently builds only the Go backend (`out/sbair-modem`).
 
-Deploy to the device's current LAN address:
-
-```sh
-bash tools/deploy-floop3.sh root@<AIR6_LAN_IP>
-```
-
-The deploy script checks root SSH, Air 6 model, LuCI, and free overlay space. It saves configuration and existing Floop3 paths under `/root/sbair-backups/floop3-preinstall-<UTC timestamp>/`, transfers required files over SSH, and runs `install.sh /`. The device needs no package-feed Internet connection and is not automatically rebooted.
-
-For extra SSH options, use `~/.ssh/config` or set `AIR6_SSH_OPTS`:
-
-```sh
-AIR6_SSH_OPTS='-o ConnectTimeout=5' bash tools/deploy-floop3.sh root@<AIR6_LAN_IP>
-```
+For a prebuilt bundle, follow the Korean release installation guide. For a source build, run `./build.sh`, create an archive containing `install.sh`, `root/`, `htdocs/`, `tools/check-shell-lf.sh`, and `out/sbair-modem`, copy it to `/tmp` over SSH, then extract it and run `sh ./install.sh /` on the router. The same target checks apply.
 
 After installation, open `http://<AIR6_LAN_IP>/cgi-bin/luci/`. The app is under **Services → SoftBank Air 6**. Choose English, 한국어, or 日本語 under **System → Language and Style**.
 
@@ -59,6 +46,6 @@ After installation, open `http://<AIR6_LAN_IP>/cgi-bin/luci/`. The app is under 
 
 The installer does not create/change the root password or SSH authentication. Set a unique strong root password and prepare SSH keys. Do not expose SSH or the HTTP management interface directly to the public WAN; administer from a trusted local network.
 
-Keep the backup path printed by the installer if an error occurs. `before-install.tar.gz` contains copies of existing settings and installation paths. Do not reset networking/firewall. Review and restore selected files using an available SSH/UART management path. Temporary diagnostic files may remain under `/tmp/floop3-deploy-*` after failure.
+The installer does not create a configuration backup. Save a LuCI configuration backup and keep UART or another management path available before installing. If installation fails, do not reset networking/firewall; inspect logs and changed files over SSH/UART.
 
 Run these scripts on WSL, Linux, or macOS. On Windows, use a WSL terminal and navigate to the project directory.

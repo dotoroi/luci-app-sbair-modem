@@ -1,0 +1,56 @@
+name: Build and publish release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: src/sbair-modem/go.mod
+          cache: false
+
+      - name: Go tests and vet
+        working-directory: src/sbair-modem
+        run: |
+          go test ./... -count=1
+          go vet ./...
+
+      - name: Install fixture dependency
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y ripgrep
+
+      - name: Run shell and publication fixtures
+        run: |
+          for t in tests/*-fixture.sh; do
+            case "$t" in
+              tests/iperf3-parser-fixture.sh|tests/publication-hygiene-fixture.sh) bash "$t" ;;
+              *) sh "$t" ;;
+            esac
+          done
+
+      - name: Build and package
+        run: |
+          ./build.sh
+          ./tools/package-release.sh "$GITHUB_REF_NAME" --use-existing-binary
+
+      - name: Publish release with bundle and checksum
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "out/release/floop3-$GITHUB_REF_NAME-air6-linux-arm64.tar.gz" \
+            "out/release/floop3-$GITHUB_REF_NAME-air6-linux-arm64.tar.gz.sha256" \
+            --verify-tag --generate-notes

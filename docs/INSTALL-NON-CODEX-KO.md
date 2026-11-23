@@ -12,7 +12,7 @@
 
 현재 확보된 Air 6 UART 자료에는 1.8 V 로직 레벨 측정 보고가 있으나, 헤더의 TX/RX/GND 핀 순서는 확인되지 않았습니다. **1.8 V 호환 어댑터 또는 적절한 레벨 변환기를 사용하고, 장치별 자료와 계측으로 핀 배치·전압을 확인한 뒤 연결하십시오. 3.3 V 어댑터를 바로 연결하거나 UART VCC 핀에 전원을 넣지 마십시오.**
 
-이 절차는 Air 6의 OpenWrt 펌웨어를 다시 빌드하거나 플래시하지 않습니다. 대신 PC에서 Floop3 Go 백엔드와 번역 카탈로그를 빌드해 SSH로 전송합니다. 이 저장소에는 사전 빌드 파일만으로 설치하는 별도 배포 경로가 없으므로, 아래 `./build.sh` 단계는 필요합니다. 같은 버전의 검증된 `out/` 산출물이 이미 있으면 재사용할 수 있습니다.
+이 절차는 Air 6의 OpenWrt 펌웨어를 다시 빌드하거나 플래시하지 않습니다. 태그 릴리스에는 사전 빌드 Go 백엔드와 설치 파일 묶음을 첨부할 수 있습니다. 현재 확인한 대상은 호환성 표에 적힌 순정 SBA6D 버전으로 제한합니다. 다른 OpenWrt에는 설치하지 마십시오. 버전별 전체 기능 검증은 아직 완료되지 않았습니다.
 
 ## 대상과 준비물
 
@@ -26,32 +26,55 @@ Floop3 앱은 vendor OpenWrt 21.02.7의 vendor MT-WiFi 연계 기능이 필요�
 
 순정 vendor OpenWrt 21.02.7에 LuCI가 없으면 Floop3 설치 전에 ../extras/luci-bootstrap/README.md의 bootstrap을 먼저 실행하십시오. bootstrap은 LuCI만 추가하며 MT-WiFi 드라이버를 수정·이식하지 않고 vendor ABI를 보존합니다. 대상 vendor 환경에 LuCI가 이미 있으면 bootstrap은 생략합니다. 최신 OpenWrt나 다른 release/SNAPSHOT에는 이 bootstrap의 고정 패키지 목록을 적용하지 마십시오.
 
-## 빌드와 설치
+## 사전 빌드 릴리스 설치
 
-공식 저장소에서 소스를 내려받아 빌드합니다.
+GitHub Releases에서 `floop3-<버전>-air6-linux-arm64.tar.gz`와 `.sha256`을 받습니다. 공유기 설정을 먼저 백업한 다음 WSL에서 체크섬을 확인하고 압축을 풉니다.
+
+```sh
+sha256sum -c floop3-<버전>-air6-linux-arm64.tar.gz.sha256
+tar -xzf floop3-<버전>-air6-linux-arm64.tar.gz
+cd floop3-<버전>-air6-linux-arm64
+sha256sum -c SHA256SUMS
+```
+
+압축 파일을 공유기 `/tmp`로 복사하고 SSH로 접속합니다. `<AIR6_LAN_IP>`는 현재 공유기 주소로 바꾸십시오.
+
+```sh
+cd ..
+scp floop3-<버전>-air6-linux-arm64.tar.gz root@<AIR6_LAN_IP>:/tmp/
+ssh root@<AIR6_LAN_IP>
+```
+
+공유기 셸에서:
+
+```sh
+cd /tmp
+tar -xzf floop3-<버전>-air6-linux-arm64.tar.gz
+cd floop3-<버전>-air6-linux-arm64
+sha256sum -c SHA256SUMS
+sh ./install.sh /
+```
+
+설치기는 SBA6D 식별값, 정확한 OpenWrt revision/target/architecture, 허용 KNOS 버전, overlay 여유 공간을 검사합니다. 맞지 않으면 파일 배치 전에 중단합니다. 설치 중 rpcd가 재시작되며 공유기는 재부팅되지 않습니다.
+
+## 소스에서 빌드하고 설치
+
+릴리스 파일을 쓰지 않고 직접 빌드하려면 WSL에서:
 
 ```sh
 git clone https://github.com/Floop3/luci-app-sbair-modem.git floop3
 cd floop3
 ./build.sh
-./tools/check-i18n.sh
 ```
 
-./build.sh는 po2lmo가 설치되어 있으면 이를 쓰고, 없으면 포함된 Python 3 변환기를 사용합니다. 필요하면 PO2LMO=/path/to/po2lmo를 지정할 수 있습니다. 빌드가 끝나면 out/sbair-modem과 일본어·한국어 .lmo 카탈로그가 있어야 합니다. 영어는 원문 메시지를 사용합니다.
-
-장치의 현재 LAN 주소를 넣어 배포합니다.
+`./build.sh`는 Go 백엔드만 빌드합니다. 다음 명령으로 설치 파일을 묶고 장치에 복사할 수 있습니다.
 
 ```sh
-bash tools/deploy-floop3.sh root@<AIR6_LAN_IP>
+tar -czf floop3-source.tar.gz install.sh root htdocs tools/check-shell-lf.sh out/sbair-modem
+scp floop3-source.tar.gz root@<AIR6_LAN_IP>:/tmp/
 ```
 
-배포기는 root SSH, Air 6 모델, LuCI, overlay 여유 공간을 확인합니다. 설정과 기존 Floop3 경로를 /root/sbair-backups/floop3-preinstall-<UTC시각>/에 보관하고, 필요한 파일을 SSH로 전송해 install.sh /를 실행합니다. 장치의 패키지 저장소 연결은 필요하지 않고 자동 재부팅도 하지 않습니다.
-
-추가 SSH 옵션이 필요한 경우 ~/.ssh/config를 쓰거나 AIR6_SSH_OPTS를 지정합니다.
-
-```sh
-AIR6_SSH_OPTS='-o ConnectTimeout=5' bash tools/deploy-floop3.sh root@<AIR6_LAN_IP>
-```
+SSH로 접속한 장치에서 압축을 푼 뒤 `sh ./install.sh /`를 실행합니다. 이 설치 경로도 동일한 장치 사전 검사를 적용합니다.
 
 설치 후 http://<AIR6_LAN_IP>/cgi-bin/luci/에 접속합니다. 전용 메뉴는 Services → SoftBank Air 6 아래에 표시되며, System → Language and Style에서 English·한국어·日本語를 선택할 수 있습니다.
 
@@ -59,6 +82,6 @@ AIR6_SSH_OPTS='-o ConnectTimeout=5' bash tools/deploy-floop3.sh root@<AIR6_LAN_I
 
 설치기는 root 비밀번호나 SSH 인증을 만들거나 바꾸지 않습니다. 장치 관리 화면에서 고유하고 강한 root 비밀번호를 설정하고 SSH 공개키를 준비하십시오. SSH와 HTTP 관리 화면을 공인 WAN에 직접 노출하지 말고 신뢰할 수 있는 내부망에서만 관리합니다.
 
-오류가 나면 출력된 /root/sbair-backups/floop3-preinstall-<UTC시각>/ 경로를 보존하십시오. 이 디렉터리의 before-install.tar.gz에는 기존 설정과 설치 경로 사본이 있습니다. 네트워크나 방화벽을 초기화하지 말고, SSH/UART 중 동작하는 관리 경로에서 백업 내용을 검토한 뒤 복원합니다. 설치 도중 실패하면 임시 파일은 진단을 위해 /tmp/floop3-deploy-*에 남을 수 있습니다.
+설치기는 자동 설정 백업을 만들지 않습니다. 설치 전에 LuCI의 백업 기능으로 설정을 저장하고 UART 또는 다른 관리 경로를 확보하십시오. 설치 실패 시 네트워크와 방화벽을 초기화하지 말고, SSH/UART에서 로그와 변경 파일을 확인합니다.
 
 스크립트는 WSL/Linux/macOS에서 실행합니다. Windows에서는 WSL 터미널에서 프로젝트 디렉터리로 이동해 위 명령을 사용하면 됩니다.

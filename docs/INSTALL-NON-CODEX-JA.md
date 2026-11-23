@@ -12,7 +12,7 @@
 
 現在確認できるAir 6のUART資料には、ユーザー報告による1.8 Vロジック測定値がありますが、ヘッダーのTX/RX/GNDのピン順は未確認です。**1.8 V対応アダプターまたは適切なレベル変換器を使用し、機器固有の資料と測定でピン配置・電圧を確認してから接続してください。3.3 Vアダプターを直接接続したり、UARTのVCCピンに給電したりしないでください。**
 
-この手順ではAir 6のOpenWrtファームウェアを再ビルド／フラッシュしません。PC上でFloop3のGoバックエンドと翻訳カタログをビルドし、SSHで転送します。このリポジトリにはビルド済みファイルだけでインストールする別経路がないため、同じバージョンの検証済み`out/`成果物がすでにある場合を除き、以下の`./build.sh`が必要です。
+この手順ではAir 6のOpenWrtファームウェアを再ビルド／フラッシュしません。タグ付きリリースにはビルド済みGoバックエンドとインストール一式を添付できます。対象は互換性表に記載した純正SBA6Dに限り、各バージョンでの全機能検証は未完了です。
 
 ## 対象と準備
 
@@ -34,24 +34,11 @@ Floop3はvendor MT-WiFi連携が必要なvendor OpenWrt 21.02.7を対象とし�
 git clone https://github.com/Floop3/luci-app-sbair-modem.git floop3
 cd floop3
 ./build.sh
-./tools/check-i18n.sh
 ```
 
-`./build.sh`は`po2lmo`があればそれを使い、なければ同梱のPython 3変換器を使います。必要なら`PO2LMO=/path/to/po2lmo`を指定します。`out/sbair-modem`と日本語・韓国語の`.lmo`カタログが生成されます。英語は原文メッセージを使います。
+現状の`./build.sh`はGoバックエンド(`out/sbair-modem`)のみをビルドします。
 
-端末の現在のLANアドレスを指定して配備します。
-
-```sh
-bash tools/deploy-floop3.sh root@<AIR6_LAN_IP>
-```
-
-配備スクリプトはroot SSH、Air 6機種、LuCI、overlay空き容量を確認します。設定と既存Floop3パスを`/root/sbair-backups/floop3-preinstall-<UTC timestamp>/`に保存し、SSHで必要なファイルを転送して`install.sh /`を実行します。端末側のパッケージ配布サーバーへの接続は不要で、自動再起動もしません。
-
-追加のSSHオプションには`~/.ssh/config`または`AIR6_SSH_OPTS`を使います。
-
-```sh
-AIR6_SSH_OPTS='-o ConnectTimeout=5' bash tools/deploy-floop3.sh root@<AIR6_LAN_IP>
-```
+ビルド済み一式は韓国語ガイドのリリース手順に従って導入できます。ソースから導入する場合はWSLで`./build.sh`を実行し、`install.sh`、`root/`、`htdocs/`、`tools/check-shell-lf.sh`、`out/sbair-modem`をアーカイブして端末の`/tmp`へSSH転送します。端末で展開後、`sh ./install.sh /`を実行してください。同じ対象チェックが適用されます。
 
 インストール後、`http://<AIR6_LAN_IP>/cgi-bin/luci/`を開きます。アプリは**Services → SoftBank Air 6**にあります。**System → Language and Style**でEnglish、한국어、日本語を選べます。
 
@@ -59,6 +46,6 @@ AIR6_SSH_OPTS='-o ConnectTimeout=5' bash tools/deploy-floop3.sh root@<AIR6_LAN_I
 
 インストーラーはrootパスワードやSSH認証を作成・変更しません。固有の強いrootパスワードを設定し、SSH鍵を用意してください。SSHやHTTP管理画面を公衆WANに直接公開せず、信頼できる内部ネットワークから管理します。
 
-エラー時は表示されたバックアップ先を保管してください。`before-install.tar.gz`には既存設定とインストール先のコピーがあります。ネットワークやファイアウォールを初期化せず、SSH/UARTの管理経路から内容を確認して必要なファイルだけ復元します。失敗時の診断用一時ファイルが`/tmp/floop3-deploy-*`に残ることがあります。
+インストーラーは設定バックアップを自動作成しません。導入前にLuCIの設定バックアップを保存し、UARTなど別の管理経路を確保してください。失敗時はネットワークやファイアウォールを初期化せず、SSH/UARTからログと変更ファイルを確認してください。
 
 スクリプトはWSL/Linux/macOSで実行します。WindowsではWSL端末でプロジェクトディレクトリへ移動してください。
