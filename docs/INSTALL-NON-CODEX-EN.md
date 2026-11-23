@@ -17,7 +17,7 @@ This procedure does not rebuild or flash the Air 6 OpenWrt firmware. Tagged rele
 ## Requirements
 
 - LuCI, rpcd, ubus, and uci must already work on the SoftBank Air 6.
-- The host needs Git, Bash, Go 1.25+, Python 3, ssh, tar, and sha256sum.
+- The host needs Git, Bash, Go 1.25.5 or later, Python 3, ssh, tar, and sha256sum.
 - Root SSH access is required; key authentication is recommended.
 - Installation restarts LuCI's rpcd but does not reboot the router. Back up configuration first.
 - The installer stops rather than overwriting an unrecognized `/usr/sbin/sbair-netmode` implementation.
@@ -38,7 +38,45 @@ cd floop3
 
 `./build.sh` currently builds only the Go backend (`out/sbair-modem`).
 
-For a prebuilt bundle, follow the Korean release installation guide. For a source build, run `./build.sh`, create an archive containing `install.sh`, `root/`, `htdocs/`, `tools/check-shell-lf.sh`, and `out/sbair-modem`, copy it to `/tmp` over SSH, then extract it and run `sh ./install.sh /` on the router. The same target checks apply.
+### Native Windows build (without WSL)
+
+Install Go 1.25.5 or later from [go.dev/dl](https://go.dev/dl/) and ensure its `go/bin` directory is on `PATH`. Install Git for Windows from [git-scm.com](https://git-scm.com/download/win). Use **Git Bash** for the project scripts; it supplies the POSIX-compatible shell and tools they need. Install Python 3 and make `python3` or `python` available in Git Bash. Packaging defaults to `python3`; set `PYTHON3=python` if that is the command your Python installation provides.
+
+```sh
+git clone https://github.com/Floop3/luci-app-sbair-modem.git floop3
+cd floop3
+./build.sh
+./tools/package-release.sh vX.Y.Z
+```
+
+If the Python command is named `python` rather than `python3`, use `PYTHON3=python ./tools/package-release.sh vX.Y.Z`. The package command rebuilds the backend and creates `out/release/floop3-vX.Y.Z-air6-linux-arm64.tar.gz` plus its `.sha256` file. Replace `vX.Y.Z` with the release tag. Confirm `go version`, the available Python command's `--version`, and `git status --short` in Git Bash first. PowerShell alone does not provide the POSIX shell commands used by these scripts.
+
+For a prebuilt bundle, download the `.tar.gz` and its `.sha256` file from the tagged GitHub release. On the host, verify and inspect the archive:
+
+```sh
+sha256sum -c floop3-<version>-air6-linux-arm64.tar.gz.sha256
+tar -xzf floop3-<version>-air6-linux-arm64.tar.gz
+cd floop3-<version>-air6-linux-arm64
+sha256sum -c SHA256SUMS
+```
+
+Check that `release-manifest.json` names the release version and source commit you intend to install. Then copy the archive to the router and run its own preflight before installation:
+
+```sh
+cd ..
+scp -O floop3-<version>-air6-linux-arm64.tar.gz root@<AIR6_LAN_IP>:/tmp/
+ssh root@<AIR6_LAN_IP>
+cd /tmp
+tar -xzf floop3-<version>-air6-linux-arm64.tar.gz
+cd floop3-<version>-air6-linux-arm64
+sha256sum -c SHA256SUMS
+sh ./install.sh --check
+sh ./install.sh /
+```
+
+The installer refuses unsupported firmware, pending firewall changes, unknown network-helper ownership, or less than 24 MiB free on `/overlay`. Resolve the reported condition and rerun the check; do not bypass it.
+
+For a source build, use Go 1.25.5 or later, run `./build.sh` and `sh ./tools/build-i18n.sh`, then use `tools/deploy-floop3.sh` for its checked installation flow. Do not copy only the Go binary when the UI and catalogs come from a different source revision.
 
 After installation, open `http://<AIR6_LAN_IP>/cgi-bin/luci/`. The app is under **Services → SoftBank Air 6**. Choose English, 한국어, or 日本語 under **System → Language and Style**.
 
@@ -48,4 +86,4 @@ The installer does not create/change the root password or SSH authentication. Se
 
 The installer does not create a configuration backup. Save a LuCI configuration backup and keep UART or another management path available before installing. If installation fails, do not reset networking/firewall; inspect logs and changed files over SSH/UART.
 
-Run these scripts on WSL, Linux, or macOS. On Windows, use a WSL terminal and navigate to the project directory.
+Run these scripts in Git Bash on Windows, or in a terminal on Linux/macOS. WSL is optional when using native Windows Go with Git Bash.

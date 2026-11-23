@@ -33,14 +33,14 @@ var callNickname  = rpc.declare({ object: 'sbair', method: 'esim_nickname',
                                   params: [ 'iccid', 'nickname' ] });
 
 // ql_datacall の auth の値。proto_config_add_int auth。
-var AUTH = { '0': 'なし', '1': 'PAP', '2': 'CHAP', '3': 'PAP/CHAP' };
+var AUTH = { '0': _("doesn't exist"), '1': 'PAP', '2': 'CHAP', '3': 'PAP/CHAP' };
 var callProfileOp = function(method, iccid) {
 	return rpc.declare({ object: 'sbair', method: method, params: [ 'iccid' ] })(iccid);
 };
 
 var CARD = {
-	none:  '無し',
-	sim:   '通常の SIM (eUICC ではない)',
+	none:  _("doesn't exist"),
+	sim:   _("Generic SIM (not eUICC)"),
 	euicc: 'eUICC'
 };
 
@@ -61,13 +61,13 @@ function stateBadge(state) {
 	return E('span', {
 		'class': 'ifacebadge',
 		'style': on ? 'background-color:#5b5' : ''
-	}, on ? '有効' : '無効');
+	}, on ? _("effectiveness") : _("deactivate"));
 }
 
 return view.extend({
 	load: function() {
 		return Promise.all([
-			callStatus().catch(function(err) { return { error: String(err) }; }),
+			callStatus().catch(function(err) { return { error: sbair.errorText(err) }; }),
 			callSimmapGet().catch(function() { return { state: 'idle' }; }),
 			callDlStatus().catch(function() { return { state: 'idle' }; }),
 			callLockGet().catch(function() { return {}; }),
@@ -147,7 +147,7 @@ return view.extend({
 		redraw();
 
 		return E('div', { 'class': 'cbi-map' }, [
-			sbair.revealToggle('識別子 (EID / ICCID) を表示する', redraw),
+			sbair.revealToggle(_("Display identifier (EID/ICCID)"), redraw),
 			container
 		]);
 	},
@@ -161,11 +161,11 @@ return view.extend({
 
 		// --- SIM マッピング -------------------------------------------------
 		var rows = [
-			sbair.row('マッピング', st.label),
-			sbair.row('カード', CARD[st.card] || st.card),
-			sbair.row('SIM の状態', st.sim_status),
-			sbair.row('電話番号', st.msisdn ? sbair.mask(st.msisdn) : null),
-			sbair.row('ICCID', sbair.mask(st.iccid))
+			sbair.row(_("mapping"), st.label),
+			sbair.row(_("card"), CARD[st.card] || st.card),
+			sbair.row(_("SIM status"), st.sim_status),
+			sbair.row(_("phone number"), st.msisdn ? sbair.mask(st.msisdn) : null),
+			sbair.row(_('ICCID'), sbair.mask(st.iccid))
 		];
 
 		var target = (st.mapping === 1) ? 2 : 1;
@@ -173,17 +173,17 @@ return view.extend({
 
 		if (running) {
 			mapChildren.push(E('div', { 'class': 'alert-message' }, [
-				E('p', {}, [ E('strong', {}, '切替中: '), sw.step || '' ]),
-				E('p', {}, '30〜60 秒かかります。その間 AT は無応答になり、' +
-				           '他のタブも一時的に読めなくなります。')
+				E('p', {}, [ E('strong', {}, _("Transitioning:")), sbair.errorText(sw.step || '') ]),
+				E('p', {}, _("It takes 30 to 60 seconds. Meanwhile AT is not responding.") +
+				           _("Other tabs are also temporarily unreadable."))
 			]));
 		} else {
 			if (sw.state === 'error')
 				mapChildren.push(E('div', { 'class': 'alert-message warning' },
-					'前回の切替に失敗しました (' + (sw.step || '') + '): ' + (sw.message || '')));
+					_("Last conversion failed (") + sbair.errorText(sw.step || '') + '): ' + sbair.errorText(sw.message || '')));
 			else if (sw.state === 'done')
 				mapChildren.push(E('div', { 'class': 'alert-message' },
-					'切替が完了しました。' + (sw.message || '')));
+					_("The conversion is complete.") + (sw.message ? sbair.errorText(sw.message) : '')));
 
 			mapChildren.push(E('div', { 'style': 'margin-top:1em' }, [
 				E('button', {
@@ -191,18 +191,18 @@ return view.extend({
 					'click': ui.createHandlerFn(this, function() {
 						return self.confirmSwitch(target);
 					})
-				}, sbair.simMappingLabel(target) + ' へ切り替える')
+				}, sbair.simMappingLabel(target) + _("switch to"))
 			]));
 			mapChildren.push(E('div', { 'class': 'cbi-value-description' },
-				'⚠ 切替中は電波を止めます (AT+CFUN=4)。' +
-				'切替先に有効な profile が無ければ圏外になります。' +
-				'再起動すると物理スロット側へ戻ります。'));
+				_("⚠ Stop propagation during transition (AT+CFUN=4).") +
+				_("If the conversion destination does not have a valid profile, it will be out of service.") +
+				_("Rebooting will return it to the physical slot side.")));
 		}
-		body.push(sbair.section('現在のSIM', [
-			subsection('SIMマッピング', mapChildren)
+		body.push(sbair.section(_("Current SIM"), [
+			subsection(_("SIM Mapping"), mapChildren)
 		]));
 		body.push(this.simLockSection());
-		body.push(sbair.section('通信設定', [ this.apnSection() ]));
+		body.push(sbair.section(_("Communication settings"), [ this.apnSection() ]));
 
 		// --- eUICC ---------------------------------------------------------
 		if (st.error) {
@@ -211,33 +211,33 @@ return view.extend({
 		}
 
 		if (!st.available) {
-			body.push(sbair.section('eSIM', [ subsection('eUICC', [
-				E('p', {}, st.reason || 'eUICC はありません。'),
+		body.push(sbair.section(_('eSIM'), [ subsection(_('eUICC'), [
+				E('p', {}, st.reason ? sbair.errorText(st.reason) : _("There is no eUICC.")),
 				(st.card === 'sim')
-					? E('p', {}, '通常の SIM が挿さっています。profile の操作は eUICC カードでのみ行えます。')
+					? E('p', {}, _("A regular SIM has been inserted. Profile work is only possible with eUICC cards."))
 					: ''
 			]) ]));
-			body.push(sbair.section('詳細操作', [
-				details('eSIMを追加', this.installer(running))
+			body.push(sbair.section(_("detailed operation"), [
+				details(_("Add eSIM"), this.installer(running))
 			]));
 			return body;
 		}
 
-		body.push(sbair.section('eSIM', [
-			subsection('eUICC情報', [ sbair.table([
-				sbair.row('EID', sbair.mask(st.eid)),
-				sbair.row('SGP.22', st.svn),
-				sbair.row('ISD-R AID', sbair.mask(st.isdr_aid))
+		body.push(sbair.section(_('eSIM'), [
+			subsection(_("eUICC information"), [ sbair.table([
+				sbair.row(_('EID'), sbair.mask(st.eid)),
+				sbair.row(_('SGP.22'), st.svn),
+				sbair.row(_('ISD-R AID'), sbair.mask(st.isdr_aid))
 			]) ]),
-			subsection('プロファイル', [
+			subsection(_("profile"), [
 				st.profiles_error
 					? E('div', { 'class': 'alert-message warning' }, st.profiles_error)
 					: this.profileTable(st.profiles, running)
 			])
 		]));
 
-		body.push(sbair.section('詳細操作', [
-			details('eSIMを追加', this.installer(running))
+		body.push(sbair.section(_("detailed operation"), [
+			details(_("Add eSIM"), this.installer(running))
 		]));
 		return body;
 	},
@@ -246,11 +246,11 @@ return view.extend({
 	// 確認できるようにする。解除・再ロックのボタンだけを折りたたむ。
 	simLockSection: function() {
 		var lk = this.data.lock || {};
-		var state = lk.locked === undefined ? '不明' : (lk.locked ? 'ロック中' : '解除済み');
-		return sbair.section('SIMロック', [
+		var state = lk.locked === undefined ? _("unknown") : (lk.locked ? _("Locking") : _("cleared"));
+		return sbair.section(_("SIM lock"), [
 			E('p', { 'style': 'font-size:115%;font-weight:600;margin-bottom:.6em' },
-				'現在の状態: ' + state),
-			details('SIMロック操作を表示（危険）', this.lockSection())
+				_("Current status:") + state),
+			details(_("SIM lock operation indication (danger)"), this.lockSection())
 		]);
 	},
 
@@ -266,29 +266,29 @@ return view.extend({
 
 		if (busy) {
 			children.push(E('div', { 'class': 'alert-message' }, [
-				E('p', {}, [ E('strong', {}, '切替中: '), lj.step || '' ]),
-				E('p', {}, 'SIM を読み直すため電波を止めます。40〜60 秒かかります。')
+				E('p', {}, [ E('strong', {}, _("Transitioning:")), sbair.errorText(lj.step || '') ]),
+				E('p', {}, _("Turn off the radio waves to read the SIM again. It takes 40-60 seconds."))
 			]));
 			return children;
 		}
 
 		if (lj.state === 'error')
 			children.push(E('div', { 'class': 'alert-message warning' },
-				'前回の切替に失敗しました (' + (lj.step || '') + '): ' + (lj.message || '')));
+				_("Last conversion failed (") + sbair.errorText(lj.step || '') + '): ' + sbair.errorText(lj.message || '')));
 		else if (lj.state === 'done')
-			children.push(E('div', { 'class': 'alert-message' }, lj.message || '切替が完了しました。'));
+			children.push(E('div', { 'class': 'alert-message' }, lj.message ? sbair.errorText(lj.message) : _("The conversion is complete.")));
 
-		var rows = [ sbair.row('状態', locked ? 'ロック中' : '解除済み',
-			locked ? '他社 SIM は使えません' : null) ];
+		var rows = [ sbair.row(_("situation"), locked ? _("Locking") : _("cleared"),
+			locked ? _("Third-party SIMs cannot be used.") : null) ];
 		// **残り試行回数を必ず出す。** 鍵を間違えるとここが減り、
 		// 使い切ると戻せなくなる。件数(capacity)と取り違えないこと。
 		(lk.categories || []).forEach(function(c) {
 			if (!c.label)
 				return;
-			rows.push(sbair.row('　' + c.label,
-				(c.locked ? 'ロック中' : '解除済み') +
-				' — 残り試行 ' + c.remaining + '/' + c.max_retry +
-				'、登録 ' + c.entries + '/' + c.capacity + ' 件'));
+			rows.push(sbair.row('　' + _(c.label),
+				(c.locked ? _("Locking") : _("cleared")) +
+				_("—try the rest") + c.remaining + '/' + c.max_retry +
+				_(", registration") + c.entries + '/' + c.capacity + _("case")));
 		});
 		children.push(sbair.table(rows));
 
@@ -298,10 +298,10 @@ return view.extend({
 				'click': ui.createHandlerFn(self, function() {
 					return self.confirmLock(!locked);
 				})
-			}, locked ? 'ロックを解除する' : 'ロックを掛け直す')
+			}, locked ? _("unlocked") : _("reset the lock"))
 		]));
 		children.push(E('div', { 'class': 'cbi-value-description' },
-			'AT+ESMLCK を直接打ちます。切替後に SIM を読み直すため電波が一度止まります。'));
+			_("Hit AT+ESMLCK directly. After switching, the radio waves stop once to read the SIM again.")));
 
 		return children;
 	},
@@ -309,16 +309,16 @@ return view.extend({
 	confirmLock: function(on) {
 		var self = this;
 		var body = [ E('p', {}, on
-			? 'SIM ロックを掛け直します。SoftBank 以外の SIM が使えなくなります。'
-			: 'SIM ロックを解除します。他社の SIM が使えるようになります。') ];
+			? _("Multiply SIM lock again. Non-SoftBank SIMs cannot be used.")
+			: _("Unlock SIM. You can use a third-party SIM.")) ];
 		body.push(E('ul', {}, [
-			E('li', {}, '電波を一度止めます (AT+CFUN=0 → 1)。通信が切れます'),
-			E('li', {}, '40〜60 秒かかります'),
-			on ? '' : E('li', {}, '鍵が違うと残り試行回数が減ります。使い切ると戻せません')
+			E('li', {}, _("Stop propagation once (AT+CFUN=0 → 1). communication is lost")),
+			E('li', {}, _("It takes 40-60 seconds")),
+			on ? '' : E('li', {}, _("Different keys reduce the number of remaining attempts. Once you use it up you can't go back"))
 		]));
-		return ui.showModal('SIM ロックの' + (on ? '設定' : '解除'), body.concat([
+		return ui.showModal(_("SIM lock") + (on ? _("setting") : _("clear")), body.concat([
 			E('div', { 'class': 'right' }, [
-				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, 'やめる'),
+				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, _("stop")),
 				' ',
 				E('button', {
 					'class': 'cbi-button ' + (on ? 'cbi-button-negative' : 'cbi-button-action'),
@@ -326,15 +326,15 @@ return view.extend({
 						return callLockSet(on).then(function(res) {
 							ui.hideModal();
 							if (res && res.error) {
-								ui.addNotification(null, E('p', {}, res.error), 'warning');
+								ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 								return;
 							}
-							self.data.lockJob = { state: 'running', step: '起動' };
+							self.data.lockJob = { state: 'running', step: _("movement") };
 							poll.add(self.watchLock, 3);
 							self.redraw();
 						});
 					})
-				}, on ? '掛け直す' : '解除する')
+				}, on ? _("redial") : _("clear"))
 			])
 		]));
 	},
@@ -348,7 +348,7 @@ return view.extend({
 		var children = [];
 
 		if (!a.iccid) {
-			return subsection('APN', [ E('p', {}, 'SIM が読めないため設定できません。') ]);
+			return subsection(_('APN'), [ E('p', {}, _("The SIM cannot be read and cannot be set up.")) ]);
 		}
 
 		var f = {};
@@ -378,13 +378,13 @@ return view.extend({
 		};
 
 		children.push(sbair.table([
-			sbair.row('対象の SIM', sbair.mask(a.iccid)),
-			sbair.row('現在の WAN', (a.wan && a.wan.apn) ? a.wan.apn : null,
-				a.applied ? '適用済み' : (e.apn ? '未適用' : null))
+			sbair.row(_("Target SIM"), sbair.mask(a.iccid)),
+			sbair.row(_("Current WAN"), (a.wan && a.wan.apn) ? a.wan.apn : null,
+				a.applied ? _("Applied") : (e.apn ? _("Not applied") : null))
 		]));
 
-		children.push(field('label', '名前 (任意)', e.label, '例: au'));
-		children.push(field('apn', 'APN', e.apn, '例: au.au-net.ne.jp'));
+		children.push(field('label', _("Name (optional)"), e.label, _("Example: au")));
+		children.push(field('apn', 'APN', e.apn, _("Example: au.au-net.ne.jp")));
 
 		var auth = E('select', { 'class': 'cbi-input-select' },
 			Object.keys(AUTH).map(function(k) {
@@ -393,20 +393,20 @@ return view.extend({
 			}));
 		f.auth = auth;
 		children.push(E('div', { 'class': 'cbi-value' }, [
-			E('label', { 'class': 'cbi-value-title' }, '認証方式'),
+			E('label', { 'class': 'cbi-value-title' }, _("Authentication method")),
 			E('div', { 'class': 'cbi-value-field' }, [ auth ])
 		]));
 
-		children.push(field('username', 'ユーザ名', e.username));
-		children.push(field('password', 'パスワード', e.password, '', 'password'));
+		children.push(field('username', _("user name"), e.username));
+		children.push(field('password', _("password"), e.password, '', 'password'));
 
 		// **この SIM を使うのに要るモデム側の状態を、APN と一緒に持つ。**
 		// 適用のたびに揃えるので、設定が出荷既定へ戻っても起動時に元に戻る。
-		children.push(check('unlock', 'SIM ロックを解除しておく', e.unlock == '1',
-			'他社の SIM でつながるのに要ります。掛かっているときだけ動き、' +
-			'そのときは電波を 40〜60 秒止めます。'));
-		children.push(check('ims', 'IMS を有効にしておく', e.ims == '1',
-			'SMS は IMS 経由で配送されます。未登録だと 1 通も届きません。'));
+		children.push(check('unlock', _("to unlock sim"), e.unlock == '1',
+			_("Required to connect with a SIM from another company. It only moves when you hang it,") +
+			_("At that time, radio waves are stopped for 40 to 60 seconds.")));
+		children.push(check('ims', _("Enable IMS"), e.ims == '1',
+			_("SMS is delivered via IMS. If it is unregistered, not a single message will arrive.")));
 
 		var save = function(apply) {
 			return callApnSet(a.iccid, (f.apn.value || '').trim(),
@@ -415,17 +415,17 @@ return view.extend({
 				f.unlock.checked ? '1' : '0', f.ims.checked ? '1' : '0'
 			).then(function(res) {
 				if (res && res.error) {
-					ui.addNotification(null, E('p', {}, res.error), 'warning');
+					ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 					return;
 				}
 				if (!apply)
-					return self.reloadApn('保存しました。');
+					return self.reloadApn(_("Saved."));
 				return callApnApply().then(function(r) {
 					if (r && r.error) {
 						ui.addNotification(null, E('p', {}, r.error), 'warning');
 						return;
 					}
-					return self.reloadApn(r.note || '適用しました。');
+					return self.reloadApn(r.note ? sbair.errorText(r.note) : _("Applied."));
 				});
 			});
 		};
@@ -440,7 +440,7 @@ return view.extend({
 					return callApnProbe().then(function(res) {
 						if (!res || res.error) {
 							ui.addNotification(null,
-								E('p', {}, (res && res.error) || 'SIM から読み出せませんでした。'),
+								E('p', {}, (res && res.error) ? sbair.errorText(res.error) : _("Unable to read from SIM.")),
 								'warning');
 							return;
 						}
@@ -450,41 +450,41 @@ return view.extend({
 						if (g.password) f.password.value = g.password;
 						if (g.auth)     f.auth.value = g.auth;
 						ui.addNotification(null,
-							E('p', {}, 'SIM から読み出しました: ' + g.apn +
-								'。内容を確かめてから保存してください。'), 'info');
+							E('p', {}, _("I read from SIM:") + g.apn +
+								_(". Please check the contents and save.")), 'info');
 					});
 				})
-			}, 'SIM から読み出す'),
+			}, _("Reading from SIM")),
 			E('button', {
 				'class': 'cbi-button cbi-button-action',
 				'style': 'margin-right:.4em',
 				'click': ui.createHandlerFn(self, function() { return save(true); })
-			}, '保存して適用'),
+			}, _("Save and Apply")),
 			E('button', {
 				'class': 'cbi-button cbi-button-neutral',
 				'style': 'margin-right:.4em',
 				'click': ui.createHandlerFn(self, function() { return save(false); })
-			}, '保存のみ'),
+			}, _("save only")),
 			e.apn ? E('button', {
 				'class': 'cbi-button cbi-button-negative',
 				'click': ui.createHandlerFn(self, function() {
 					return callApnDelete(a.iccid).then(function() {
-						return self.reloadApn('削除しました。');
+						return self.reloadApn(_("Deleted."));
 					});
 				})
-			}, '削除') : ''
+			}, _("delete")) : ''
 		]));
 		children.push(E('div', { 'class': 'cbi-value-description' },
-			'保存先は /etc/config/sbair で、ICCID ごとに残ります。' +
-			'起動時と SIM の切替後に、その SIM に対応するものが自動で当たります。'));
+			_("The destination is /etc/config/sbair and remains for each ICCID.") +
+			_("At startup and after switching SIMs, the one corresponding to that SIM is automatically selected.")));
 
 		// 他の SIM の分も一覧で見せる。差し替えたときに何が入っているか分かる。
 		var others = (a.entries || []).filter(function(x) { return x.iccid !== a.iccid; });
 		if (others.length) {
 			var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, 'ICCID'),
-				E('th', { 'class': 'th' }, '名前'),
-				E('th', { 'class': 'th' }, 'APN')
+				E('th', { 'class': 'th' }, _('ICCID')),
+				E('th', { 'class': 'th' }, _("name")),
+				E('th', { 'class': 'th' }, _('APN'))
 			]) ];
 			others.forEach(function(x) {
 				rows.push(E('tr', { 'class': 'tr' }, [
@@ -493,11 +493,11 @@ return view.extend({
 					E('td', { 'class': 'td left' }, x.apn)
 				]));
 			});
-			children.push(E('h4', { 'style': 'margin-top:1.5em' }, '他の SIM に保存済み'));
+			children.push(E('h4', { 'style': 'margin-top:1.5em' }, _("Stored on another SIM")));
 			children.push(sbair.table(rows));
 		}
 
-		return subsection('APN', children);
+		return subsection(_('APN'), children);
 	},
 
 	reloadApn: function(msg) {
@@ -520,8 +520,8 @@ return view.extend({
 		if (busy) {
 			return [
 				E('div', { 'class': 'alert-message' }, [
-					E('p', {}, [ E('strong', {}, 'インストール中: '), dl.step || '' ]),
-					E('p', {}, 'SM-DP+ との通信が終わるまで 20〜30 秒かかります。')
+					E('p', {}, [ E('strong', {}, _("Installing:")), sbair.errorText(dl.step || '') ]),
+					E('p', {}, _("It takes 20 to 30 seconds for communication with SM-DP+ to end."))
 				])
 			];
 		}
@@ -536,26 +536,26 @@ return view.extend({
 			'type': 'text',
 			'class': 'cbi-input-text',
 			'style': 'width:100%;max-width:20em',
-			'placeholder': '(要求される profile のみ)'
+			'placeholder': _("(Requested profile only)")
 		});
 
 		var children = [];
 		if (dl.state === 'error')
 			children.push(E('div', { 'class': 'alert-message warning' },
-				'前回のインストールに失敗しました (' + (dl.step || '') + '): ' + (dl.message || '')));
+				_("Last installation failed (") + sbair.errorText(dl.step || '') + '): ' + sbair.errorText(dl.message || '')));
 		else if (dl.state === 'done')
-			children.push(E('div', { 'class': 'alert-message' }, dl.message || 'インストールが完了しました。'));
+			children.push(E('div', { 'class': 'alert-message' }, dl.message ? sbair.errorText(dl.message) : _("Installation is complete.")));
 
 		children.push(E('div', { 'class': 'cbi-value' }, [
-			E('label', { 'class': 'cbi-value-title' }, 'アクティベーションコード'),
+			E('label', { 'class': 'cbi-value-title' }, _("Activation Code")),
 			E('div', { 'class': 'cbi-value-field' }, [
 				code,
 				E('div', { 'class': 'cbi-value-description' },
-					'事業者から渡される "LPA:1$..." の文字列。QR コードの中身もこれ。')
+					_("The string \"LPA:1$...\" passed to the operator. The content of the QR code is also this."))
 			])
 		]));
 		children.push(E('div', { 'class': 'cbi-value' }, [
-			E('label', { 'class': 'cbi-value-title' }, '確認コード'),
+			E('label', { 'class': 'cbi-value-title' }, _("verification code")),
 			E('div', { 'class': 'cbi-value-field' }, [ cc ])
 		]));
 		children.push(E('div', {}, [
@@ -566,24 +566,24 @@ return view.extend({
 					var v = (code.value || '').trim();
 					if (!v) {
 						ui.addNotification(null,
-							E('p', {}, 'アクティベーションコードを入れてください。'), 'warning');
+							E('p', {}, _("Enter your activation code.")), 'warning');
 						return;
 					}
 					return callDownload(v, (cc.value || '').trim()).then(function(res) {
 						if (res && res.error) {
-							ui.addNotification(null, E('p', {}, res.error), 'warning');
+							ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 							return;
 						}
-						self.data.dl = { state: 'running', step: '起動' };
+						self.data.dl = { state: 'running', step: _("movement") };
 						poll.add(self.watchDl, 3);
 						self.redraw();
 					});
 				})
-			}, 'インストール')
+			}, _("installation"))
 		]));
 		children.push(E('div', { 'class': 'cbi-value-description' },
-			'⚠ ダウンロードは 1 回限りのことが多く、失敗すると事業者に再発行を' +
-			'頼む必要があります。SM-DP+ には IMEI が渡ります。'));
+			_("⚠ Downloads are often one-time, and if they fail, they are reissued to the business operator.") +
+			_("You have to ask for it. SM-DP+ passes IMEI.")));
 
 		return children;
 	},
@@ -591,13 +591,13 @@ return view.extend({
 	profileTable: function(list, disabled) {
 		var self = this;
 		if (!list || !list.length)
-			return E('p', {}, 'profile がありません。');
+			return E('p', {}, _("There is no profile."));
 
 		var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-			E('th', { 'class': 'th' }, 'ICCID'),
-			E('th', { 'class': 'th' }, '状態'),
-			E('th', { 'class': 'th' }, '事業者'),
-			E('th', { 'class': 'th' }, '名前'),
+			E('th', { 'class': 'th' }, _('ICCID')),
+			E('th', { 'class': 'th' }, _("situation")),
+			E('th', { 'class': 'th' }, _("business person")),
+			E('th', { 'class': 'th' }, _("name")),
 			E('th', { 'class': 'th' }, '')
 		]) ];
 
@@ -629,7 +629,7 @@ return view.extend({
 					E('button', {
 						'class': 'cbi-button cbi-button-neutral',
 						'style': 'padding:0 .4em;margin-left:.3em',
-						'title': '名前を付ける',
+						'title': _("by another name"),
 						'disabled': disabled ? '' : null,
 						'click': ui.createHandlerFn(self, function() {
 							return self.editNickname(p);
@@ -637,9 +637,9 @@ return view.extend({
 					}, '✎')
 				]),
 				E('td', { 'class': 'td left' }, [
-					on ? btn('無効化', 'esim_disable', 'cbi-button-neutral')
-					   : btn('有効化', 'esim_enable', 'cbi-button-action'),
-					btn('削除', 'esim_delete', 'cbi-button-negative')
+					on ? btn(_("deactivate"), 'esim_disable', 'cbi-button-neutral')
+					   : btn(_("activate"), 'esim_enable', 'cbi-button-action'),
+					btn(_("delete"), 'esim_delete', 'cbi-button-negative')
 				])
 			]));
 		});
@@ -649,19 +649,19 @@ return view.extend({
 	// 切替は電波を止めるので、必ず確認を挟む。
 	confirmSwitch: function(target) {
 		var self = this;
-		return ui.showModal('SIM マッピングの切替', [
-			E('p', {}, sbair.simMappingLabel(target) + ' に切り替えます。'),
+		return ui.showModal(_("Switch SIM Mapping"), [
+			E('p', {}, sbair.simMappingLabel(target) + _(" will switch to the selected SIM.")),
 			E('ul', {}, [
-				E('li', {}, '電波を止めます (AT+CFUN=4)。通信が切れます'),
-				E('li', {}, '30〜60 秒かかり、その間 AT は無応答になります'),
-				E('li', {}, '切替先に有効な profile が無ければ圏外になります'),
-				E('li', {}, '内蔵 eSIM に ISD-R は無いので、そちらでは profile を操作できません')
+				E('li', {}, _("Stop propagation (AT+CFUN=4). communication is lost")),
+				E('li', {}, _("It takes 30 to 60 seconds and AT does not respond.")),
+				E('li', {}, _("If the conversion destination does not have a valid profile, it will be out of service.")),
+				E('li', {}, _("The built-in eSIM doesn't have an ISD-R, so you can't manipulate the profile there."))
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'cbi-button',
 					'click': ui.hideModal
-				}, 'やめる'),
+				}, _("stop")),
 				' ',
 				E('button', {
 					'class': 'cbi-button cbi-button-action',
@@ -669,15 +669,15 @@ return view.extend({
 						return callSimmapSet(target).then(function(res) {
 							ui.hideModal();
 							if (res && res.error) {
-								ui.addNotification(null, E('p', {}, res.error), 'warning');
+								ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 								return;
 							}
-							self.data.sw = { state: 'running', step: '起動', target: target };
+							self.data.sw = { state: 'running', step: _("movement"), target: target };
 							poll.add(self.watch, 3);
 							self.redraw();
 						});
 					})
-				}, '切り替える')
+				}, _("conversion"))
 			])
 		]);
 	},
@@ -694,23 +694,23 @@ return view.extend({
 			'placeholder': p.name || '',
 			'maxlength': '64'
 		});
-		return ui.showModal('profile の名前', [
+		return ui.showModal(_("profile name"), [
 			E('p', {}, [
-				'事業者側の名前は ',
+				_("The name of the business operator is"),
 				E('strong', {}, p.provider || '-'), ' / ',
 				E('strong', {}, p.name || '-'),
-				'。ここで付ける名前はカードに保存され、この画面以外でも表示されます。'
+				_(". The name you give here will be saved to the card and will be displayed in addition to this screen.")
 			]),
 			E('div', { 'class': 'cbi-value' }, [
-				E('label', { 'class': 'cbi-value-title' }, '名前'),
+				E('label', { 'class': 'cbi-value-title' }, _("name")),
 				E('div', { 'class': 'cbi-value-field' }, [
 					input,
 					E('div', { 'class': 'cbi-value-description' },
-						'空にすると付けた名前を消します。')
+						_("If left blank, the specified name will be deleted."))
 				])
 			]),
 			E('div', { 'class': 'right' }, [
-				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, 'やめる'),
+				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, _("stop")),
 				' ',
 				E('button', {
 					'class': 'cbi-button cbi-button-action',
@@ -718,7 +718,7 @@ return view.extend({
 						return callNickname(p.iccid, input.value || '').then(function(res) {
 							ui.hideModal();
 							if (res && res.error) {
-								ui.addNotification(null, E('p', {}, res.error), 'warning');
+								ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 								return;
 							}
 							return callStatus().then(function(st) {
@@ -727,29 +727,29 @@ return view.extend({
 							});
 						});
 					})
-				}, '保存')
+				}, _("save"))
 			])
 		]);
 	},
 
 	confirmProfile: function(method, p) {
 		var self = this;
-		var label = { esim_enable: '有効化', esim_disable: '無効化', esim_delete: '削除' }[method];
+		var label = { esim_enable: _("activate"), esim_disable: _("deactivate"), esim_delete: _("delete") }[method];
 		var body = [
 			E('p', {}, [ E('strong', {}, p.nickname || p.name || p.iccid),
-			             ' を' + label + 'します。' ])
+			             '~' + label + _("do.") ])
 		];
 		if (method === 'esim_delete')
 			body.push(E('div', { 'class': 'alert-message warning' },
-				'削除は取り消せません。同じ profile を入れ直すには、事業者から ' +
-				'activation code を再発行してもらう必要があります。'));
+				_("Deletion cannot be undone. To re-enter the same profile,") +
+				_("You will need to reissue the activation code.")));
 		else
-			body.push(E('p', {}, 'カードが再初期化 (REFRESH) されるため、' +
-				'反映まで数秒かかります。'));
+			body.push(E('p', {}, _("Because the card is reset (REFRESH)") +
+				_("It takes a few seconds for reflection to occur.")));
 
-		return ui.showModal('profile の' + label, body.concat([
+		return ui.showModal(_("Profile for ") + label, body.concat([
 			E('div', { 'class': 'right' }, [
-				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, 'やめる'),
+				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, _("stop")),
 				' ',
 				E('button', {
 					'class': 'cbi-button ' +
@@ -758,7 +758,7 @@ return view.extend({
 						return callProfileOp(method, p.iccid).then(function(res) {
 							ui.hideModal();
 							if (res && res.error) {
-								ui.addNotification(null, E('p', {}, res.error), 'warning');
+								ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 								return;
 							}
 							// enable/disable の直後はカードが REFRESH 中で

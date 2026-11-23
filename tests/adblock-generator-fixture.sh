@@ -25,10 +25,9 @@ out=$(SBAIR_ADBLOCK_SOURCE_FILE="$input" SBAIR_ADBLOCK_SOURCE_REVISION=test-fixt
 printf '%s\n' "$out" | grep -q '^source_revision=test-fixture$'
 printf '%s\n' "$out" | grep -q '^entry_count=2$'
 cmp -s "$expected" "$output"
-first_hash=$(shasum -a 256 "$output" | awk '{print $1}')
+cp "$output" "$tmp/first-output"
 
 SBAIR_ADBLOCK_SOURCE_FILE="$input" SBAIR_ADBLOCK_SOURCE_REVISION=test-fixture \
 	SBAIR_ADBLOCK_OUTPUT="$output" sh "$repo/tools/update-adblock-domains.sh" >/dev/null
-second_hash=$(shasum -a 256 "$output" | awk '{print $1}')
-[ "$first_hash" = "$second_hash" ]
+cmp "$tmp/first-output" "$output"
 echo 'adblock-generator-fixture-ok'

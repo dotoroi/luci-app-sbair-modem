@@ -1,0 +1,3334 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-sbair-modem\n"
+"PO-Revision-Date: 2026-11-13 00:00+0000\n"
+"Last-Translator: Floop3 UI contributors\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgid ""
+"\n"
+"Use eth1 as WAN and request DHCP. Use a wired WAN instead of a cellular WAN. "
+"Check the physical jack connected to eth1 and the current LAN DHCP status."
+msgstr ""
+
+msgid " / Gateway "
+msgstr ""
+
+msgid " will be switched. "
+msgstr ""
+
+msgid " will switch to the selected SIM."
+msgstr ""
+
+msgid "(Cannot be avoided with AT+CMGL specification). In the storage room"
+msgstr ""
+
+msgid "(Check only about 25 frequently used ports)"
+msgstr ""
+
+msgid "(Not included with SIM)"
+msgstr ""
+
+msgid "(Requested profile only)"
+msgstr ""
+
+msgid "(Sender unknown)"
+msgstr ""
+
+msgid "(no change)"
+msgstr ""
+
+msgid "(not read"
+msgstr ""
+
+msgid "+ EDMFAPP 6,3 (live)"
+msgstr ""
+
+msgid "+CESQ (live)"
+msgstr ""
+
+msgid "+CIREG (live)"
+msgstr ""
+
+msgid "+ECBDINFO (raw)"
+msgstr ""
+
+msgid "+EPBSEH (live)"
+msgstr ""
+
+msgid ", registration"
+msgstr ""
+
+msgid "- It will not be overwritten by a second or subsequent capture."
+msgstr ""
+
+msgid ". Please check the contents and save."
+msgstr ""
+
+msgid ""
+". The name you give here will be saved to the card and will be displayed in "
+"addition to this screen."
+msgstr ""
+
+msgid ". You cannot guess the value and activate it."
+msgstr ""
+
+msgid "/ netmask"
+msgstr ""
+
+msgid "5GHz / 160 MHz client → NAS via Air6"
+msgstr ""
+
+msgid "? Continue?"
+msgstr ""
+
+msgid "? Nearby devices can join for a limited time. Continue?"
+msgstr ""
+
+msgid "A connection device cannot be acquired (or does not exist yet)."
+msgstr ""
+
+msgid ""
+"A regular SIM has been inserted. Profile work is only possible with eUICC "
+"cards."
+msgstr ""
+
+msgid "AP / Bridge"
+msgstr ""
+
+msgid "AP/Bridge settings"
+msgstr ""
+
+msgid "AP/Bridge — connects br-lan to the upstream network"
+msgstr ""
+
+msgid "APN settings will not change."
+msgstr ""
+
+msgid "Activate with a click"
+msgstr ""
+
+msgid "Activation Code"
+msgstr ""
+
+msgid "Activation profile"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add USB LAN port"
+msgstr ""
+
+msgid "Add eSIM"
+msgstr ""
+
+msgid ""
+"Add the interface to br-lan. It uses the same private network and DHCP as "
+"the LAN, and the WAN settings do not change."
+msgstr ""
+
+msgid "Add to LAN"
+msgstr ""
+
+msgid "Added USB LAN port to br-lan."
+msgstr ""
+
+msgid "Added barrel to inventory."
+msgstr ""
+
+msgid "Advanced settings"
+msgstr ""
+
+msgid ""
+"Advertising blocks are managed per device MAC address. Each terminal does "
+"not need to use the management screen."
+msgstr ""
+
+msgid "After checking the difference, restart Wi-Fi and compare"
+msgstr ""
+
+msgid "Already a br-lan member"
+msgstr ""
+
+msgid "Already at default power."
+msgstr ""
+
+msgid "Already at maximum scale."
+msgstr ""
+
+msgid "Applied"
+msgstr ""
+
+msgid "Applied."
+msgstr ""
+
+msgid "Apply changes"
+msgstr ""
+
+msgid "Apply selected band changes"
+msgstr ""
+
+msgid "Applying:"
+msgstr ""
+
+msgid "Architecture"
+msgstr ""
+
+msgid "Association count"
+msgstr ""
+
+msgid ""
+"At startup and after switching SIMs, the one corresponding to that SIM is "
+"automatically selected."
+msgstr ""
+
+msgid "At that time, radio waves are stopped for 40 to 60 seconds."
+msgstr ""
+
+msgid "Authentication method"
+msgstr ""
+
+msgid "Automatic acquisition from upstream router (DHCP)"
+msgstr ""
+
+msgid "Automatic validation upon startup is also not performed."
+msgstr ""
+
+msgid "Automatically resets upon startup."
+msgstr ""
+
+msgid "Automatically rewind to original settings"
+msgstr ""
+
+msgid "Automatically rewinds if no network connection is reached in time"
+msgstr ""
+
+msgid "Available after driver binding"
+msgstr ""
+
+msgid "Available services"
+msgstr ""
+
+msgid "Band / IMS"
+msgstr ""
+
+msgid "Band Steering"
+msgstr ""
+
+msgid "Band connecting"
+msgstr ""
+
+msgid "Band steering"
+msgstr ""
+
+msgid "Bandwidth"
+msgstr ""
+
+msgid "Bandwidth cannot be changed for legacy Wi-Fi protocols."
+msgstr ""
+
+msgid "Baud rate: 115200"
+msgstr ""
+
+msgid "Beacon / Tx power"
+msgstr ""
+
+msgid "Because the card is reset (REFRESH)"
+msgstr ""
+
+msgid ""
+"Because the wireless driver (mt_wifi) of this aircraft does not support the "
+"Network → Wireless screen of the OpenWrt standard,"
+msgstr ""
+
+msgid ""
+"Before using AP / Bridge mode, check EasyMesh in the stock web UI if needed."
+msgstr ""
+
+msgid ""
+"Blank inherits the stock settings. Required items for which a stock setting "
+"cannot be obtained will be rejected upon application."
+msgstr ""
+
+msgid "Body information"
+msgstr ""
+
+msgid "Bridge"
+msgstr ""
+
+msgid "Bridge members"
+msgstr ""
+
+msgid "Built-in eSIM"
+msgstr ""
+
+msgid "Bundle"
+msgstr ""
+
+msgid "Cable: Regular Micro-USB cable"
+msgstr ""
+
+msgid "Can't get temperature."
+msgstr ""
+
+msgid "Cancel pending changes and revert to previous settings?"
+msgstr ""
+
+msgid "Cancel selection"
+msgstr ""
+
+msgid ""
+"Candidate USB Host network device not detected (All USB Host devices can be "
+"checked in “Main Unit > USB Device”)"
+msgstr ""
+
+msgid ""
+"Candidate v1 is a live-validated binary from upstream, but the source/binary "
+"correspondence is treated as B2 provenance and is not recommended for new "
+"uses."
+msgstr ""
+
+msgid "Cannot be calculated in existing settings."
+msgstr ""
+
+msgid "Cell ID"
+msgstr ""
+
+msgid "Cellular"
+msgstr ""
+
+msgid "Cellular WAN"
+msgstr ""
+
+msgid "Change USB UDC/ConfigFS. Do you have an independent management path?"
+msgstr ""
+
+msgid ""
+"Change and save band steering. Turning it off also turns off MLO. A device "
+"reboot may be required. Continue?"
+msgstr ""
+
+msgid "Change the band you want to activate as follows:"
+msgstr ""
+
+msgid ""
+"Change the ownership state of USB UDC/ConfigFS and make Air6 act as a USB "
+"CDC-NCM gadget."
+msgstr ""
+
+msgid "Changes that do not apply"
+msgstr ""
+
+msgid "Changing band steering setting..."
+msgstr ""
+
+msgid ""
+"Changing this may alter SSID settings. Check saved settings and actual "
+"broadcasts in Wi-Fi diagnostics."
+msgstr ""
+
+msgid "Channel"
+msgstr ""
+
+msgid "Check manually within seconds."
+msgstr ""
+
+msgid "Check the 6GHz factor"
+msgstr ""
+
+msgid "Check the saved state first. If needed:"
+msgstr ""
+
+msgid "Check these settings"
+msgstr ""
+
+msgid ""
+"Clear it from storage and also clear the modem's storage area. It cannot be "
+"cancelled."
+msgstr ""
+
+msgid "Client isolation"
+msgstr ""
+
+msgid "Communication between main SSID bands"
+msgstr ""
+
+msgid "Communication between main and guest SSIDs"
+msgstr ""
+
+msgid "Communication is lost (AT+CFUN=0 → 1)"
+msgstr ""
+
+msgid "Communication settings"
+msgstr ""
+
+msgid ""
+"Communication standard/channel/bandwidth (UCI setting value. Check actual "
+"operation with “Wi-Fi > Diagnosis”)"
+msgstr ""
+
+msgid "Compare settings"
+msgstr ""
+
+msgid "Comparison results"
+msgstr ""
+
+msgid "Competitive / non-granted"
+msgstr ""
+
+msgid "Confirmation required"
+msgstr ""
+
+msgid "Connection device ("
+msgstr ""
+
+msgid "Connection method"
+msgstr ""
+
+msgid ""
+"Connects Wi-Fi 7 capable clients across multiple bands. Older WPA clients "
+"may fail to connect; stock firmware changes security settings when this is "
+"enabled."
+msgstr ""
+
+msgid "Continue?"
+msgstr ""
+
+msgid "Conversion: Pin socket (female) → USB-A female"
+msgstr ""
+
+msgid "Corresponding but invalid"
+msgstr ""
+
+msgid "Could not read Wi-Fi batch change data."
+msgstr ""
+
+msgid "Could not remove wireless power settings."
+msgstr ""
+
+msgid "Could not write wireless power settings."
+msgstr ""
+
+msgid "Could not write wireless settings."
+msgstr ""
+
+msgid "Current DHCP scope (observation)"
+msgstr ""
+
+msgid "Current PIN: "
+msgstr ""
+
+msgid "Current SIM"
+msgstr ""
+
+msgid "Current WAN"
+msgstr ""
+
+msgid "Current status:"
+msgstr ""
+
+msgid "Currently detached (settings retained)"
+msgstr ""
+
+msgid "DHCP / Fixed"
+msgstr ""
+
+msgid ""
+"DHCP clients in AP mode are disabled with the safe flag. Applies only to "
+"static IP."
+msgstr ""
+
+msgid "DHCP lease time (observed)"
+msgstr ""
+
+msgid "DHCP packet guard"
+msgstr ""
+
+msgid "DHCP/route status was checked and corrected."
+msgstr ""
+
+msgid "Date and time of last change"
+msgstr ""
+
+msgid "Default (uncontrolled) — accept current settings"
+msgstr ""
+
+msgid "Default power saved; Wi-Fi restart started."
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete everything on this SIM"
+msgstr ""
+
+msgid "Delete message"
+msgstr ""
+
+msgid "Delete the following messages from both your library and your modem:"
+msgstr ""
+
+msgid "Deleted."
+msgstr ""
+
+msgid "Deletion cannot be undone. To re-enter the same profile,"
+msgstr ""
+
+msgid ""
+"Depending on how the data call fails, the modem side session is blocked."
+msgstr ""
+
+msgid "Detected /"
+msgstr ""
+
+msgid "Device reboot"
+msgstr ""
+
+msgid "Diagnostic log (recent)"
+msgstr ""
+
+msgid "Differences from Known-Good ("
+msgstr ""
+
+msgid ""
+"Different keys reduce the number of remaining attempts. Once you use it up "
+"you can't go back"
+msgstr ""
+
+msgid "Disable (Enable)"
+msgstr ""
+
+msgid "Disable (limited rollback)"
+msgstr ""
+
+msgid ""
+"Disable DHCP for LAN clients? Devices relying on Air 6 may be unable to "
+"renew their IP addresses. Continue?"
+msgstr ""
+
+msgid "Disable DHCP server"
+msgstr ""
+
+msgid "Disable IMS"
+msgstr ""
+
+msgid "Disable OTA/FOTA automatic updates"
+msgstr ""
+
+msgid ""
+"Disable OTA/FOTA automatic updates. Set fota.config.enabled and "
+"fota.provision.enabled to 0, stop kn_fotad and disable autostart. Do you "
+"want to continue?"
+msgstr ""
+
+msgid "Disable ad blocking with a click"
+msgstr ""
+
+msgid "Disable with a click"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Disables all 2.4/5/6 GHz SSIDs. Wired LAN and SSH remain available."
+msgstr ""
+
+msgid "Disconnect the USB host and obtain a means of physical recovery."
+msgstr ""
+
+msgid ""
+"Disconnect the USB host device before operating it. LAN/WAN, br-lan, DHCP, "
+"Wi-Fi, and firewall do not change automatically."
+msgstr ""
+
+msgid "Display identifier (Cell ID)"
+msgstr ""
+
+msgid "Display identifier (EID/ICCID)"
+msgstr ""
+
+msgid "Display identifier (IMEI)"
+msgstr ""
+
+msgid ""
+"Displays all USB devices/interfaces including hub, storage, serial, vendor-"
+"specific, and unknown as USB Host (device connected to Air 6)."
+msgstr ""
+
+msgid ""
+"Do not assume the USB side as the management path, but secure a recovery "
+"method such as another LAN or Wi-Fi management path and UART."
+msgstr ""
+
+msgid ""
+"Do not change these settings unless you have a means of recovery such as "
+"UART. Additionally, Safe Apply's automatic rollback feature does not "
+"guarantee recovery from all configuration failures."
+msgstr ""
+
+msgid ""
+"Do you want to disable USB Gadget and delete the dedicated ConfigFS topology?"
+msgstr ""
+
+msgid "Driver SHA256"
+msgstr ""
+
+msgid "Driver vermagic"
+msgstr ""
+
+msgid ""
+"Drop the radio waves, raise them again (AT+CFUN=0 → 1), and spread out the "
+"WAN again."
+msgstr ""
+
+msgid ""
+"EasyMesh may automatically re-enable DHCP. This feature does not change "
+"EasyMesh settings."
+msgstr ""
+
+msgid "Edit it yourself here."
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Enable (Disable)"
+msgstr ""
+
+msgid ""
+"Enable DHCP for LAN clients? It may conflict with another DHCP server on the "
+"same LAN. Continue?"
+msgstr ""
+
+msgid "Enable DHCP server"
+msgstr ""
+
+msgid "Enable IMS"
+msgstr ""
+
+msgid "Enable OTA/FOTA automatic updates"
+msgstr ""
+
+msgid ""
+"Enable OTA/FOTA automatic updates and start kn_fotad. Do you want to "
+"continue?"
+msgstr ""
+
+msgid "Enable ad blocking with a click"
+msgstr ""
+
+msgid "Enable filter"
+msgstr ""
+
+msgid ""
+"Enable the MAC allowlist. Devices not in the list will be blocked. Continue?"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid ""
+"Enabling MLO requires band steering to be enabled. Older clients may lose "
+"access. Continue?"
+msgstr ""
+
+msgid "Enter your activation code."
+msgstr ""
+
+msgid "Ethernet link rate / duplex"
+msgstr ""
+
+msgid ""
+"Ethernet link rate and USB bus speed are reported link/bus speeds, not "
+"application effective speeds. No iperf3 measurements are performed on this "
+"screen."
+msgstr ""
+
+msgid ""
+"Even if the connection method is NR5G, 5G NSA connects to the LTE anchor and "
+"then adds 5G."
+msgstr ""
+
+msgid ""
+"Even when invalidated, fota.config.respawn does not change. Wait 10 seconds "
+"and make sure you restart kn_fotad."
+msgstr ""
+
+msgid "Example: 1-1024,8080"
+msgstr ""
+
+msgid "Example: au"
+msgstr ""
+
+msgid "Example: au.au-net.ne.jp"
+msgstr ""
+
+msgid "Excluded / Not confirmed"
+msgstr ""
+
+msgid "Existing settings (unmanaged)"
+msgstr ""
+
+msgid ""
+"Explicitly run knsh wlan restart and compare runtimes. Wi-Fi will be "
+"temporarily disconnected. Do you want to continue?"
+msgstr ""
+
+msgid "FOTA body"
+msgstr ""
+
+msgid "Failed."
+msgstr ""
+
+msgid "Fallback"
+msgstr ""
+
+msgid "Fallback IP"
+msgstr ""
+
+msgid "Fallback Netmask"
+msgstr ""
+
+msgid "Fast roaming (802.11r)"
+msgstr ""
+
+msgid ""
+"Fast roaming for networks with multiple access points. It has little benefit "
+"with a single AP and applies to all SSIDs."
+msgstr ""
+
+msgid ""
+"First check which physical jack is connected to eth1 on your device. If you "
+"connect a higher-level network to the LAN jack, DHCP servers may compete "
+"with each other. This mode replaces modem WAN and does not tie you into a "
+"dual WAN with cellular."
+msgstr ""
+
+msgid ""
+"For now, measurements on the 5G side are empty, so there's no shortage yet."
+msgstr ""
+
+msgid "Frequency (primary / center)"
+msgstr ""
+
+msgid "Gateway"
+msgstr ""
+
+msgid "Gateway: "
+msgstr ""
+
+msgid "Generate new PIN"
+msgstr ""
+
+msgid "Generic SIM (not eUICC)"
+msgstr ""
+
+msgid "Genuine Settings: Static IP"
+msgstr ""
+
+msgid "Get the gist"
+msgstr ""
+
+msgid "Granted only in case of DHCP failure. Conflict check in ARP probe"
+msgstr ""
+
+msgid "HTMode"
+msgstr ""
+
+msgid "Here's what you can't erase on the modem side:"
+msgstr ""
+
+msgid ""
+"Historical TCP P1 iperf3 actual measurements (2026-09-21, 10 seconds each). "
+"It does not indicate the current speed. Wi-Fi value is 5GHz / 160MHz "
+"(channel 56) Client → Air6 → NAS transmission."
+msgstr ""
+
+msgid "Historical throughput references"
+msgstr ""
+
+msgid ""
+"Hit AT+ESMLCK directly. After switching, the radio waves stop once to read "
+"the SIM again."
+msgstr ""
+
+msgid "I didn't get the ad blocking status."
+msgstr ""
+
+msgid "I read from SIM:"
+msgstr ""
+
+msgid "I removed the USB LAN port."
+msgstr ""
+
+msgid "I requested amputation. It may take some time to reconnect."
+msgstr ""
+
+msgid ""
+"I saved the settings and started the Wi-Fi reboot. It disconnects for a few "
+"seconds and reconnects."
+msgstr ""
+
+msgid ""
+"I understand that this is an experimental feature that changes USB UDC/"
+"ConfigFS."
+msgstr ""
+
+msgid "I'm holding B right now"
+msgstr ""
+
+msgid "IP address"
+msgstr ""
+
+msgid ""
+"If it is not registered, not a single message will arrive. Not valid as "
+"shipped."
+msgstr ""
+
+msgid ""
+"If left blank, only about 25 frequently used ports will be used next time "
+"(up to a maximum of 4096 ports)."
+msgstr ""
+
+msgid ""
+"If left blank, the factory settings will be inherited. If there is no "
+"setting on the factory side, it will not be set."
+msgstr ""
+
+msgid "If left blank, the netmask of the factory settings will be inherited."
+msgstr ""
+
+msgid "If left blank, the specified name will be deleted."
+msgstr ""
+
+msgid "If left blank, the static IP of the factory settings will be inherited."
+msgstr ""
+
+msgid "If network access is lost, UART recovery may be required."
+msgstr ""
+
+msgid ""
+"If the conversion destination does not have a valid profile, it will be out "
+"of service."
+msgstr ""
+
+msgid ""
+"If you cannot move to another band, it will be out of range, but in that "
+"case it will be automatically restored."
+msgstr ""
+
+msgid ""
+"If you cannot secure a recovery method such as UART, do not select or apply "
+"DHCP. Safe Apply's automatic rollback feature does not guarantee recovery "
+"from all configuration failures."
+msgstr ""
+
+msgid ""
+"If you do not confirm within 120 seconds, we will roll back to your previous "
+"network settings."
+msgstr ""
+
+msgid "If you do not connect to the network in time"
+msgstr ""
+
+msgid ""
+"If you open , you can turn on/off only your own terminal without logging in."
+msgstr ""
+
+msgid ""
+"If you switch connection modes or change settings, all network connections "
+"may be lost and a soft brick state may occur."
+msgstr ""
+
+msgid ""
+"If you switch or change Wi-Fi or network settings, you may lose all network "
+"connections and end up in a soft brick state."
+msgstr ""
+
+msgid "Import from modem"
+msgstr ""
+
+msgid ""
+"In AP mode, DHCP, RA, DHCPv6, and NDP on Air 6 are stopped. It does not "
+"block IPv6 coming from upstream."
+msgstr ""
+
+msgid "In AP mode, it is not used for routing. The modem itself does not stop."
+msgstr ""
+
+msgid ""
+"In addition, we have confirmed that in the case of soft bricking, recovery "
+"is possible in the following environments."
+msgstr ""
+
+msgid "In modem:"
+msgstr ""
+
+msgid "In this state, you will not receive SMS."
+msgstr ""
+
+msgid "Inheritance of stock settings"
+msgstr ""
+
+msgid "Installation is complete."
+msgstr ""
+
+msgid "Installing:"
+msgstr ""
+
+msgid "Interface/Link"
+msgstr ""
+
+msgid "Introduce/Disable"
+msgstr ""
+
+msgid "Introduced but failed verification"
+msgstr ""
+
+msgid "Invalid Wi-Fi batch change data."
+msgstr ""
+
+msgid "Invalid channel for the selected Wi-Fi band."
+msgstr ""
+
+msgid "Invalid network interface name."
+msgstr ""
+
+msgid "It cannot be cancelled."
+msgstr ""
+
+msgid "It takes 20 to 30 seconds for communication with SM-DP+ to end."
+msgstr ""
+
+msgid "It takes 30 to 60 seconds and AT does not respond."
+msgstr ""
+
+msgid "It takes 30 to 60 seconds. Meanwhile AT is not responding."
+msgstr ""
+
+msgid "It takes 30~60 seconds"
+msgstr ""
+
+msgid "It takes 40-60 seconds"
+msgstr ""
+
+msgid "It takes a few seconds for reflection to occur."
+msgstr ""
+
+msgid "It will remain in the same unread state as when first captured."
+msgstr ""
+
+msgid "Items that cannot be obtained"
+msgstr ""
+
+msgid "Judgment target"
+msgstr ""
+
+msgid ""
+"Just run knsh save. Wi-Fi restart does not work. Do you want to continue?"
+msgstr ""
+
+msgid "Keep current br-lan, private address, DHCP"
+msgstr ""
+
+msgid "Kernel"
+msgstr ""
+
+msgid "Known USB Host Ethernet Candidates"
+msgstr ""
+
+msgid "Known-good profile"
+msgstr ""
+
+msgid "LAN DHCP server"
+msgstr ""
+
+msgid "LAN service"
+msgstr ""
+
+msgid "LAN settings"
+msgstr ""
+
+msgid ""
+"LAN settings are retained even if the adapter is disconnected. When you "
+"reconnect, you will be connected to the same LAN bridge."
+msgstr ""
+
+msgid "Last conversion failed ("
+msgstr ""
+
+msgid "Last correction/count"
+msgstr ""
+
+msgid "Last installation failed ("
+msgstr ""
+
+msgid "Layers/Items Changed"
+msgstr ""
+
+msgid ""
+"Legacy Wi-Fi protocols do not support bandwidth changes. Change the Wi-Fi "
+"protocol first."
+msgstr ""
+
+msgid "License"
+msgstr ""
+
+msgid "Line Overview"
+msgstr ""
+
+msgid "Link broken"
+msgstr ""
+
+msgid "Loaded USB modules"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Locking"
+msgstr ""
+
+msgid "MAC address"
+msgstr ""
+
+msgid "MAC filter (allowlist)"
+msgstr ""
+
+msgid "MLO"
+msgstr ""
+
+msgid "Main SSID access to wired LAN"
+msgstr ""
+
+msgid "Manage IP addresses assigned by Air 6 to LAN clients."
+msgstr ""
+
+msgid ""
+"Manage automatic body updates with genuine kn_fotad. It does not block "
+"servers, change binaries, or change respawn settings."
+msgstr ""
+
+msgid "Managed by"
+msgstr ""
+
+msgid "Management IP"
+msgstr ""
+
+msgid "Management IP method"
+msgstr ""
+
+msgid ""
+"Management of sbair has been cancelled. Network settings have not changed."
+msgstr ""
+
+msgid "Management path"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Manufacturer/Product"
+msgstr ""
+
+msgid "Maximum scale saved; Wi-Fi restart started."
+msgstr ""
+
+msgid "Mesh mode"
+msgstr ""
+
+msgid "Mode selection and detailed settings (currently:"
+msgstr ""
+
+msgid "Modem not reporting"
+msgstr ""
+
+msgid "Modem reset"
+msgstr ""
+
+msgid "Modem settings"
+msgstr ""
+
+msgid "Monitor only (default)"
+msgstr ""
+
+msgid "Monitoring"
+msgstr ""
+
+msgid ""
+"Moving on to rebooting. However, if you reset the settings, the SIM lock "
+"will return to default shipping."
+msgstr ""
+
+msgid "Multi-Link Operation (MLO)"
+msgstr ""
+
+msgid "Multiply SIM lock again. Non-SoftBank SIMs cannot be used."
+msgstr ""
+
+msgid "Name (optional)"
+msgstr ""
+
+msgid "Need to check driver status"
+msgstr ""
+
+msgid "Netmask:"
+msgstr ""
+
+msgid "Network devices"
+msgstr ""
+
+msgid "Network diagnostics were not obtained."
+msgstr ""
+
+msgid "Network mode (AP / Bridge)"
+msgstr ""
+
+msgid "No MAC addresses registered."
+msgstr ""
+
+msgid "No bundle has been introduced that satisfies fixed SHA256/vermagic."
+msgstr ""
+
+msgid "No encryption"
+msgstr ""
+
+msgid "No number ("
+msgstr ""
+
+msgid "No open ports found."
+msgstr ""
+
+msgid "Non-target / unknown"
+msgstr ""
+
+msgid "Normal state not recorded"
+msgstr ""
+
+msgid "Not analyzed (monitors only hash/mtime/size)"
+msgstr ""
+
+msgid "Not applied"
+msgstr ""
+
+msgid "Not detected"
+msgstr ""
+
+msgid "Not detected ("
+msgstr ""
+
+msgid "Not introduced"
+msgstr ""
+
+msgid "Not received"
+msgstr ""
+
+msgid "Not registered"
+msgstr ""
+
+msgid ""
+"Not registered on the network. Below are the measurements of cells that can "
+"be received:"
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+msgid "OTA/FOTA automatic renewal"
+msgstr ""
+
+msgid "OWE(Enhanced Open)"
+msgstr ""
+
+msgid "Obtain DHCP automatically"
+msgstr ""
+
+msgid ""
+"Obtained the difference before and after knsh save. Wi-Fi restart is not "
+"performed."
+msgstr ""
+
+msgid "Off"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid ""
+"Only disables sbair management while maintaining current network settings.\n"
+"\n"
+"Even with this transition, there is a risk of losing the management path and "
+"soft bricking it, requiring a UART for recovery. Do you want to continue?"
+msgstr ""
+
+msgid ""
+"Only enabled devices in this list can connect. If you enable the filter with "
+"an empty list, no device will be able to connect."
+msgstr ""
+
+msgid ""
+"Only the app management bundle on the USB Host side is subject to "
+"manipulation. It is invalid because bundle is not currently provided."
+msgstr ""
+
+msgid "Only when changed"
+msgstr ""
+
+msgid "Other bridge members:"
+msgstr ""
+
+msgid "Other tabs are also temporarily unreadable."
+msgstr ""
+
+msgid "Parent address/default path"
+msgstr ""
+
+msgid ""
+"Pending wireless changes exist. Save or discard them before changing "
+"settings."
+msgstr ""
+
+msgid "Physical slot (uSIM)"
+msgstr ""
+
+msgid "Please check all three items below before enabling."
+msgstr ""
+
+msgid "Preflight"
+msgstr ""
+
+msgid "Preflight NG"
+msgstr ""
+
+msgid "Preflight OK"
+msgstr ""
+
+msgid "Preview of applying static IP"
+msgstr ""
+
+msgid "Primary (uncontrolled) / unmanaged"
+msgstr ""
+
+msgid "Profile for "
+msgstr ""
+
+msgid "Protocol"
+msgstr ""
+
+msgid "Provenance"
+msgstr ""
+
+msgid "Provisioning"
+msgstr ""
+
+msgid ""
+"Push-button (PBC) mode temporarily allows anyone nearby to join the Wi-Fi "
+"network."
+msgstr ""
+
+msgid "RSRP (5G each antenna)"
+msgstr ""
+
+msgid "RSRP (LTE each antenna)"
+msgstr ""
+
+msgid "RTL8156 raw LAN — Air6 → NAS"
+msgstr ""
+
+msgid "RTL8156 raw LAN — NAS → Air6"
+msgstr ""
+
+msgid "Radio / AP interface"
+msgstr ""
+
+msgid ""
+"Radio waves will be lost for a few seconds (a rescan will be performed)."
+msgstr ""
+
+msgid "Reading from SIM"
+msgstr ""
+
+msgid "Reboot device"
+msgstr ""
+
+msgid ""
+"Reboot requested. Check the device address and reopen this page in about two "
+"minutes."
+msgstr ""
+
+msgid ""
+"Reboot the device? Wi-Fi and LAN connections will drop and the WAN address "
+"may change. This button does not save pending settings. Continue?"
+msgstr ""
+
+msgid "Rebooting will return it to the physical slot side."
+msgstr ""
+
+msgid "Recent changes / Known-good"
+msgstr ""
+
+msgid "Record the present as normal"
+msgstr ""
+
+msgid ""
+"Recovery may not be possible even if you press the reset button, in which "
+"case recovery via UART connection is required."
+msgstr ""
+
+msgid "Reference value. May be inconsistent with registration status"
+msgstr ""
+
+msgid "Registrar"
+msgstr ""
+
+msgid "Registration and SMS over IMS may remain."
+msgstr ""
+
+msgid ""
+"Registration takes 10 to 30 seconds, but even if it is invalidated in the "
+"registered state,"
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Reload (unapplied changes will be discarded)"
+msgstr ""
+
+msgid "Remove ."
+msgstr ""
+
+msgid ""
+"Remove all storage from the storage and also free up storage space on the "
+"modem."
+msgstr ""
+
+msgid "Remove from LAN"
+msgstr ""
+
+msgid ""
+"Remove the interface from br-lan. Communication for connected LAN clients "
+"may be lost."
+msgstr ""
+
+msgid "Requested bandwidth is not supported by the current Wi-Fi protocol."
+msgstr ""
+
+msgid ""
+"Required to connect with a SIM from another company. It only moves when you "
+"hang it,"
+msgstr ""
+
+msgid ""
+"Requires a compatible SoftBank mesh node. Stock firmware may re-enable "
+"radios, change security modes, and reveal SSIDs when mesh is enabled."
+msgstr ""
+
+msgid "Reset 2.4 GHz WPS"
+msgstr ""
+
+msgid "Reset 5 GHz WPS"
+msgstr ""
+
+msgid "Reset WPS state for "
+msgstr ""
+
+msgid "Resetting:"
+msgstr ""
+
+msgid ""
+"Restore SBA6D firmware default wireless power? Country/region settings and "
+"regulatory table will not change. Continue?"
+msgstr ""
+
+msgid "Restore default power"
+msgstr ""
+
+msgid ""
+"Restore saved WAN interface settings when switching to modem router mode"
+msgstr ""
+
+msgid ""
+"Retaining your current network settings. AP/Bridge will not change until "
+"explicitly applied."
+msgstr ""
+
+msgid "Retrieving from modem..."
+msgstr ""
+
+msgid "Revert to previous combination"
+msgstr ""
+
+msgid "Reviewed Activation profile is missing or invalid."
+msgstr ""
+
+msgid "Rollback required"
+msgstr ""
+
+msgid "Runtime"
+msgstr ""
+
+msgid "Runtime difference"
+msgstr ""
+
+msgid "Runtime only changed?"
+msgstr ""
+
+msgid "SIM / eSIM"
+msgstr ""
+
+msgid "SIM Mapping"
+msgstr ""
+
+msgid "SIM applicable LAN"
+msgstr ""
+
+msgid "SIM lock"
+msgstr ""
+
+msgid "SIM lock operation indication (danger)"
+msgstr ""
+
+msgid "SIM status"
+msgstr ""
+
+msgid "SIM/Phone Number:"
+msgstr ""
+
+msgid "SINR (5G each antenna)"
+msgstr ""
+
+msgid "SINR (LTE each antenna)"
+msgstr ""
+
+msgid "SMS"
+msgstr ""
+
+msgid "SMS is delivered via IMS."
+msgstr ""
+
+msgid ""
+"SMS is delivered via IMS. If it is unregistered, not a single message will "
+"arrive."
+msgstr ""
+
+msgid "Safe Apply pending"
+msgstr ""
+
+msgid "Safe knsh save difference test"
+msgstr ""
+
+msgid "Save and Apply"
+msgstr ""
+
+msgid "Saved."
+msgstr ""
+
+msgid ""
+"Saves and reflects network settings. The USB adapter may lose link or "
+"briefly reconnect to the network."
+msgstr ""
+
+msgid "Scan in a specified range"
+msgstr ""
+
+msgid "Secure independent management path for LAN or Wi-Fi"
+msgstr ""
+
+msgid "Select all corresponding bands"
+msgstr ""
+
+msgid ""
+"Selecting and applying will only turn off sbair management, keeping your "
+"current network settings."
+msgstr ""
+
+msgid "Send pending channel changes with wifi_apply_batch."
+msgstr ""
+
+msgid "Set firmware maximum power"
+msgstr ""
+
+msgid ""
+"Set wireless power to the firmware maximum scale? Country/region settings "
+"will not change. Continue?"
+msgstr ""
+
+msgid "Setting details (UCI/Vendor persistent/Runtime)"
+msgstr ""
+
+msgid "Settings could not be saved."
+msgstr ""
+
+msgid "Settings request failed: "
+msgstr ""
+
+msgid ""
+"Settings saved. After reboot, check actual Wi-Fi broadcasts in diagnostics. "
+"Runtime broadcasts have not yet been verified."
+msgstr ""
+
+msgid "Show debug (show raw response from AT)"
+msgstr ""
+
+msgid "Since it is out of scope, you will not be able to register with IMS."
+msgstr ""
+
+msgid ""
+"Since this screen and SSH are on the LAN side, operation continues even if "
+"the bands are separated and communication is not possible."
+msgstr ""
+
+msgid "SoftBank Air"
+msgstr ""
+
+msgid "SoftBank Mesh"
+msgstr ""
+
+msgid "Start 2.4 GHz PBC"
+msgstr ""
+
+msgid "Start 5 GHz PBC"
+msgstr ""
+
+msgid "Start WPS push-button setup on "
+msgstr ""
+
+msgid ""
+"Started applying. Check the status of the actual machine and automatically "
+"check if there are no problems."
+msgstr ""
+
+msgid "Static IP (DHCP client disabled with safe flag)"
+msgstr ""
+
+msgid "Static IP settings to be applied"
+msgstr ""
+
+msgid "Static IP:"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Status unknown"
+msgstr ""
+
+msgid ""
+"Stock constraint: turn on band steering first; MLO is locked while it is off."
+msgstr ""
+
+msgid "Stop propagation (AT+CFUN=4). communication is lost"
+msgstr ""
+
+msgid "Stop propagation once (AT+CFUN=0 → 1). communication is lost"
+msgstr ""
+
+msgid "Storage for:"
+msgstr ""
+
+msgid "Stored on another SIM"
+msgstr ""
+
+msgid "Support level"
+msgstr ""
+
+msgid "Switch SIM Mapping"
+msgstr ""
+
+msgid "Target SIM"
+msgstr ""
+
+msgid "Temperature (AT+QTEMP)"
+msgstr ""
+
+msgid ""
+"Temporarily disconnect your device from Wi-Fi. If you know the password, you "
+"will be reconnected immediately. Are you okay?"
+msgstr ""
+
+msgid "Temporary connection (Wi-Fi only, not a permanent block)"
+msgstr ""
+
+msgid "The SIM cannot be read and cannot be set up."
+msgstr ""
+
+msgid "The band with , ● attached is the band you are currently holding."
+msgstr ""
+
+msgid ""
+"The built-in eSIM doesn't have an ISD-R, so you can't manipulate the profile "
+"there."
+msgstr ""
+
+msgid "The conversion is complete."
+msgstr ""
+
+msgid "The destination is /etc/config/sbair and remains for each ICCID."
+msgstr ""
+
+msgid "The device rejected the Wi-Fi channel command."
+msgstr ""
+
+msgid "The name of the business operator is"
+msgstr ""
+
+msgid "The number of modems was updated every 30 seconds."
+msgstr ""
+
+msgid "The quality of the line during the connection is not good."
+msgstr ""
+
+msgid "The read-only preflight did not complete or failed."
+msgstr ""
+
+msgid "The second did not arrive. There is not enough text."
+msgstr ""
+
+msgid "The selected Wi-Fi protocol is not available on this band."
+msgstr ""
+
+msgid "The selected bandwidth is not available on this band."
+msgstr ""
+
+msgid ""
+"The selected interface is not verified as a connected USB host Ethernet "
+"device."
+msgstr ""
+
+msgid "The settings have been confirmed."
+msgstr ""
+
+msgid ""
+"The settings on the modem side will return to the factory default upon "
+"reboot, but the selected combination will be saved."
+msgstr ""
+
+msgid "The storage area for this aircraft is"
+msgstr ""
+
+msgid "The storage is still empty. Click “Import from Modem.”"
+msgstr ""
+
+msgid ""
+"The string \"LPA:1$...\" passed to the operator. The content of the QR code "
+"is also this."
+msgstr ""
+
+msgid ""
+"The upper address is received via DHCP from the dedicated Ethernet interface "
+"eth1. LAN/Wi-Fi maintains current private addresses and DHCP ranges, and "
+"uses existing LAN→WAN NAT/firewall policies."
+msgstr ""
+
+msgid "There are differences in settings"
+msgstr ""
+
+msgid ""
+"There are no changes that do not apply. SSID edits and channel/bandwidth/"
+"communication specification changes will not be reflected on the actual "
+"device until you press “Apply Changes” here."
+msgstr ""
+
+msgid "There are no messages for this SIM."
+msgstr ""
+
+msgid ""
+"There are other unsaved changes to your wireless settings. Please check the "
+"existing changes and save or cancel them."
+msgstr ""
+
+msgid "There is no eUICC."
+msgstr ""
+
+msgid "There is no profile."
+msgstr ""
+
+msgid "There is."
+msgstr ""
+
+msgid "Third-party SIMs cannot be used."
+msgstr ""
+
+msgid ""
+"This does not affect the DHCP client setting Air 6 uses to obtain its "
+"management IP from the upstream router."
+msgstr ""
+
+msgid ""
+"This is missing when the APN is correct but the connection doesn't work."
+msgstr ""
+
+msgid "This screen and SSH are on the LAN side so they don't drop out."
+msgstr ""
+
+msgid ""
+"This setting controls the LAN DHCP server that assigns IP addresses to LAN "
+"devices."
+msgstr ""
+
+msgid "This will turn off all Wi-Fi radios. Wired LAN is unaffected. Continue?"
+msgstr ""
+
+msgid "Time of change after startup"
+msgstr ""
+
+msgid "Transitioning:"
+msgstr ""
+
+msgid "Transitioning…"
+msgstr ""
+
+msgid ""
+"Transitions reorganize networks. The AP/Bridge switches to the set "
+"management IP."
+msgstr ""
+
+msgid "Troubleshooting"
+msgstr ""
+
+msgid "Turn off the radio waves to read the SIM again. It takes 40-60 seconds."
+msgstr ""
+
+msgid ""
+"Turn the modem's radio waves down once and then up again to turn the WAN "
+"back on."
+msgstr ""
+
+msgid ""
+"Turning mesh off unpairs mesh nodes. Pair them again if you enable it later. "
+"Stock firmware may also disable WPS under its existing WPS/filter "
+"conditions. Continue?"
+msgstr ""
+
+msgid ""
+"Turning mesh on may change radio, encryption, and SSID visibility settings. "
+"A compatible SoftBank mesh node is required. Continue?"
+msgstr ""
+
+msgid "UART: FT232RL (Voltage: 1.8V)"
+msgstr ""
+
+msgid "UCI hash changed?"
+msgstr ""
+
+msgid "UCI settings"
+msgstr ""
+
+msgid ""
+"UCI settings, vendor persistence, and actual operation (runtime) are "
+"displayed as separate layers. The actual value of each vendor persistent "
+"band is not interpreted, but only hash/mtime/size is monitored. Even if the "
+"channel/bandwidth of AUTO changes to ACS, it is not judged as drift."
+msgstr ""
+
+msgid "UCI/vendor detection"
+msgstr ""
+
+msgid "UDC binding"
+msgstr ""
+
+msgid "UDC state / speed"
+msgstr ""
+
+msgid "USB Gadget（CDC-NCM NIC）"
+msgstr ""
+
+msgid "USB Host Driver Management (Read Only)"
+msgstr ""
+
+msgid ""
+"USB Host Ethernet driver introduction and bridge/WAN/LAN assignment are "
+"separate functions and will not be changed on this screen. USB Gadget "
+"features are covered in other sections below."
+msgstr ""
+
+msgid "USB Host buses / root hubs"
+msgstr ""
+
+msgid "USB Host network candidates"
+msgstr ""
+
+msgid "USB LAN interface"
+msgstr ""
+
+msgid "USB LAN port configured"
+msgstr ""
+
+msgid "USB LAN port removal"
+msgstr ""
+
+msgid "USB bus / root hub"
+msgstr ""
+
+msgid "USB bus not detected"
+msgstr ""
+
+msgid "USB device"
+msgstr ""
+
+msgid "USB device not detected"
+msgstr ""
+
+msgid ""
+"USB host Ethernet is automatically detected and displayed. This screen does "
+"not automatically connect to the network, and only connects the USB "
+"interface to br-lan when the user confirms and presses “Add to LAN”."
+msgstr ""
+
+msgid "USB interface not detected"
+msgstr ""
+
+msgid "USB speed"
+msgstr ""
+
+msgid "Unable to communicate"
+msgstr ""
+
+msgid "Unable to get Wi-Fi interface."
+msgstr ""
+
+msgid "Unable to read from SIM."
+msgstr ""
+
+msgid "Unknown ("
+msgstr ""
+
+msgid "Unlock SIM. You can use a third-party SIM."
+msgstr ""
+
+msgid "Unmanaged (existing setting)"
+msgstr ""
+
+msgid "Unmanaged (keep existing settings)"
+msgstr ""
+
+msgid "Unresolved (no original settings)"
+msgstr ""
+
+msgid "Update Management"
+msgstr ""
+
+msgid "Upstream revision"
+msgstr ""
+
+msgid "Use IMS"
+msgstr ""
+
+msgid "Use fallback when DHCP acquisition is not possible"
+msgstr ""
+
+msgid "Vendor persistent"
+msgstr ""
+
+msgid "Vendor persistent changed?"
+msgstr ""
+
+msgid "Vendor persistent metadata"
+msgstr ""
+
+msgid ""
+"Vendor persistent not detected. It does not parse the content; it only "
+"monitors the metadata of existing files."
+msgstr ""
+
+msgid "View diagnostic log"
+msgstr ""
+
+msgid "View phone number and caller ID"
+msgstr ""
+
+msgid "WAN address"
+msgstr ""
+
+msgid "WAN interface"
+msgstr ""
+
+msgid "WPA/WPA2 (mixed)"
+msgstr ""
+
+msgid "WPA2/WPA3 (mixed)"
+msgstr ""
+
+msgid "Wait for confirmation Change network"
+msgstr ""
+
+msgid ""
+"We have confirmed that it is possible to return to the factory default state "
+"by executing the following command from the shell while connected to UART."
+msgstr ""
+
+msgid ""
+"What we cover here is setting up a DHCP client where the Air 6 itself "
+"obtains a management IP from the upstream router. Failure to switch or apply "
+"will result in loss of all network connectivity and may require UART "
+"recovery by soft bricking."
+msgstr ""
+
+msgid "When applied, radio waves will be interrupted for only a few seconds."
+msgstr ""
+
+msgid ""
+"When off, clients on the main SSID (SSID1) cannot communicate with guest "
+"SSID (SSID2) clients. This is guest network isolation."
+msgstr ""
+
+msgid ""
+"When off, clients on the main SSID (SSID1) cannot reach wired LAN devices. "
+"This applies only to SSID1; guest SSID2 is unaffected. This app separately "
+"maintains wired access for SSID2."
+msgstr ""
+
+msgid ""
+"When off, main SSIDs on 2.4, 5, and 6 GHz cannot communicate with each other."
+msgstr ""
+
+msgid "Wi-Fi"
+msgstr ""
+
+msgid "Wi-Fi 7 / Mesh"
+msgstr ""
+
+msgid "Wi-Fi band is empty or duplicated."
+msgstr ""
+
+msgid ""
+"Wi-Fi changes apply differently by setting. Restarting Wi-Fi or the device "
+"does not guarantee that band steering SSID changes are saved and active."
+msgstr ""
+
+msgid "Wi-Fi channel update failed; UCI settings were saved."
+msgstr ""
+
+msgid "Wi-Fi interface is empty or duplicated."
+msgstr ""
+
+msgid "Wi-Fi overall"
+msgstr ""
+
+msgid "Wi-Fi radio"
+msgstr ""
+
+msgid "Wi-Fi restart Running diagnostics..."
+msgstr ""
+
+msgid "Wi-Fi restart failed."
+msgstr ""
+
+msgid ""
+"Wi-Fi settings will not be changed on this screen. Also maintain the vendor "
+"alias 172.16.255.254 (network.lan1)."
+msgstr ""
+
+msgid "Wired WAN"
+msgstr ""
+
+msgid "Wired WAN (eth1)"
+msgstr ""
+
+msgid "Wired WAN router"
+msgstr ""
+
+msgid "Wired WAN router mode"
+msgstr ""
+
+msgid ""
+"Wired WAN router — Receive DHCP on eth1, provide private DHCP to LAN/Wi-Fi"
+msgstr ""
+
+msgid "Wireless device information could not be retrieved."
+msgstr ""
+
+msgid "Wireless device not found for the selected band."
+msgstr ""
+
+msgid "Wireless device not found."
+msgstr ""
+
+msgid "Wireless power"
+msgstr ""
+
+msgid ""
+"Wireless power can be set to the maximum scale (100) supported by this SBA6D "
+"firmware. This is not a dBm value and does not change the country/region or "
+"regulatory table."
+msgstr ""
+
+msgid "Wiring: GND = black, RX = green, TX = white"
+msgstr ""
+
+msgid "Would you like to record the current Wi-Fi status as Known-good?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "You are done."
+msgstr ""
+
+msgid "You can select by pressing the number. The thin number is"
+msgstr ""
+
+msgid "You have saved your note."
+msgstr ""
+
+msgid "You have to ask for it. SM-DP+ passes IMEI."
+msgstr ""
+
+msgid "You will need to reissue the activation code."
+msgstr ""
+
+msgid "acquisition failure"
+msgstr ""
+
+msgid "activate"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "ad block"
+msgstr ""
+
+msgid "antenna"
+msgstr ""
+
+msgid "apply"
+msgstr ""
+
+msgid "auto start"
+msgstr ""
+
+msgid "automatic"
+msgstr ""
+
+msgid "band"
+msgstr ""
+
+msgid "banner"
+msgstr ""
+
+msgid "bcdUSB / device class"
+msgstr ""
+
+msgid "big)"
+msgstr ""
+
+msgid "book"
+msgstr ""
+
+msgid "br-lan connected"
+msgstr ""
+
+msgid "business person"
+msgstr ""
+
+msgid "by another name"
+msgstr ""
+
+msgid "cable"
+msgstr ""
+
+msgid "cancellation"
+msgstr ""
+
+msgid "candle"
+msgstr ""
+
+msgid "capture"
+msgstr ""
+
+msgid "card"
+msgstr ""
+
+msgid "carrier"
+msgstr ""
+
+msgid "case"
+msgstr ""
+
+msgid "case)"
+msgstr ""
+
+msgid "change band"
+msgstr ""
+
+msgid "check port)"
+msgstr ""
+
+msgid "clear"
+msgstr ""
+
+msgid "cleared"
+msgstr ""
+
+msgid "close"
+msgstr ""
+
+msgid "communication standards"
+msgstr ""
+
+msgid "condition correction"
+msgstr ""
+
+msgid "connection"
+msgstr ""
+
+msgid "connection device"
+msgstr ""
+
+msgid "connection mode"
+msgstr ""
+
+msgid "container"
+msgstr ""
+
+msgid "conversion"
+msgstr ""
+
+msgid "current status"
+msgstr ""
+
+msgid "danger"
+msgstr ""
+
+msgid "deactivate"
+msgstr ""
+
+msgid "default path"
+msgstr ""
+
+msgid "default settings"
+msgstr ""
+
+msgid "delete"
+msgstr ""
+
+msgid "delete all"
+msgstr ""
+
+msgid "destruction"
+msgstr ""
+
+msgid "detailed operation"
+msgstr ""
+
+msgid "diagnosis"
+msgstr ""
+
+msgid "division"
+msgstr ""
+
+msgid "do."
+msgstr ""
+
+msgid "doesn't exist"
+msgstr ""
+
+msgid "eUICC information"
+msgstr ""
+
+msgid "effectiveness"
+msgstr ""
+
+msgid "eliminate"
+msgstr ""
+
+msgid "emphysema"
+msgstr ""
+
+msgid "encryption method"
+msgstr ""
+
+msgid "entity"
+msgstr ""
+
+msgid "expected driver"
+msgstr ""
+
+msgid "express designation"
+msgstr ""
+
+msgid "failure"
+msgstr ""
+
+msgid "firmware"
+msgstr ""
+
+msgid "from modem"
+msgstr ""
+
+msgid "functioning"
+msgstr ""
+
+msgid "green onion"
+msgstr ""
+
+msgid "has been applied. The remaining"
+msgstr ""
+
+msgid "hidden and disabled must be 0 or 1."
+msgstr ""
+
+msgid "high temperature"
+msgstr ""
+
+msgid "injustice"
+msgstr ""
+
+msgid "installation"
+msgstr ""
+
+msgid "item"
+msgstr ""
+
+msgid "link connection"
+msgstr ""
+
+msgid "list of differences"
+msgstr ""
+
+msgid "main"
+msgstr ""
+
+msgid "management status"
+msgstr ""
+
+msgid "mapping"
+msgstr ""
+
+msgid "mode"
+msgstr ""
+
+msgid "modem"
+msgstr ""
+
+msgid "modem reset"
+msgstr ""
+
+msgid "monitoring"
+msgstr ""
+
+msgid "movement"
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "netdev not created"
+msgstr ""
+
+msgid "netifd may not go up even if you retry."
+msgstr ""
+
+msgid "netmask"
+msgstr ""
+
+msgid "network"
+msgstr ""
+
+msgid "network device not detected"
+msgstr ""
+
+msgid "normal"
+msgstr ""
+
+msgid "not managed"
+msgstr ""
+
+msgid "operating mode"
+msgstr ""
+
+msgid "overall status"
+msgstr ""
+
+msgid "password"
+msgstr ""
+
+msgid "phone number"
+msgstr ""
+
+msgid "port"
+msgstr ""
+
+msgid "port scan"
+msgstr ""
+
+msgid "problem solving"
+msgstr ""
+
+msgid "profile"
+msgstr ""
+
+msgid "profile name"
+msgstr ""
+
+msgid "read the barrel"
+msgstr ""
+
+msgid "reason"
+msgstr ""
+
+msgid "received message"
+msgstr ""
+
+msgid "redial"
+msgstr ""
+
+msgid "reference"
+msgstr ""
+
+msgid "registered"
+msgstr ""
+
+msgid "registration status"
+msgstr ""
+
+msgid "reload"
+msgstr ""
+
+msgid "reset"
+msgstr ""
+
+msgid "reset the lock"
+msgstr ""
+
+msgid "respawn settings"
+msgstr ""
+
+msgid "restart diagnosis"
+msgstr ""
+
+msgid "return"
+msgstr ""
+
+msgid "rollback"
+msgstr ""
+
+msgid "save"
+msgstr ""
+
+msgid "save only"
+msgstr ""
+
+msgid ""
+"sbair does not auto-calibrate network, DHCP, or Wi-Fi. To change it, select "
+"AP/Bridge and apply it explicitly."
+msgstr ""
+
+msgid "sensor"
+msgstr ""
+
+msgid "service"
+msgstr ""
+
+msgid "setting"
+msgstr ""
+
+msgid "situation"
+msgstr ""
+
+msgid "spread"
+msgstr ""
+
+msgid "static IP"
+msgstr ""
+
+msgid "stealth"
+msgstr ""
+
+msgid "stop"
+msgstr ""
+
+msgid "success"
+msgstr ""
+
+msgid "switch to"
+msgstr ""
+
+msgid "temperature"
+msgstr ""
+
+msgid "terminal"
+msgstr ""
+
+msgid "to unlock sim"
+msgstr ""
+
+msgid "treason"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "unlocked"
+msgstr ""
+
+msgid "unmanage"
+msgstr ""
+
+msgid "unread"
+msgstr ""
+
+msgid "user name"
+msgstr ""
+
+msgid "verification code"
+msgstr ""
+
+msgid "wait for apply"
+msgstr ""
+
+msgid "waiting"
+msgstr ""
+
+msgid "warning"
+msgstr ""
+
+msgid ""
+"— It disappears from storage and doesn't come back when you retrieve it."
+msgstr ""
+
+msgid "— It takes 30 to 60 seconds."
+msgstr ""
+
+msgid "—try the rest"
+msgstr ""
+
+msgid ""
+"※The settings and environment, including LuCI, will also be initialized, so "
+"please perform this operation as a last resort."
+msgstr ""
+
+msgid "⚠ Capturing will change unread to read on modem side"
+msgstr ""
+
+msgid ""
+"⚠ Downloads are often one-time, and if they fail, they are reissued to the "
+"business operator."
+msgstr ""
+
+msgid "⚠ Experimental high-risk features"
+msgstr ""
+
+msgid "⚠ Setting up a DHCP client is very high risk"
+msgstr ""
+
+msgid "⚠ Stop propagation during transition (AT+CFUN=4)."
+msgstr ""
+
+msgid "⚠ There is a risk of soft bricks"
+msgstr ""
+
+msgid ""
+"⚠ This switch is the modem's VoLTE flag. If you activate it without "
+"registering"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:17
+msgid "Cellular data call (ql_datacall)"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:49
+msgid "APN"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:50
+msgid ""
+"Changes made here are temporary. The vendor knsh service overwrites this "
+"value from /etc/config/lte on reboot. Use the APN setting under SIM in the "
+"SoftBank Air menu to keep it persistent."
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:51
+msgid "Example: uno.au-net.ne.jp"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:55
+msgid "None"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:61
+msgid "Username"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:66
+msgid "Password"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:72
+msgid "IP address type"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:86
+msgid "Configure APN automatically from SIM"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:87
+msgid ""
+"Enabling this may cause the vendor routine to wait indefinitely for a SIM "
+"response and prevent the WAN from coming up. Leave it disabled when entering "
+"the APN manually."
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:92
+msgid "Radio access technology"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:93
+msgid "Automatic (NR + LTE + UMTS)"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:94
+msgid "4G / 5G only"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:97
+msgid "PLMN override"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:100
+msgid "MTU"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:105
+msgid "Allow data while roaming"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:110
+msgid "Retry count"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:116
+msgid "PDU timeout (seconds)"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/wifi.js:110
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/wifi.js:191
+msgid "Type"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/wifi.js:256
+msgid "Discard"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:2
+msgid "Basic settings"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:3
+msgid "Diagnostics"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:4
+msgid "Connected devices"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:5
+msgid "Network"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:6
+msgid "Connection mode"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:7
+msgid "LAN services"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:8
+msgid "Device"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:9
+msgid "Device information"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:10
+msgid "USB devices"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:11
+msgid "Update management"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/lan_services.js:23
+msgid "Enabled / running"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/lan_services.js:25
+msgid "Disabled / stopped"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:1
+msgid ""
+"172.16.255.254 is reserved as a vendor alias and cannot be used as the "
+"fallback IP."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:2
+msgid "A WPS PIN is required."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:3
+msgid "A job is already running."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:4
+msgid "APN is required."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:6
+msgid ""
+"Cannot scan an IP address that is not in the current br-lan client list."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:7
+msgid "Cannot scan because the connected-device list is unavailable."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:8
+msgid "Could not parse the port selection. Example: 1-1024,8080."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:13
+msgid "Enter the activation code."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:14
+msgid "Fallback IP must be a valid IPv4 address."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:15
+msgid "Fallback netmask must be a valid IPv4 netmask."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:16
+msgid "Fallback wait time must be between 5 and 3600 seconds."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:17
+msgid "Gateway must be a valid IPv4 address."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:18
+msgid "ICCID is required."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:23
+msgid "MLO command failed; configuration may be partially changed"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:24
+msgid "MLO read-back failed; configuration may be partially changed"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:25
+msgid "Management IP method must be DHCP or static."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:26
+msgid "Message hash is required."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:27
+msgid "Message was not found in the archive."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:28
+msgid ""
+"Netmask must be blank or a valid IPv4 netmask (blank inherits the stock "
+"setting)."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:29
+msgid "No card is present in the physical SIM slot."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:30
+msgid "No eUICC is available. The built-in eSIM mapping has no ISD-R."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:33
+msgid "SIM mapping must be 1 (physical slot) or 2 (built-in eSIM)."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:35
+msgid ""
+"Static IP must be blank or a valid IPv4 address (blank inherits the stock "
+"setting)."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:36
+msgid "Storage returned no response."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:37
+msgid "The SIM did not return an APN."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:38
+msgid ""
+"The built-in eSIM has no ISD-R. Switch to an eUICC card in the physical slot "
+"to use eUICC functions."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:39
+msgid ""
+"The connected-device scan timed out. The LAN may be busy; try again shortly."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:41
+msgid "The modem rejected the request: "
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:42
+msgid "The physical-slot card is a regular SIM, not an eUICC."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:43
+msgid ""
+"The physical-slot card is a regular SIM, not an eUICC. No known ISD-R AID "
+"could be opened."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:47
+msgid "UCI commit failed; configuration may be partially saved"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:48
+msgid "USB NIC enable requires explicit acknowledgement"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:49
+msgid "Unable to read the SIM ICCID."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:50
+msgid "Unable to read the SIM."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:51
+msgid "WPS is supported only on the 2.4 GHz and 5 GHz bands."
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:57
+msgid "band steering command failed; configuration may be partially changed"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:58
+msgid "band steering read-back failed; configuration may be partially changed"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:59
+msgid "cannot read MLO status"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:60
+msgid "channel is required"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:61
+msgid "channel must be a decimal value from 0 to 233"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:62
+msgid "enabled must be 0 or 1"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:64
+msgid "knsh save failed after UCI commit"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:65
+msgid "mac is required"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:66
+msgid "mesh command failed; configuration may be partially changed"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:67
+msgid "mesh is off but stock WPS cleanup failed"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:68
+msgid ""
+"stock constraint: MLO can only be enabled while band steering is enabled"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:69
+msgid "unrecognized MLO status"
+msgstr ""
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:70
+msgid "usage: sbair-modem netmode arp-probe <interface> <IPv4>"
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:21
+msgid "Unable to open the eUICC: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:22
+msgid "Unable to create config file: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:23
+msgid "Unable to apply firewall rules: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:24
+msgid "Unable to inspect the hosts parent directory: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:25
+msgid "Unable to write the hosts file: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:26
+msgid "Unable to remove ad-block DNAT rules: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:27
+msgid "Unable to write UCI settings: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:28
+msgid "Unable to read APN from the SIM: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:29
+msgid "Unable to parse the modem response: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:30
+msgid "Band response is too short: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:31
+msgid "Unable to parse the band number: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:32
+msgid "Unable to read EID: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:33
+msgid "Unable to read the eSIM profile: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:34
+msgid "Invalid ICCID: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:35
+msgid "eSIM operation failed: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:36
+msgid "Unable to query the modem: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:37
+msgid "Unable to change the setting: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:38
+msgid "Unable to safely prepare the job directory: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:39
+msgid "Unable to start the job: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:40
+msgid "Unable to determine the executable path: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:41
+msgid "Unable to save job status: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:42
+msgid "Unable to start the worker: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:43
+msgid "Invalid DHCP pool start address: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:44
+msgid "Invalid DHCP pool end address: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:45
+msgid "Router IP is invalid: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:46
+msgid "Unable to inspect the SIM LAN DHCP range: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:47
+msgid "PDU is not valid hexadecimal data: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:48
+msgid "Unable to get the br-lan IPv4 network: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:49
+msgid "Scan rejected because the connected-device list could not be verified: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:50
+msgid "AT+ESIMMAP? response is missing +ESIMMAP: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:51
+msgid "Unable to enable PDU mode: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:52
+msgid "Unable to read SMS: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:53
+msgid "Unable to read the SMS storage: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:54
+msgid "Unable to secure the SMS database parent directory: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:55
+msgid "Unable to securely open the SMS database: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:56
+msgid "Unable to inspect SQLite sidecar: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:57
+msgid "Unable to secure SQLite sidecar permissions: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:58
+msgid "Unable to open the SMS database: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:59
+msgid "Unable to save the message: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:60
+msgid "Unable to read from the SMS database: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:61
+msgid "Unable to delete the message: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:20
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:98
+msgid "Unable to disable SIM lock: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:21
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:67
+msgid "SIM lock disabled ("
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:22
+msgid "Saved band settings differ from the requested combination (LTE "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:23
+msgid "Unable to read the current band settings: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:24
+msgid "Unable to prepare band settings: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:25
+msgid "Unable to write band settings: "
+msgstr ""
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:26
+msgid "Reapplied band settings (LTE "
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:1
+msgid " WAN was not started in AP mode."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:2
+msgid "/bin/usim"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:7
+msgid "AT+CFUN=0"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:8
+msgid "AT+CFUN=1"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:9
+msgid "AT+CFUN=4"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:10
+msgid "AT+EPBSEH="
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:11
+msgid "AT+EPBSEH=?"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:12
+msgid "AT+EPBSEH?"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:13
+msgid "AT+ESIMMAP=2"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:14
+msgid "Activation code"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:18
+msgid "Check WAN status"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:19
+msgid "Complete"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:20
+msgid "Connect"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:21
+msgid "Contact SM-DP+"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:27
+msgid "Disable SIM lock (AT+ESMLCK)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:28
+msgid "Disable radio (AT+CFUN=0)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:29
+msgid "Disable radio (AT+CFUN=4)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:30
+msgid "Download"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:31
+msgid "Enable SIM lock (AT+ESMLCK)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:38
+msgid "IMEI"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:39
+msgid "IMS enabled. Registration may take 10–30 seconds."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:40
+msgid "Input"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:53
+msgid "Open eUICC"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:54
+msgid "PDU is truncated."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:56
+msgid "Profile added. Activate it from the profile list."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:57
+msgid "Read IMEI"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:58
+msgid "Read current settings"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:59
+msgid "Recovery verification"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:60
+msgid "Registration"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:61
+msgid "Reload SIM (AT+CFUN=0)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:63
+msgid "Response is not an SMS-DELIVER PDU."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:64
+msgid "Restore radio (AT+CFUN=1)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:65
+msgid "Restore the previous settings"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:66
+msgid "Rollback"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:68
+msgid "SIM lock is enabled. Disable it from the SIM page."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:70
+msgid ""
+"Select at least one LTE band. 5G is added after LTE connects, so 5G will not "
+"connect if no LTE band is selected."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:72
+msgid "Start"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:74
+msgid "Stop WAN"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:76
+msgid "Switch to built-in eSIM (AT+ESIMMAP=2)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:77
+msgid "Switch to physical slot (/bin/usim)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:82
+msgid "The modem did not respond after switching. Check it over serial."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:84
+msgid ""
+"The modem was reset and WAN was re-established. Connection may take 10–30 "
+"seconds."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:85
+msgid "The modem was reset. WAN was not started in AP mode."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:86
+msgid ""
+"The network did not connect with the selected bands, so the previous "
+"settings were restored."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:89
+msgid ""
+"The radio is back, but network registration did not complete in time. WAN "
+"was not started in AP mode."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:90
+msgid "The radio is back, but the network did not connect in time. WAN is up."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:95
+msgid "UDH is missing."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:96
+msgid "UDH is truncated."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:101
+msgid "Unable to restore the previous settings: "
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:102
+msgid "Verify SIM state"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:103
+msgid "Verify recovery"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:104
+msgid ""
+"WAN was not started in AP mode. Modem AT and SMS functions remain available."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:105
+msgid "WAN was restarted. Connection may take 10–30 seconds."
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:107
+msgid "Wait for modem reinitialization (25 seconds)"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:108
+msgid "Wait for network registration"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:114
+msgid "Write band settings"
+msgstr ""
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:122
+msgid "ifup wan"
+msgstr ""
+
+msgid "5G NR"
+msgstr ""
+
+msgid "DNS"
+msgstr ""
+
+msgid "EID"
+msgstr ""
+
+msgid "ICCID"
+msgstr ""
+
+msgid "ISD-R AID"
+msgstr ""
+
+msgid "LAN DHCP"
+msgstr ""
+
+msgid "LAN/Wi-Fi"
+msgstr ""
+
+msgid "LTE"
+msgstr ""
+
+msgid "MAC / MTU"
+msgstr ""
+
+msgid "RSRP"
+msgstr ""
+
+msgid "RSRQ"
+msgstr ""
+
+msgid "RSSI"
+msgstr ""
+
+msgid "SGP.22"
+msgstr ""
+
+msgid "SSID"
+msgstr ""
+
+msgid "TAC"
+msgstr ""
+
+msgid "UDC"
+msgstr ""
+
+msgid "VID:PID"
+msgstr ""
+
+msgid "WPS"
+msgstr ""
+
+msgid "block device"
+msgstr ""
+
+msgid "bundle"
+msgstr ""
+
+msgid "class / subclass / protocol"
+msgstr ""
+
+msgid "driver"
+msgstr ""
+
+msgid "driver / bus"
+msgstr ""
+
+msgid "eSIM"
+msgstr ""
+
+msgid "interface"
+msgstr ""
+
+msgid "layer"
+msgstr ""
+
+msgid "master"
+msgstr ""
+
+msgid "modalias"
+msgstr ""
+
+msgid "mtime"
+msgstr ""
+
+msgid "netdev"
+msgstr ""
+
+msgid "network candidate"
+msgstr ""
+
+msgid "new"
+msgstr ""
+
+msgid "old"
+msgstr ""
+
+msgid "parent / sysfs"
+msgstr ""
+
+msgid "path"
+msgstr ""
+
+msgid "reported speed"
+msgstr ""
+
+msgid "role"
+msgstr ""
+
+msgid "sha256"
+msgstr ""
+
+msgid "size"
+msgstr ""
+
+msgid "state / carrier"
+msgstr ""
+
+msgid "usb0"
+msgstr ""
+
+msgid "yes"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid " / carrier "
+msgstr ""

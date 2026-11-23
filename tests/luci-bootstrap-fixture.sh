@@ -17,7 +17,7 @@ awk -F '\t' '
 			$4 !~ /^[0-9a-fA-F]{64}$/ || $5 == "") bad=1
 		rows++
 	}
-	END { exit(rows != 34 || bad) }
+	END { exit(rows != 36 || bad) }
 ' "$bootstrap/packages.lock"
 
 [ "$(awk -F '\t' '{ gsub(/\r$/, "", $5); if ($5 == "special-libnl") n++ } END { print n + 0 }' "$bootstrap/packages.lock")" = 1 ]

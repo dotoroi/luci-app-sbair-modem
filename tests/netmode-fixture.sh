@@ -164,7 +164,7 @@ run_netmode() {
 	SBAIR_NETMODE_SELF="$repo/root/usr/sbin/sbair-netmode" \
 	SBAIR_NETMODE_MODULE_DIR="${NETMODE_MODULE_DIR:-$repo/root/usr/libexec/sbair/netmode}" \
 	SBAIR_NETMODE_DNSMASQ_INIT="$fake/dnsmasq-init" \
-	SBAIR_NETMODE_LOCK_DIR="${NETMODE_LOCK_DIR:-}" \
+	SBAIR_NETMODE_LOCK_DIR="${NETMODE_LOCK_DIR:-$tmp/netmode.lock}" \
 	UCI_STATE="$state" UCI_FAIL_SET_KEY="${UCI_FAIL_SET_KEY:-}" UCI_FAIL_DELETE_KEY="${UCI_FAIL_DELETE_KEY:-}" UCI_FAIL_COMMIT="${UCI_FAIL_COMMIT:-}" IPTABLES_RULE="$rule" DNSMASQ_LOG="$dnsmasq_log" UDP67_FILE="$udp67_file" ROUTE_DEVICE="${ROUTE_DEVICE:-}" \
 	IP_ADDR_OUTPUT="${IP_ADDR_OUTPUT:-}" \
 	PATH="$fake:/usr/sbin:/usr/bin:/sbin:/bin" \
@@ -175,13 +175,12 @@ run_netmode() {
 # working directory. A missing module set must fail before touching UCI state.
 (cd "$tmp" && run_netmode version) | grep -q '^implementation=luci-app-sbair-modem$'
 (cd "$tmp" && run_netmode get-config) >/dev/null
-before_missing_modules=$(shasum -a 256 "$state" | awk '{print $1}')
+cp "$state" "$tmp/before-missing-modules"
 if NETMODE_MODULE_DIR="$tmp/missing-modules" run_netmode show >"$tmp/missing-modules.out" 2>&1; then
 	echo 'network-mode ran without its required modules' >&2
 	exit 1
 fi
-after_missing_modules=$(shasum -a 256 "$state" | awk '{print $1}')
-[ "$before_missing_modules" = "$after_missing_modules" ]
+cmp "$tmp/before-missing-modules" "$state"
 grep -q 'module unavailable' "$tmp/missing-modules.out"
 unset NETMODE_MODULE_DIR
 

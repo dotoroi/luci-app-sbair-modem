@@ -1,38 +1,20 @@
-[English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
+# SoftBank Air 6용 Floop3
 
-[사용자 안내서](docs/MANUALS.ko.md)
-[Air 6 router mode / Air 6 ルーターモード / Air 6 라우터 모드](docs/ROUTER-MODE.ko.md)
+[English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
-# luci-app-sbair-modem
+Floop3는 **SoftBank Air 6(RG620T-SBK / RUDOLF / SBA6D)**용 LuCI 앱입니다. 모뎀, SIM/eSIM, SMS, Wi-Fi, 연결 기기, 네트워크 설정을 관리합니다.
 
-SoftBank Air 6 (RG620T-SBK / RUDOLF)의 벤더 수정 OpenWrt 21.02.7 펌웨어를 위한 LuCI 앱입니다. 모뎀 상태와 제어, SIM/eSIM 관리, APN 및 SMS, Wi-Fi와 연결 기기 관리, AP/브리지 및 유선 WAN 모드, USB 기기 정보, OTA/FOTA 유지보수 기능을 제공합니다.
+## 설치 전에
 
-> 이 프로젝트는 기기 제조사 OpenWrt 21.02.7 환경을 대상으로 합니다. 최신 upstream OpenWrt용 범용 패키지가 아닙니다.
+- 대상은 제조사 펌웨어 **OpenWrt 21.02.7**, target `gem6xxx/evb6990_cpe_mt7990_emmc`, ARM64입니다. 일반 upstream OpenWrt용 패키지가 아닙니다.
+- [펌웨어 호환성 안내](docs/FIRMWARE-COMPATIBILITY-KO.md)를 확인하세요. 메타데이터가 맞아도 모든 기능이 검증됐다는 뜻은 아닙니다.
+- 공유기 설정을 백업하고 SSH 또는 UART 복구 경로를 확보하세요. 설치기는 `rpcd`를 재시작하지만 공유기를 재부팅하지 않습니다.
+- 릴리즈 체크섬과 `install.sh --check`를 확인하세요. 모델·기존 파일 소유권·미적용 방화벽 변경·여유 공간 검사를 우회하지 마세요.
 
-## 기능
+## 처음 시작하기
 
-- 이동통신 모뎀 상태, 무선 상세 정보, SIM/eSIM, SIM 잠금, IMS, APN, SMS, 재설정
-- Wi-Fi 설정과 진단
-- 연결 기기 목록과 네트워크 모드 관리
-- 기기 및 USB 정보, OTA/FOTA 유지보수
-- LuCI 영어·일본어·한국어 번역
-- 선택형 USB 네트워크 어댑터 기능은 실험적이며 하드웨어와 설정에 따라 달라집니다.
+1. 장치와 소스 버전에 맞는 태그 릴리즈를 선택합니다.
+2. [설치 안내](docs/INSTALL-NON-CODEX-KO.md)와 [접근 설정 안내](docs/INSTALL-ACCESS-KO.md)를 따릅니다.
+3. Wi-Fi, 네트워크 모드, USB NIC, 복구 절차는 [사용자 매뉴얼 목록](docs/MANUALS.ko.md)을 참고하세요.
 
-화면에서는 민감한 식별 정보를 기본적으로 가려 표시합니다.
-
-## 빌드 및 설치
-
-필요 조건과 빌드·설치 절차는 저장소 문서를 참고하세요.
-
-- [빌드 및 설치 안내](docs/INSTALL-NON-CODEX-KO.md)
-- [펌웨어 호환성 및 사전 빌드 바이너리 범위](docs/FIRMWARE-COMPATIBILITY-KO.md)
-- [신규 설치 및 업그레이드 정책](docs/RELEASE-INSTALL-POLICY-KO.md)
-- [접속 및 비밀번호 안내](docs/INSTALL-ACCESS-KO.md)
-- [오버레이 whiteout 읽기 전용 점검](docs/OVERLAY-WHITEOUT-AUDIT-KO.md)
-- [API 및 화면 참고](docs/API.md)
-
-번역 카탈로그는 `po/`에 있습니다. LuCI의 `po2lmo`를 지정해 `PO2LMO=/path/to/po2lmo ./tools/build-i18n.sh`로 빌드한 뒤 `install.sh`로 설치 대상 rootfs에 반영합니다.
-
-## 라이선스
-
-[LICENSE](LICENSE)를 참고하세요.
+USB NIC 기능은 실험적이며 어댑터와 펌웨어에 따라 동작이 다릅니다. SSH와 LuCI는 신뢰할 수 있는 내부망에서만 사용하고 공인 인터넷에 직접 노출하지 마세요.

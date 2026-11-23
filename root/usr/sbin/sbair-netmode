@@ -5,9 +5,8 @@
 # SoftBank Air 6 network-mode controller.
 #
 # The device already has the required br-lan membership (eth0.1/eth0.2 and the
-# 2.4/5/6 GHz AP interfaces). This helper only changes the L3 owner of that
-# bridge, disables local DHCP/RA services, and keeps cellular WAN out of the
-# default route in AP mode.
+# 2.4/5/6 GHz AP interfaces). This helper manages SIM-router, AP/Bridge, and
+# DHCP Ethernet-WAN modes through the same Safe Apply transaction path.
 
 PATH=${SBAIR_NETMODE_PATH:-/usr/sbin:/usr/bin:/sbin:/bin}
 export PATH
@@ -29,7 +28,7 @@ ROLLBACK_SECONDS=120
 NETMODE_IMPLEMENTATION='luci-app-sbair-modem'
 NETMODE_SCHEMA='1'
 NETMODE_VERSION='1'
-SNAPSHOT_KEYS='mode managed management_proto ipaddr netmask gateway dns fallback_enabled fallback_ip fallback_netmask fallback_timeout dhcp_server cellular_wan dhcp_pool_start dhcp_pool_limit dhcp_pool_leasetime backup_ready sim_proto sim_ipaddr sim_netmask sim_gateway sim_dns sim_ip6assign sim_ip6hint sim_ip6class sim_delegate sim_dhcp_start sim_dhcp_limit sim_dhcp_leasetime sim_wan_disabled sim_wan_auto sim_dhcp_ignore sim_dhcp_ra sim_dhcp_dhcpv6 sim_dhcp_ndp network_lan_proto network_lan_ipaddr network_lan_netmask network_lan_gateway network_lan_dns network_lan_ip6assign network_lan_ip6hint network_lan_ip6class network_lan_delegate dhcp_lan_ignore dhcp_lan_ra dhcp_lan_dhcpv6 dhcp_lan_ndp dhcp_lan_start dhcp_lan_limit dhcp_lan_leasetime network_wan_disabled network_wan_auto'
+SNAPSHOT_KEYS='mode managed management_proto ipaddr netmask gateway dns fallback_enabled fallback_ip fallback_netmask fallback_timeout dhcp_server cellular_wan dhcp_pool_start dhcp_pool_limit dhcp_pool_leasetime backup_ready sim_proto sim_ipaddr sim_netmask sim_gateway sim_dns sim_ip6assign sim_ip6hint sim_ip6class sim_delegate sim_dhcp_start sim_dhcp_limit sim_dhcp_leasetime sim_wan_disabled sim_wan_auto sim_dhcp_ignore sim_dhcp_ra sim_dhcp_dhcpv6 sim_dhcp_ndp network_lan_proto network_lan_ipaddr network_lan_netmask network_lan_gateway network_lan_dns network_lan_ip6assign network_lan_ip6hint network_lan_ip6class network_lan_delegate dhcp_lan_ignore dhcp_lan_ra dhcp_lan_dhcpv6 dhcp_lan_ndp dhcp_lan_start dhcp_lan_limit dhcp_lan_leasetime network_wan_disabled network_wan_auto network_wan_proto network_wan_device network_wan6_proto network_wan6_device network_wan6_disabled network_wan6_auto eth1_lan_member'
 DRAFT_KEYS='proto ipaddr netmask gateway dns fallback_enabled fallback_ip fallback_netmask fallback_timeout dhcp_start dhcp_limit dhcp_leasetime'
 
 LOCK_HELD=0
@@ -45,7 +44,7 @@ case "$MODULE_DIR" in
 	/*) ;;
 	*) printf "%s\n" "error=network-mode module directory must be absolute" >&2; exit 1;;
 esac
-for module_name in common.sh state.sh apply.sh status.sh; do
+for module_name in common.sh state.sh apply.sh status.sh usb-lan.sh; do
 	module_path="$MODULE_DIR/$module_name"
 	[ -f "$module_path" ] && [ ! -L "$module_path" ] || { printf "%s\n" "error=network-mode module unavailable: $module_path" >&2; exit 1; }
 	. "$module_path" || { printf "%s\n" "error=network-mode module failed to load: $module_path" >&2; exit 1; }
@@ -64,12 +63,15 @@ case "${1:-}" in
 	apply) shift; start_apply "$@";;
 	# Compatibility for pre-Safe-Apply callers. These aliases deliberately use
 	# the same transaction path as `apply`; they must never mutate immediately.
-	sim|ap) start_apply "$1";;
+	sim|ap|ethwan|vlanwan) start_apply "$1";;
 	confirm) confirm;;
 	rollback) rollback;;
 	unmanage) unmanage;;
 	recover) recover;;
 	repair) repair_config;;
+	usb-lan-list) ensure_config; usb_lan_list;;
+	usb-lan-add) shift; usb_lan_add "${1:-}";;
+	usb-lan-remove) shift; usb_lan_remove "${1:-}";;
 	dhcp-event)
 		shift
 		netmode_lock_wait || exit 0
@@ -104,7 +106,7 @@ case "${1:-}" in
 	--apply-worker) apply_worker "${2:-}" "${3:-}" "${4:-sim}" "${5:-0}";;
 	--rollback-watch) rollback_watch "${2:-}" "${3:-0}" "${4:-sim}" "${5:-0}";;
 	*)
-		printf '%s\n' 'usage: sbair-netmode version|show|get-config|pool-context sim|set-config|apply sim|apply ap|sim|ap|confirm|rollback|unmanage|recover|repair' >&2
+		printf '%s\n' 'usage: sbair-netmode version|show|get-config|pool-context sim|set-config|apply sim|apply ap|apply ethwan|apply vlanwan|sim|ap|ethwan|vlanwan|confirm|rollback|unmanage|recover|repair|usb-lan-list|usb-lan-add IFACE|usb-lan-remove IFACE' >&2
 		exit 2
 		;;
 esac

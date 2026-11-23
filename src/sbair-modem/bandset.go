@@ -39,16 +39,16 @@ const (
 func bandMaskHex(bands []int, width int) (string, error) {
 	words := width / 8
 	if words == 0 {
-		return "", fmt.Errorf("マスクの幅が不正です (%d)", width)
+		return "", fmt.Errorf("Band mask width is invalid.")
 	}
 	w := make([]uint32, words)
 	for _, b := range bands {
 		if b < 1 {
-			return "", fmt.Errorf("バンド番号が不正です: %d", b)
+		return "", fmt.Errorf("Band number is invalid.")
 		}
 		i := (b - 1) / 32
 		if i >= words {
-			return "", fmt.Errorf("バンド %d はこのマスクに入りません", b)
+		return "", fmt.Errorf("Band is not included in the mask.")
 		}
 		w[i] |= 1 << uint((b-1)%32)
 	}
@@ -68,11 +68,11 @@ func epbsehFields(ch *ATChannel, cmd string) ([]string, error) {
 	}
 	v, ok := Last(lines, "+EPBSEH:")
 	if !ok {
-		return nil, fmt.Errorf("%s に +EPBSEH: がありません", cmd)
+		return nil, fmt.Errorf("Band response is missing +EPBSEH.")
 	}
 	f := splitAT(v)
 	if len(f) < 4 {
-		return nil, fmt.Errorf("%s の応答が短すぎます: %s", cmd, v)
+		return nil, fmt.Errorf("Band response is too short: %s", v)
 	}
 	return f[:4], nil
 }
@@ -97,7 +97,7 @@ func parseBandList(s string) ([]int, error) {
 		}
 		n, err := strconv.Atoi(p)
 		if err != nil {
-			return nil, fmt.Errorf("バンド番号として読めません: %q", p)
+	return nil, fmt.Errorf("Unable to parse the band number: %q", p)
 		}
 		if !seen[n] {
 			seen[n] = true
@@ -124,26 +124,26 @@ func runBandWorker(lteArg, nrArg string) int {
 
 	wantLTE, err := parseBandList(lteArg)
 	if err != nil {
-		return j.fail("入力", err.Error())
+		return j.fail("Input", err.Error())
 	}
 	wantNR, err := parseBandList(nrArg)
 	if err != nil {
-		return j.fail("入力", err.Error())
+		return j.fail("Input", err.Error())
 	}
 	// **LTE を空にさせない。** この機体は 5G NSA なので LTE のアンカーが
 	// 要る。空にすると 5G ごと落ちて、巻き戻すまで圏外になる。
 	if len(wantLTE) == 0 {
-		return j.fail("入力", "LTE を 1 つ以上選んでください。5G は LTE に繋いでから足す方式なので、LTE を空にすると 5G も繋がりません。")
+		return j.fail("Input", "Select at least one LTE band. 5G is added after LTE connects, so 5G will not connect if no LTE band is selected.")
 	}
 
 	ch := NewATChannel(*device)
 	ch.SetTimeout(30 * time.Second)
 	if err := ch.Connect(); err != nil {
-		return j.fail("接続", err.Error())
+		return j.fail("Connect", err.Error())
 	}
 	defer ch.Disconnect()
 
-	j.step("現在の設定を読む")
+	j.step("Read current settings")
 	cur, err := epbsehFields(ch, "AT+EPBSEH?")
 	if err != nil {
 		return j.fail("AT+EPBSEH?", err.Error())
@@ -156,18 +156,18 @@ func runBandWorker(lteArg, nrArg string) int {
 	// **対応していないバンドは弾く。** モデムが黙って無視する保証が無い。
 	supLTE, supNR := bandMask(cap[2]), bandMask(cap[3])
 	if bad := notIn(wantLTE, supLTE); len(bad) > 0 {
-		return j.fail("入力", fmt.Sprintf("対応していない LTE バンドです: %v (対応 %v)", bad, supLTE))
+		return j.fail("Input", fmt.Sprintf("Unsupported LTE bands: %v (supported: %v)", bad, supLTE))
 	}
 	if bad := notIn(wantNR, supNR); len(bad) > 0 {
-		return j.fail("入力", fmt.Sprintf("対応していない 5G バンドです: %v (対応 %v)", bad, supNR))
+		return j.fail("Input", fmt.Sprintf("Unsupported 5G bands: %v (supported: %v)", bad, supNR))
 	}
 
 	next := []string{cur[0], cur[1], "", ""}
 	if next[2], err = bandMaskHex(wantLTE, len(cur[2])); err != nil {
-		return j.fail("入力", err.Error())
+		return j.fail("Input", err.Error())
 	}
 	if next[3], err = bandMaskHex(wantNR, len(cur[3])); err != nil {
-		return j.fail("入力", err.Error())
+		return j.fail("Input", err.Error())
 	}
 
 	// 巻き戻し先を uci に残す。**/tmp のジョブファイルは再起動で消える。**
@@ -178,40 +178,39 @@ func runBandWorker(lteArg, nrArg string) int {
 		_, _ = uci("commit", "sbair")
 	}
 
-	j.step("バンドを書き込む")
+	j.step("Write band settings")
 	if err := writeEPBSEH(ch, next); err != nil {
 		return j.fail("AT+EPBSEH=", err.Error())
 	}
 	time.Sleep(bandSettle)
 
-	j.step("ネットワークへの登録を待つ")
+	j.step("Wait for network registration")
 	if waitRegistered(ch, j) {
 		// **設定はモデムの電源が切れると消える**(実測: 再起動で出荷既定に
 		// 戻る)。起動時に入れ直せるよう、望んだ組み合わせを残す。
 		saveDesiredBands(wantLTE, wantNR)
-		return finishBandSet(ch, j, next, "バンドを変更しました。")
+		return finishBandSet(ch, j, next, "Band settings changed.")
 	}
 
 	// 戻らなかった。**元に戻して、戻ったことまで確かめる。**
-	j.step("戻らないので元の設定へ巻き戻す")
+	j.step("Restore the previous settings")
 	if err := writeEPBSEH(ch, cur); err != nil {
-		return j.fail("巻き戻し", "元の設定に戻せませんでした: "+err.Error()+
-			" 手動で戻してください: AT+EPBSEH=\""+strings.Join(cur, "\",\"")+"\"")
+		return j.fail("Rollback", "Unable to restore the previous settings: "+err.Error()+
+			" Restore manually with AT+EPBSEH=\""+strings.Join(cur, "\",\"")+"\"")
 	}
 	time.Sleep(bandSettle)
 	if !waitRegistered(ch, j) {
 		_, _ = ifupWAN()
-		return j.fail("巻き戻し",
-			"指定したバンドではつながらず、元の設定に戻しましたが、まだネットワークにつながっていません。"+
-				"しばらく待つか、モデムをリセットしてください。")
+		return j.fail("Rollback",
+			"The network did not connect with the selected bands. Previous settings were restored, but the network is still unavailable. Wait or reset the modem.")
 	}
 	finishBandSet(ch, j, cur, "")
-	return j.fail("登録", "指定したバンドではネットワークにつながらなかったので、元の設定に巻き戻しました。")
+	return j.fail("Registration", "The network did not connect with the selected bands, so the previous settings were restored.")
 }
 
 // finishBandSet brings the WAN back and records what is now in effect.
 func finishBandSet(ch *ATChannel, j *job, applied []string, msg string) int {
-	j.step("WAN状態を確認")
+	j.step("Check WAN status")
 	// **AT を握ったまま ifup しない。** その先で ql_datacall が AT を使う。
 	ch.Disconnect()
 	if out, err := ifupWAN(); err != nil {
@@ -221,13 +220,13 @@ func finishBandSet(ch *ATChannel, j *job, applied []string, msg string) int {
 		if msg == "" {
 			return 0
 		}
-		return j.done("完了", msg+" APモードのためWANは起動していません。")
+		return j.done("Complete", msg+" WAN was not started in AP mode.")
 	}
 	if msg == "" {
 		return 0
 	}
 	lte, nr := bandMask(applied[2]), bandMask(applied[3])
-	return j.done("完了", fmt.Sprintf("%s LTE %v / 5G %v。接続まで 10〜30 秒かかります。", msg, lte, nr))
+	return j.done("Complete", fmt.Sprintf("%s LTE %v / 5G %v. Connection may take 10–30 seconds.", msg, lte, nr))
 }
 
 // waitRegistered polls +CEREG until the modem is attached again.
@@ -328,27 +327,26 @@ func ensureBands(ch *ATChannel, slow bool) []string {
 	}
 	cur, err := epbsehFields(ch, "AT+EPBSEH?")
 	if err != nil {
-		return []string{"バンドの現在値を読めません: " + err.Error()}
+	return []string{"Unable to read the current band settings: " + err.Error()}
 	}
 	if sameInts(bandMask(cur[2]), wantLTE) && sameInts(bandMask(cur[3]), wantNR) {
 		return nil // もう望みどおり。触らない。
 	}
 	if !slow {
-		return []string{fmt.Sprintf("バンドの設定が保存した組み合わせ (LTE %v / 5G %v) と違います。"+
-			"電波の画面から適用し直してください。", wantLTE, wantNR)}
+		return []string{fmt.Sprintf("Saved band settings differ from the requested combination (LTE %v / 5G %v). Reapply them from the Signal page.", wantLTE, wantNR)}
 	}
 
 	next := []string{cur[0], cur[1], "", ""}
 	if next[2], err = bandMaskHex(wantLTE, len(cur[2])); err != nil {
-		return []string{"バンドを組み立てられません: " + err.Error()}
+		return []string{"Unable to prepare band settings: " + err.Error()}
 	}
 	if next[3], err = bandMaskHex(wantNR, len(cur[3])); err != nil {
-		return []string{"バンドを組み立てられません: " + err.Error()}
+		return []string{"Unable to prepare band settings: " + err.Error()}
 	}
 	if err := writeEPBSEH(ch, next); err != nil {
-		return []string{"バンドを書き込めません: " + err.Error()}
+		return []string{"Unable to write band settings: " + err.Error()}
 	}
-	return []string{fmt.Sprintf("バンドを入れ直しました (LTE %v / 5G %v)。", wantLTE, wantNR)}
+	return []string{fmt.Sprintf("Reapplied band settings (LTE %v / 5G %v).", wantLTE, wantNR)}
 }
 
 const (

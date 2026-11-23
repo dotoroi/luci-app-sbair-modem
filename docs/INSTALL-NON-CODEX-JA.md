@@ -38,7 +38,45 @@ cd floop3
 
 現状の`./build.sh`はGoバックエンド(`out/sbair-modem`)のみをビルドします。
 
-ビルド済み一式は韓国語ガイドのリリース手順に従って導入できます。ソースから導入する場合はWSLで`./build.sh`を実行し、`install.sh`、`root/`、`htdocs/`、`tools/check-shell-lf.sh`、`out/sbair-modem`をアーカイブして端末の`/tmp`へSSH転送します。端末で展開後、`sh ./install.sh /`を実行してください。同じ対象チェックが適用されます。
+### WSLを使わないWindowsネイティブビルド
+
+[go.dev/dl](https://go.dev/dl/)からGo 1.25.5以降をインストールし、`go/bin`を`PATH`に追加します。[Git for Windows](https://git-scm.com/download/win)もインストールしてください。プロジェクトのスクリプトはPOSIX互換シェルとツールを使うため、**Git Bash**から実行します。Python 3もインストールし、`python3`または`python`がGit Bashから使えるようにします。パッケージ作成は`python3`を既定で使用します。Pythonコマンド名が`python`の場合は`PYTHON3=python`を指定します。
+
+```sh
+git clone https://github.com/Floop3/luci-app-sbair-modem.git floop3
+cd floop3
+./build.sh
+./tools/package-release.sh vX.Y.Z
+```
+
+Pythonコマンド名が`python`の場合は`PYTHON3=python ./tools/package-release.sh vX.Y.Z`を使います。パッケージ作成コマンドはバックエンドを再ビルドし、`out/release/floop3-vX.Y.Z-air6-linux-arm64.tar.gz`と`.sha256`を作成します。`vX.Y.Z`は実際のリリースタグに置き換えてください。Git Bashで先に`go version`、利用するPythonコマンドの`--version`、`git status --short`を確認します。PowerShellだけではスクリプトが必要とするPOSIXシェルコマンドを提供しません。
+
+事前ビルド済みバンドルは、タグ付きGitHubリリースの`.tar.gz`と`.sha256`を取得してください。ホスト上でチェックサムとバンドル内ファイルを確認します。
+
+```sh
+sha256sum -c floop3-<version>-air6-linux-arm64.tar.gz.sha256
+tar -xzf floop3-<version>-air6-linux-arm64.tar.gz
+cd floop3-<version>-air6-linux-arm64
+sha256sum -c SHA256SUMS
+```
+
+`release-manifest.json`のバージョンとソースコミットが導入対象と一致することを確認してください。続いてルーターへコピーし、装置側でも事前検査してから導入します。
+
+```sh
+cd ..
+scp -O floop3-<version>-air6-linux-arm64.tar.gz root@<AIR6_LAN_IP>:/tmp/
+ssh root@<AIR6_LAN_IP>
+cd /tmp
+tar -xzf floop3-<version>-air6-linux-arm64.tar.gz
+cd floop3-<version>-air6-linux-arm64
+sha256sum -c SHA256SUMS
+sh ./install.sh --check
+sh ./install.sh /
+```
+
+インストーラーは、非対応ファームウェア、未適用のfirewall変更、所有者不明のネットワークhelper、`/overlay`の空き容量が24 MiB未満の場合に停止します。原因を解消して再検査し、この確認を回避しないでください。
+
+ソースからビルドする場合はGo 1.25.5以上を使い、`./build.sh`と`sh ./tools/build-i18n.sh`を実行した後、事前検査付きの`tools/deploy-floop3.sh`を使用します。UIや翻訳が異なるソース版のGoバイナリだけをコピーしないでください。
 
 インストール後、`http://<AIR6_LAN_IP>/cgi-bin/luci/`を開きます。アプリは**Services → SoftBank Air 6**にあります。**System → Language and Style**でEnglish、한국어、日本語を選べます。
 
@@ -48,4 +86,4 @@ cd floop3
 
 インストーラーは設定バックアップを自動作成しません。導入前にLuCIの設定バックアップを保存し、UARTなど別の管理経路を確保してください。失敗時はネットワークやファイアウォールを初期化せず、SSH/UARTからログと変更ファイルを確認してください。
 
-スクリプトはWSL/Linux/macOSで実行します。WindowsではWSL端末でプロジェクトディレクトリへ移動してください。
+スクリプトはWindowsのGit Bash、またはLinux/macOSの端末から実行します。GoとGit BashをWindowsに用意すれば、WSLは必須ではありません。

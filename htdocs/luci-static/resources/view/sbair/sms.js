@@ -30,35 +30,35 @@ function when(iso) {
 function simLabel(s) {
 	if (s.label) return s.label;
 	if (s.number) return sbair.mask(s.number);
-	return '番号なし (' + sbair.mask(s.iccid) + ')';
+	return _("No number (") + sbair.mask(s.iccid) + ')';
 }
 
 function message(self, m) {
 	var head = [
-		E('strong', {}, sbair.mask(m.from) || '(送信者不明)'),
+		E('strong', {}, sbair.mask(m.from) || _("(Sender unknown)")),
 		E('span', { 'style': 'color:#888;margin-left:1em' }, when(m.time))
 	];
 	if (m.unread)
 		head.push(E('span', {
 			'style': 'margin-left:1em;padding:0 .4em;border-radius:3px;' +
 			         'background:#5a8;color:#fff;font-size:90%'
-		}, '未読'));
+		}, _("unread")));
 	if (m.parts)
 		head.push(E('span', { 'style': 'color:#888;margin-left:1em;font-size:90%' },
-			m.parts + ' 分割'));
+			m.parts + _("division")));
 
 	var body = [ E('div', { 'style': 'margin-bottom:.3em' }, head) ];
 	// **欠けた分割は隠さない。** 届いているぶんは出したうえで欠番を添える。
 	if (m.missing && m.missing.length)
 		body.push(E('div', { 'class': 'alert-message warning', 'style': 'margin:.3em 0' },
-			'分割の ' + m.missing.join(', ') + ' 番目が届いていません。本文が欠けています。'));
+			_("division") + m.missing.join(', ') + _("The second did not arrive. There is not enough text.")));
 	body.push(E('div', { 'style': 'white-space:pre-wrap;word-break:break-word' }, m.text || ''));
 
 	if (m.hash)
 		body.push(E('div', { 'style': 'margin-top:.4em' }, E('button', {
 			'class': 'cbi-button cbi-button-remove',
 			'click': ui.createHandlerFn(self, function() { return self.confirmDelete(m); })
-		}, '削除')));
+		}, _("delete"))));
 
 	return E('div', {
 		'style': 'padding:.6em .2em;border-top:1px solid rgba(128,128,128,.3)'
@@ -82,7 +82,7 @@ function render(self) {
 	var imp = [];
 	if (d.importing)
 		imp.push(E('div', { 'class': 'alert-message' }, [
-			E('span', { 'class': 'spinning' }, ' '), 'モデムから取り込んでいます…'
+			E('span', { 'class': 'spinning' }, ' '), _("Retrieving from modem...")
 		]));
 	else if (d.importNote)
 		imp.push(E('div', { 'class': 'alert-message success' }, d.importNote));
@@ -91,29 +91,29 @@ function render(self) {
 		'class': 'cbi-button cbi-button-action',
 		'disabled': d.importing ? '' : null,
 		'click': ui.createHandlerFn(self, 'doImport')
-	}, 'モデムから取り込む'));
+	}, _("Import from modem")));
 	imp.push(E('span', { 'style': 'margin-left:1em;color:#888' },
 		(st.used != null && st.total != null)
-			? 'モデム内: ' + st.used + ' / ' + st.total + ' 通' : ''));
+			? _("In modem:") + st.used + ' / ' + st.total + _("container") : ''));
 	imp.push(E('div', { 'class': 'cbi-value-description' }, [
-		'保管庫はこの機体の ', E('code', {}, '/etc/sbair/sms.db'), ' (SQLite)。',
+		_("The storage area for this aircraft is"), E('code', {}, '/etc/sbair/sms.db'), ' (SQLite).',
 		E('br'),
-		E('strong', {}, '⚠ 取り込むと、モデム側で未読が既読に変わります'),
-		'(AT+CMGL の仕様で避けられません)。保管庫には',
-		E('strong', {}, '最初に取り込んだときの未読状態がそのまま残ります'),
-		' — 2 回目以降の取り込みで上書きしません。'
+		E('strong', {}, _("⚠ Capturing will change unread to read on modem side")),
+		_("(Cannot be avoided with AT+CMGL specification). In the storage room"),
+		E('strong', {}, _("It will remain in the same unread state as when first captured.")),
+		_("- It will not be overwritten by a second or subsequent capture.")
 	]));
-	body.push(sbair.section('取り込み', imp));
+	body.push(sbair.section(_("capture"), imp));
 
 	// --- SIM の選択 ---------------------------------------------------------
 	if (sbair.isDebug() && d.smsDB)
-		body.push(E('div', { 'class': 'cbi-value-description' }, '保管先: ' + d.smsDB));
+		body.push(E('div', { 'class': 'cbi-value-description' }, _("Storage for:") + d.smsDB));
 
 	var sims = d.sims || [];
 	if (!sims.length) {
-		body.push(sbair.section('受信メッセージ', [
+		body.push(sbair.section(_("received message"), [
 			E('div', { 'class': 'cbi-value-description' },
-				'まだ保管庫が空です。「モデムから取り込む」を押してください。')
+				_("The storage is still empty. Click “Import from Modem.”"))
 		]));
 		return body;
 	}
@@ -123,30 +123,30 @@ function render(self) {
 		'change': ui.createHandlerFn(self, function(ev) { return self.selectSIM(ev.target.value); })
 	});
 	sims.forEach(function(s) {
-		var t = simLabel(s) + ' — ' + s.count + ' 通';
-		if (s.unread) t += ' (未読 ' + s.unread + ')';
+		var t = simLabel(s) + ' — ' + s.count + _("container");
+		if (s.unread) t += _("(not read") + s.unread + ')';
 		sel.appendChild(E('option', {
 			'value': s.iccid, 'selected': s.iccid == d.iccid ? '' : null
 		}, t));
 	});
 
 	var list = [ E('div', { 'style': 'margin-bottom:.5em' }, [
-		E('label', { 'style': 'margin-right:.5em' }, 'SIM / 電話番号:'), sel
+		E('label', { 'style': 'margin-right:.5em' }, _("SIM/Phone Number:")), sel
 	]) ];
 
 	var cur = sims.filter(function(s) { return s.iccid == d.iccid; })[0];
 	if (cur)
 		list.push(sbair.table([
-			sbair.row('電話番号', cur.number ? sbair.mask(cur.number) : '(SIM に入っていません)'),
-			sbair.row('ICCID', sbair.mask(cur.iccid))
+			sbair.row(_("phone number"), cur.number ? sbair.mask(cur.number) : _("(Not included with SIM)")),
+			sbair.row(_('ICCID'), sbair.mask(cur.iccid))
 		]));
 
 	var msgs = d.messages || [];
 	if (d.loading)
-		list.push(E('div', { 'class': 'alert-message' }, '読み込み中…'));
+		list.push(E('div', { 'class': 'alert-message' }, _("Loading...")));
 	else if (!msgs.length)
 		list.push(E('div', { 'class': 'cbi-value-description' },
-			'この SIM のメッセージはありません。'));
+			_("There are no messages for this SIM.")));
 	else
 		msgs.forEach(function(m) { list.push(message(self, m)); });
 
@@ -156,12 +156,12 @@ function render(self) {
 			E('button', {
 				'class': 'cbi-button cbi-button-negative',
 				'click': ui.createHandlerFn(self, 'confirmPurge')
-			}, 'この SIM の全件を削除'),
+			}, _("Delete everything on this SIM")),
 			E('div', { 'class': 'cbi-value-description' },
-				'保管庫から消し、あわせてモデムの保存領域も空にします。取り消せません。')
+				_("Clear it from storage and also clear the modem's storage area. It cannot be cancelled."))
 		]));
 
-	body.push(sbair.section('受信メッセージ', list));
+	body.push(sbair.section(_("received message"), list));
 	return body;
 }
 
@@ -200,8 +200,8 @@ return view.extend({
 		}, 30);
 
 		return E('div', { 'class': 'cbi-map' }, [
-			E('div', { 'class': 'cbi-map-descr' }, 'モデム内の件数は 30 秒ごとに更新。'),
-			sbair.revealToggle('電話番号と送信者を表示する', self.redraw),
+			E('div', { 'class': 'cbi-map-descr' }, _("The number of modems was updated every 30 seconds.")),
+			sbair.revealToggle(_("View phone number and caller ID"), self.redraw),
 			container
 		]);
 	},
@@ -230,12 +230,12 @@ return view.extend({
 		return callImport().then(function(res) {
 			self.data.importing = false;
 			if (res && res.error) {
-				ui.addNotification(null, E('p', {}, res.error), 'warning');
+				ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 				self.redraw();
 				return;
 			}
-			self.data.importNote = 'モデムから ' + (res.read || 0) + ' 通を読み、' +
-				(res.added || 0) + ' 通を保管庫に追加しました。';
+			self.data.importNote = _("from modem") + (res.read || 0) + _("read the barrel") +
+				(res.added || 0) + _("Added barrel to inventory.");
 			// 取り込んだ SIM を選び直して読み込む。
 			return callSims().then(function(r) {
 				self.data.sims = (r && r.sims) || [];
@@ -256,14 +256,14 @@ return view.extend({
 	// 次の取り込みで戻ってくる。
 	confirmDelete: function(m) {
 		var self = this;
-		return ui.showModal('メッセージの削除', [
-			E('p', {}, '次のメッセージを保管庫とモデムの両方から削除します。'),
+		return ui.showModal(_("Delete message"), [
+			E('p', {}, _("Delete the following messages from both your library and your modem:")),
 			E('div', { 'style': 'margin:.5em 0;padding:.5em;' +
 				'background:rgba(128,128,128,.1);white-space:pre-wrap;' +
 				'max-height:8em;overflow:auto' }, m.text || ''),
-			E('p', {}, E('strong', {}, '取り消せません。')),
+			E('p', {}, E('strong', {}, _("It cannot be cancelled."))),
 			E('div', { 'class': 'right' }, [
-				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, 'やめる'),
+				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, _("stop")),
 				' ',
 				E('button', {
 					'class': 'cbi-button cbi-button-negative',
@@ -273,7 +273,7 @@ return view.extend({
 							return self.afterDelete(res);
 						});
 					})
-				}, '削除する')
+				}, _("delete"))
 			])
 		]);
 	},
@@ -283,11 +283,11 @@ return view.extend({
 		var cur = (self.data.sims || []).filter(function(s) {
 			return s.iccid == self.data.iccid;
 		})[0] || {};
-		return ui.showModal('この SIM の全件を削除', [
-			E('p', {}, (cur.count || 0) + ' 通すべてを保管庫から削除し、モデムの保存領域も空にします。'),
-			E('p', {}, E('strong', {}, '取り消せません。')),
+		return ui.showModal(_("Delete everything on this SIM"), [
+			E('p', {}, (cur.count || 0) + _("Remove all storage from the storage and also free up storage space on the modem.")),
+			E('p', {}, E('strong', {}, _("It cannot be cancelled."))),
 			E('div', { 'class': 'right' }, [
-				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, 'やめる'),
+				E('button', { 'class': 'cbi-button', 'click': ui.hideModal }, _("stop")),
 				' ',
 				E('button', {
 					'class': 'cbi-button cbi-button-negative',
@@ -297,7 +297,7 @@ return view.extend({
 							return self.afterDelete(res);
 						});
 					})
-				}, 'すべて削除する')
+				}, _("delete all"))
 			])
 		]);
 	},
@@ -305,13 +305,13 @@ return view.extend({
 	afterDelete: function(res) {
 		var self = this;
 		if (res && res.error) {
-			ui.addNotification(null, E('p', {}, res.error), 'warning');
+			ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'warning');
 			return;
 		}
 		if (res && res.errors && res.errors.length)
 			ui.addNotification(null, E('p', {},
-				'モデム側で消せなかったものがあります: ' + res.errors.join(' / ') +
-				' — 保管庫からは消えており、取り込み直しても戻りません。'), 'warning');
+				_("Here's what you can't erase on the modem side:") + res.errors.map(function(message) { return sbair.errorText(message); }).join(' / ') +
+				_("— It disappears from storage and doesn't come back when you retrieve it.")), 'warning');
 		return Promise.all([ callSims(), callMessages(self.data.iccid, 200) ])
 			.then(function(r) {
 				self.data.sims = (r[0] && r[0].sims) || [];

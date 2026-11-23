@@ -17,7 +17,7 @@
 ## 대상과 준비물
 
 - SoftBank Air 6에서 LuCI와 rpcd, ubus, uci가 이미 동작해야 합니다.
-- PC에 Git, Bash, Go 1.25 이상, Python 3, ssh, tar, sha256sum이 필요합니다.
+- PC에 Git, Bash, Go 1.25.5 이상, Python 3, ssh, tar, sha256sum이 필요합니다.
 - root SSH 접속이 가능해야 합니다. 키 인증을 권장합니다.
 - 설치는 재부팅하지 않지만 LuCI의 rpcd를 재시작합니다. 설정 백업을 만든 뒤 설치합니다.
 - 설치기는 알 수 없는 /usr/sbin/sbair-netmode 구현을 발견하면 덮어쓰지 않고 중단합니다.
@@ -54,9 +54,9 @@ cd floop3-<버전>-air6-linux-arm64
 sha256sum -c SHA256SUMS && sh ./install.sh --check && sh ./install.sh /
 ```
 
-v0.1.1부터 번들에 Floop3용 한국어·일본어 카탈로그, 제거 도구 및 LuCI bootstrap이 들어 있습니다. LuCI가 없으면 동봉된 `extras/luci-bootstrap/README.ko.md`의 사전 검사부터 진행합니다. 호스트에서 OpenWrt 패키지를 내려받는 단계가 필요합니다.
+릴리즈 번들에는 Floop3용 한국어·일본어 카탈로그, 제거 도구 및 LuCI bootstrap이 들어 있습니다. 장치의 `release-manifest.json`에서 버전과 소스 커밋을 확인하고, 지정 브랜치 소스와 일치하지 않는 이전 태그 바이너리를 섞지 마세요. LuCI가 없으면 동봉된 `extras/luci-bootstrap/README.ko.md`의 사전 검사부터 진행합니다. 호스트에서 OpenWrt 패키지를 내려받는 단계가 필요합니다.
 
-설치기는 SBA6D 식별값, OpenWrt와 KNOS 버전, LuCI 의존성, 미적용 방화벽 변경 및 overlay 여유 공간을 검사합니다. 설치 중 rpcd가 재시작됩니다. Floop3의 기기 정보에서 설치된 릴리스 버전과 빌드 커밋을 확인할 수 있습니다. 제거할 때는 동봉된 `UNINSTALL-FLOOP3-KO.md`를 따릅니다.
+설치기는 SBA6D 식별값, OpenWrt와 KNOS 버전, LuCI 의존성, 미적용 방화벽 변경 및 overlay 여유 공간을 검사합니다. `/overlay`의 여유 공간이 24 MiB보다 적거나 검사를 통과하지 못하면 우회하지 말고 원인을 해결하세요. 설치 중 rpcd가 재시작됩니다. Floop3의 기기 정보에서 설치된 릴리즈 버전과 빌드 커밋을 확인할 수 있습니다. 제거할 때는 `docs/UNINSTALL-FLOOP3-KO.md`를 따릅니다.
 
 ## 소스에서 빌드하고 설치
 
@@ -68,14 +68,27 @@ cd floop3
 ./build.sh
 ```
 
-`./build.sh`는 Go 백엔드만 빌드합니다. 다음 명령으로 설치 파일을 묶고 장치에 복사할 수 있습니다.
+`./build.sh`는 Go 백엔드를 빌드합니다. 별도로 번역 카탈로그를 만들고, 검사·백업 절차가 포함된 배포 도구를 사용합니다.
+
+### WSL 없는 Windows 네이티브 빌드
+
+[go.dev/dl](https://go.dev/dl/)에서 Go 1.25.5 이상을 설치하고 `go/bin` 디렉터리를 `PATH`에 추가합니다. [Git for Windows](https://git-scm.com/download/win)도 설치하십시오. 프로젝트 스크립트는 POSIX 호환 셸과 도구를 사용하므로 **Git Bash**에서 실행합니다. Python 3도 설치해 Git Bash에서 `python3` 또는 `python` 명령을 쓸 수 있게 합니다. 패키징은 기본적으로 `python3`을 사용하며, Python 명령이 `python`이라면 `PYTHON3=python`을 지정합니다.
 
 ```sh
-tar -czf floop3-source.tar.gz install.sh root htdocs tools/check-shell-lf.sh out/sbair-modem
-scp floop3-source.tar.gz root@<AIR6_LAN_IP>:/tmp/
+git clone https://github.com/Floop3/luci-app-sbair-modem.git floop3
+cd floop3
+./build.sh
+./tools/package-release.sh vX.Y.Z
 ```
 
-SSH로 접속한 장치에서 압축을 푼 뒤 `sh ./install.sh /`를 실행합니다. 이 설치 경로도 동일한 장치 사전 검사를 적용합니다.
+Python 명령이 `python`이라면 `PYTHON3=python ./tools/package-release.sh vX.Y.Z`를 사용합니다. 패키징 명령은 백엔드를 다시 빌드하고 `out/release/floop3-vX.Y.Z-air6-linux-arm64.tar.gz`와 `.sha256`을 만듭니다. `vX.Y.Z`는 실제 릴리스 태그로 바꾸십시오. Git Bash에서 먼저 `go version`, 사용할 Python 명령의 `--version`, `git status --short`를 확인합니다. PowerShell만으로는 스크립트가 요구하는 POSIX 셸 명령을 제공하지 않습니다.
+
+```sh
+sh ./tools/build-i18n.sh
+./tools/deploy-floop3.sh root@<AIR6_LAN_IP>
+```
+
+배포 도구는 장치 식별·여유 공간을 검사하고 설치 전 설정과 파일을 백업합니다. Go 바이너리만 다른 소스 버전에서 가져와 교체하지 마세요.
 
 설치 후 http://<AIR6_LAN_IP>/cgi-bin/luci/에 접속합니다. 전용 메뉴는 Services → SoftBank Air 6 아래에 표시되며, System → Language and Style에서 English·한국어·日本語를 선택할 수 있습니다.
 
@@ -85,4 +98,4 @@ SSH로 접속한 장치에서 압축을 푼 뒤 `sh ./install.sh /`를 실행합
 
 설치기는 자동 설정 백업을 만들지 않습니다. 설치 전에 LuCI의 백업 기능으로 설정을 저장하고 UART 또는 다른 관리 경로를 확보하십시오. 설치 실패 시 네트워크와 방화벽을 초기화하지 말고, SSH/UART에서 로그와 변경 파일을 확인합니다.
 
-스크립트는 WSL/Linux/macOS에서 실행합니다. Windows에서는 WSL 터미널에서 프로젝트 디렉터리로 이동해 위 명령을 사용하면 됩니다.
+스크립트는 Windows의 Git Bash 또는 Linux/macOS 터미널에서 실행합니다. Windows에 Go와 Git Bash를 준비하면 WSL은 필수가 아닙니다.

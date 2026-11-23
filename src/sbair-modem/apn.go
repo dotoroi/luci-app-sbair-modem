@@ -116,17 +116,17 @@ func apnList() []apnEntry {
 
 func apnSet(e apnEntry) map[string]any {
 	if strings.TrimSpace(e.ICCID) == "" {
-		return map[string]any{"error": "ICCID が指定されていません。"}
+		return map[string]any{"error": "ICCID is required."}
 	}
 	if strings.TrimSpace(e.APN) == "" {
-		return map[string]any{"error": "APN が指定されていません。"}
+		return map[string]any{"error": "APN is required."}
 	}
 	if err := ensureConfig(); err != nil {
-		return map[string]any{"error": fmt.Sprintf("/etc/config/%s を作れません: %v", apnConfig, err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to create config file: %v", err)}
 	}
 	sec := apnConfig + "." + sectionName(e.ICCID)
 	if _, err := uci("set", sec+"=apn"); err != nil {
-		return map[string]any{"error": fmt.Sprintf("uci に書けません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to write UCI settings: %v", err)}
 	}
 	for k, v := range map[string]string{
 		"iccid": e.ICCID, "apn": e.APN, "auth": e.Auth,
@@ -150,7 +150,7 @@ func apnSet(e apnEntry) map[string]any {
 
 func apnDelete(iccid string) map[string]any {
 	if strings.TrimSpace(iccid) == "" {
-		return map[string]any{"error": "ICCID が指定されていません。"}
+		return map[string]any{"error": "ICCID is required."}
 	}
 	if _, err := uci("delete", apnConfig+"."+sectionName(iccid)); err != nil {
 		return map[string]any{"error": fmt.Sprintf("uci delete: %v", err)}
@@ -175,11 +175,11 @@ func apnDelete(iccid string) map[string]any {
 func apnProbe() map[string]any {
 	out, err := exec.Command("ql_datacall", "--apn_provision_by_sim").Output()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("SIM から読み出せません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to read APN from the SIM: %v", err)}
 	}
 	var raw map[string]any
 	if err := json.Unmarshal(out, &raw); err != nil {
-		return map[string]any{"error": fmt.Sprintf("応答を解釈できません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to parse the modem response: %v", err)}
 	}
 
 	str := func(k string) string {
@@ -197,7 +197,7 @@ func apnProbe() map[string]any {
 		IPType: str("protocol"),
 	}
 	if e.APN == "" {
-		return map[string]any{"error": "SIM が APN を返しませんでした。"}
+		return map[string]any{"error": "The SIM did not return an APN."}
 	}
 	return map[string]any{"suggestion": e, "plmn": str("plmn")}
 }
@@ -287,16 +287,16 @@ func ensureModemState(ch *ATChannel, e apnEntry, slow bool) []string {
 		st := simlockState(ch)
 		if locked, ok := st["locked"].(bool); ok && locked {
 			if !slow {
-				notes = append(notes, "SIM ロックが掛かっています。SIM のページから解除してください。")
+				notes = append(notes, "SIM lock is enabled. Disable it from the SIM page.")
 			} else {
 				// **開いているチャネルのまま解除する。** ワーカーを呼ぶと
 				// 自前でチャネルを開こうとして flock で自分自身に弾かれる。
 				ch.SetTimeout(30 * time.Second)
 				_, msg, err := simlockApply(ch, false, func(string) {})
 				if err != nil {
-					notes = append(notes, "SIM ロックを解除できません: "+err.Error())
+					notes = append(notes, "Unable to disable SIM lock: "+err.Error())
 				} else {
-					notes = append(notes, "SIM ロックを解除しました ("+msg+")。")
+					notes = append(notes, "SIM lock disabled ("+msg+").")
 				}
 			}
 		}
@@ -307,7 +307,7 @@ func ensureModemState(ch *ATChannel, e apnEntry, slow bool) []string {
 		// 返すことがあるので当てにしない。
 		if st := imsStatus(ch); st["registered"] != true {
 			if out := imsSet(ch, true); out["error"] == nil {
-				notes = append(notes, "IMS を有効にしました。登録まで 10〜30 秒かかります。")
+				notes = append(notes, "IMS enabled. Registration may take 10–30 seconds.")
 			}
 		}
 	}
@@ -327,14 +327,14 @@ func apnApplyMode(ch *ATChannel, slow bool) map[string]any {
 
 	iccid := currentICCID(ch)
 	if iccid == "" {
-		return map[string]any{"error": "SIM の ICCID を読めません。",
+		return map[string]any{"error": "Unable to read the SIM ICCID.",
 			"note": strings.Join(notes, " ")}
 	}
 	e, ok := apnGet(iccid)
 	if !ok {
 		return map[string]any{"result": "skipped", "iccid": iccid,
 			"note": strings.Join(append(notes,
-				"この SIM の APN は登録されていません。WAN は変更していません。"), " ")}
+				"No APN is saved for this SIM. The WAN configuration was not changed."), " ")}
 	}
 
 	// **APN を書く前にモデムの状態を揃える。** 解除は電波を落とすので、
@@ -376,9 +376,9 @@ func apnApplyMode(ch *ATChannel, slow bool) map[string]any {
 			err, strings.TrimSpace(string(out)))}
 	}
 	if cellularWANAllowed() {
-		notes = append(notes, "WAN を張り直しました。接続まで 10〜30 秒かかります。")
+		notes = append(notes, "WAN was restarted. Connection may take 10–30 seconds.")
 	} else {
-		notes = append(notes, "APモードのためWANは起動していません。モデムのAT/SMS機能は維持しています。")
+		notes = append(notes, "WAN was not started in AP mode. Modem AT and SMS functions remain available.")
 	}
 	return map[string]any{"result": "ok", "iccid": iccid, "apn": e.APN,
 		"note": strings.Join(notes, " ")}

@@ -22,9 +22,201 @@ network_reload() {
 	[ -x /usr/bin/sbair-modem ] && /usr/bin/sbair-modem wifi-drift snapshot network_reload_after >/dev/null 2>&1 || true
 }
 
+apply_ethwan_config() {
+	local wan_device section name networks found_zone found_forward found_lan_zone wan_input
+	ensure_config
+	if [ "$(get sbair.bridge.mode)" = vlanwan ]; then
+		restore_vlanwan_baseline || { printf '%s\n' 'error=이전 eth0.3 VLAN WAN 설정을 복원하지 못했습니다'; return 1; }
+	fi
+	[ -e /sys/class/net/eth1 ] || { printf '%s\n' 'error=유선 WAN 후보 eth1이 존재하지 않습니다'; return 1; }
+	[ "$(get network.lan.proto)" = static ] || { printf '%s\n' 'error=LAN이 고정 사설 주소를 가진 라우터 상태가 아닙니다'; return 1; }
+	is_ipv4 "$(get network.lan.ipaddr)" || { printf '%s\n' 'error=LAN IPv4 주소가 유효하지 않습니다'; return 1; }
+	mask_to_prefix "$(get network.lan.netmask)" >/dev/null 2>&1 || { printf '%s\n' 'error=LAN 넷마스크가 유효하지 않습니다'; return 1; }
+	[ "$(get dhcp.lan.ignore)" != 1 ] || { printf '%s\n' 'error=LAN DHCP 서버가 꺼져 있습니다. AP 모드에서 직접 유선 WAN 모드로 전환할 수 없습니다'; return 1; }
+	# Reuse the OEM routed firewall only when it still has LAN->WAN forwarding,
+	# a WAN zone attached to the logical wan interface, and masquerading enabled.
+	found_zone=0
+	found_lan_zone=0
+	while IFS= read -r section; do
+		[ -n "$section" ] || continue
+		name=$(get "firewall.$section.name")
+		networks=" $(get "firewall.$section.network") "
+		if [ "$name" = wan ]; then
+			case "$networks" in *' wan '*) :;; *) continue;; esac
+			[ "$(get "firewall.$section.masq")" = 1 ] || continue
+			wan_input=$(get "firewall.$section.input")
+			[ "$wan_input" = DROP ] || [ "$wan_input" = REJECT ] || continue
+			found_zone=1
+		elif [ "$name" = lan ]; then
+			case "$networks" in *' lan '*) :;; *) continue;; esac
+			[ "$(get "firewall.$section.input")" = ACCEPT ] || continue
+			found_lan_zone=1
+		fi
+	done <<EOF
+$(uci -q show firewall 2>/dev/null | sed -n "s/^firewall\.\(@zone\[[0-9][0-9]*\]\)=zone$/\1/p")
+EOF
+	[ "$found_zone" -eq 1 ] || { printf '%s\n' 'error=LAN-to-WAN masquerade firewall zone was not found; refusing Ethernet WAN setup'; return 1; }
+	[ "$found_lan_zone" -eq 1 ] || { printf '%s\n' 'error=trusted LAN firewall zone was not found; refusing Ethernet WAN setup'; return 1; }
+	found_forward=0
+	while IFS= read -r section; do
+		[ -n "$section" ] || continue
+		[ "$(get "firewall.$section.src")" = lan ] && [ "$(get "firewall.$section.dest")" = wan ] && found_forward=1
+	done <<EOF
+$(uci -q show firewall 2>/dev/null | sed -n "s/^firewall\.\(@forwarding\[[0-9][0-9]*\]\)=forwarding$/\1/p")
+EOF
+	[ "$found_forward" -eq 1 ] || { printf '%s\n' 'error=LAN-to-WAN firewall forwarding was not found; refusing Ethernet WAN setup'; return 1; }
+	wan_device=$(get network.wan.device)
+	if [ "$wan_device" = eth1 ] && [ "$(get sbair.bridge.ethwan_orig_ready)" != 1 ]; then
+		printf '%s\n' 'error=현재 eth1 WAN의 원래 모뎀 구성을 안전하게 복원할 기준이 없습니다'
+		return 1
+	fi
+	save_ethwan_baseline || { printf '%s\n' 'error=기존 WAN 설정 백업에 실패했습니다'; return 1; }
+	fallback_remove
+	ifdown wan >/dev/null 2>&1 || true
+	if uci -q get network.wan6 >/dev/null 2>&1; then ifdown wan6 >/dev/null 2>&1 || true; fi
+	# Use the vendor's dedicated eth1 WAN path. Keep the LAN subnet, DHCP pool,
+	# Wi-Fi bridge, and OEM LAN-to-WAN masquerading policy in place.
+	uci -q del_list 'network.@device[0].ports=eth1' >/dev/null 2>&1 || true
+	set_opt network.wan.proto dhcp || return 1
+	set_opt network.wan.device eth1 || return 1
+	del_opt network.wan.disabled
+	set_opt network.wan.auto 1 || return 1
+	if uci -q get network.wan6 >/dev/null 2>&1; then
+		set_opt network.wan6.device eth1 || return 1
+		del_opt network.wan6.disabled
+		set_opt network.wan6.auto 1 || return 1
+	fi
+	dhcp_guard_disable || true
+	set_opt sbair.bridge.mode ethwan || return 1
+	set_opt sbair.bridge.managed 1 || return 1
+	commit network || return 1
+	commit sbair || return 1
+	network_reload
+	/etc/init.d/firewall reload >/dev/null 2>&1 || true
+	ifup wan >/dev/null 2>&1 || true
+	if uci -q get network.wan6 >/dev/null 2>&1; then ifup wan6 >/dev/null 2>&1 || true; fi
+	restart_dnsmasq_checked || return 1
+	/etc/init.d/sbair-netfix stop >/dev/null 2>&1 || true
+}
+
+apply_vlanwan_config() {
+	local vlan1 vlan3 wan_zone lan_zone ports filtered token other other_ports present section networks found_forward index other_vid existing_vlan3 existing_ports already_moved
+	ensure_config
+	[ -e /sys/class/net/eth0 ] || { printf '%s\n' 'error=eth0 스위치 인터페이스가 없습니다'; return 1; }
+	[ "$(get network.lan.proto)" = static ] || { printf '%s\n' 'error=LAN이 고정 사설 주소를 가진 라우터 상태가 아닙니다'; return 1; }
+	is_ipv4 "$(get network.lan.ipaddr)" || { printf '%s\n' 'error=LAN IPv4 주소가 유효하지 않습니다'; return 1; }
+	mask_to_prefix "$(get network.lan.netmask)" >/dev/null 2>&1 || { printf '%s\n' 'error=LAN 넷마스크가 유효하지 않습니다'; return 1; }
+	[ "$(get dhcp.lan.ignore)" != 1 ] || { printf '%s\n' 'error=LAN DHCP 서버가 꺼져 있습니다'; return 1; }
+	wan_zone=$(find_firewall_zone wan) || { printf '%s\n' 'error=wan 방화벽 zone을 찾을 수 없습니다'; return 1; }
+	networks=" $(get "firewall.$wan_zone.network") "
+	case "$networks" in *' wan '*) :;; *) printf '%s\n' 'error=wan 방화벽 zone에 기존 wan 인터페이스가 연결되지 않았습니다'; return 1;; esac
+	[ "$(get "firewall.$wan_zone.input")" = DROP ] || [ "$(get "firewall.$wan_zone.input")" = REJECT ] || { printf '%s\n' 'error=wan 입력 정책이 DROP/REJECT가 아니므로 적용을 거부했습니다'; return 1; }
+	[ "$(get "firewall.$wan_zone.masq")" = 1 ] || { printf '%s\n' 'error=wan NAT masquerade가 없어 적용을 거부했습니다'; return 1; }
+	lan_zone=$(find_firewall_zone lan) || { printf '%s\n' 'error=lan 방화벽 zone을 찾을 수 없습니다'; return 1; }
+	case " $(get "firewall.$lan_zone.network") " in *' lan '*) :;; *) printf '%s\n' 'error=lan 방화벽 zone에 LAN 인터페이스가 연결되지 않았습니다'; return 1;; esac
+	[ "$(get "firewall.$lan_zone.input")" = ACCEPT ] || { printf '%s\n' 'error=trusted LAN 입력 정책이 ACCEPT가 아니므로 적용을 거부했습니다'; return 1; }
+	found_forward=0
+	while IFS= read -r section; do
+		[ -n "$section" ] || continue
+		[ "$(get "firewall.$section.src")" = lan ] && [ "$(get "firewall.$section.dest")" = wan ] && found_forward=1
+	done <<EOF
+$(uci -q show firewall 2>/dev/null | sed -n "s/^firewall\\.\\(@forwarding\\[[0-9][0-9]*\\]\\)=forwarding$/\\1/p")
+EOF
+	[ "$found_forward" -eq 1 ] || { printf '%s\n' 'error=LAN-to-WAN forwarding이 없어 적용을 거부했습니다'; return 1; }
+	# The history maps switch port 1 to the external jack and CPU port 5 to eth0.
+	# Move port 1 out of VLAN 1; eth0.1 remains a br-lan member and is never WAN.
+	vlan1=$(find_switch_vlan 1) || { printf '%s\n' 'error=switch0 VLAN 1을 찾을 수 없습니다'; return 1; }
+	ports=$(get "network.$vlan1.ports")
+	filtered=
+	for token in $ports; do
+		[ "$token" = 1 ] && continue
+		[ -n "$filtered" ] && filtered="$filtered "
+		filtered="$filtered$token"
+	done
+	already_moved=0
+	case " $ports " in
+		*' 1 '*) :;;
+		*)
+			if [ "$(get network.ethwan_vlan.device)" = switch0 ] && [ "$(get network.ethwan_vlan.vlan)" = 3 ]; then
+				existing_vlan3=ethwan_vlan
+			else
+				existing_vlan3=$(find_switch_vlan 3 2>/dev/null || true)
+			fi
+			[ -n "$existing_vlan3" ] || { printf '%s\n' 'error=포트 1이 VLAN 1에 없고 VLAN 3도 없어 적용을 거부했습니다'; return 1; }
+			existing_ports=$(get "network.$existing_vlan3.ports")
+			case " $existing_ports " in *' 1 '*) :;; *) printf '%s\n' 'error=포트 1이 VLAN 1에도 VLAN 3에도 없어 적용을 거부했습니다'; return 1;; esac
+			case " $existing_ports " in *' 5t '*) :;; *) printf '%s\n' 'error=기존 VLAN 3의 CPU 포트 5 tagged 연결이 없어 적용을 거부했습니다'; return 1;; esac
+			already_moved=1
+			;;
+	esac
+	# Refuse ambiguous overlap with any VLAN other than the expected VID 1/3.
+	index=0
+	while [ "$index" -lt 16 ]; do
+		other="@switch_vlan[$index]"
+		other_vid=$(get "network.$other.vlan")
+		other_ports=$(get "network.$other.ports")
+		if [ -n "$other_vid" ] && [ "$other_vid" != 1 ] && [ "$other_vid" != 3 ]; then
+			case " $other_ports " in *' 1 '*) printf '%s\n' 'error=스위치 포트 1이 다른 VLAN에도 있어 적용을 거부했습니다'; return 1;; esac
+		fi
+		index=$((index + 1))
+	done
+	if [ "$(get network.ethwan_vlan)" ]; then
+		[ "$(get network.ethwan_vlan.device)" = switch0 ] && [ "$(get network.ethwan_vlan.vlan)" = 3 ] || { printf '%s\n' 'error=network.ethwan_vlan 이름이 다른 VLAN에 사용 중입니다'; return 1; }
+		case " $(get network.ethwan_vlan.ports) " in *' 1 '*) :;; *) printf '%s\n' 'error=ethwan_vlan에 기록된 외부 포트 1이 없습니다'; return 1;; esac
+		case " $(get network.ethwan_vlan.ports) " in *' 5t '*) :;; *) printf '%s\n' 'error=ethwan_vlan에 CPU 포트 5 tagged가 없습니다'; return 1;; esac
+		vlan3=network.ethwan_vlan
+	else
+		vlan3=$(find_switch_vlan 3 2>/dev/null || true)
+		if [ -z "$vlan3" ]; then vlan3=ethwan_vlan; fi
+		if [ "$vlan3" != ethwan_vlan ]; then
+			case " $(get "network.$vlan3.ports") " in *' 1 '* ) :;; *) printf '%s\n' 'error=기존 VLAN 3에 외부 스위치 포트 1이 할당되지 않았습니다'; return 1;; esac
+			case " $(get "network.$vlan3.ports") " in *' 5t '*) :;; *) printf '%s\n' 'error=기존 VLAN 3에 CPU 포트 5 tagged가 없습니다'; return 1;; esac
+		fi
+	fi
+	if [ "$(get sbair.bridge.mode)" != vlanwan ] || [ "$(get sbair.bridge.vlanwan_orig_ready)" != 1 ]; then
+		save_vlanwan_baseline || { printf '%s\n' 'error=eth0.3 원복 기준을 저장하지 못했습니다'; return 1; }
+	fi
+	if [ "$(get network.wan.device)" = eth1 ] && [ "$(get sbair.bridge.ethwan_orig_ready)" = 1 ]; then
+		restore_ethwan_baseline || return 1
+	fi
+	ifdown ethernetwan >/dev/null 2>&1 || true
+	set_opt "network.$vlan1.ports" "$filtered" || return 1
+	if [ "$vlan3" = ethwan_vlan ]; then
+		uci -q set network.ethwan_vlan=switch_vlan || return 1
+		set_opt network.ethwan_vlan.device switch0 || return 1
+		set_opt network.ethwan_vlan.vlan 3 || return 1
+		set_opt network.ethwan_vlan.ports '1 5t' || return 1
+	fi
+	if [ "$(get network.ethernetwan)" ] && [ "$(get network.ethernetwan.proto)" != dhcp ]; then
+		printf '%s\n' 'error=기존 ethernetwan이 DHCP가 아니므로 덮어쓰지 않았습니다'; return 1
+	fi
+	uci -q set network.ethernetwan=interface || return 1
+	set_opt network.ethernetwan.proto dhcp || return 1
+	set_opt network.ethernetwan.device eth0.3 || return 1
+	set_opt network.ethernetwan.auto 1 || return 1
+	del_opt network.ethernetwan.disabled
+	case " $(get "firewall.$wan_zone.network") " in *' ethernetwan '*) :;; *) uci -q add_list "firewall.$wan_zone.network=ethernetwan" || return 1;; esac
+	dhcp_guard_disable || true
+	set_opt sbair.bridge.mode vlanwan || return 1
+	set_opt sbair.bridge.managed 1 || return 1
+	commit network || return 1
+	commit firewall || return 1
+	commit sbair || return 1
+	network_reload
+	/etc/init.d/firewall reload >/dev/null 2>&1 || true
+	ifup ethernetwan >/dev/null 2>&1 || true
+	restart_dnsmasq_checked || return 1
+	/etc/init.d/sbair-netfix stop >/dev/null 2>&1 || true
+}
+
 apply_ap_config() {
 	local proto
 	ensure_config
+	if [ "$(get sbair.bridge.mode)" = vlanwan ]; then restore_vlanwan_baseline || return 1; fi
+	if [ "$(get network.wan.device)" = eth1 ] && [ "$(get sbair.bridge.ethwan_orig_ready)" = 1 ]; then
+		# Return the Ethernet jack to the LAN bridge before entering AP mode.
+		restore_ethwan_baseline || return 1
+	fi
 	save_backup || return 1
 	fallback_remove
 	proto=$(get sbair.bridge.management_proto)
@@ -69,6 +261,7 @@ apply_ap_config() {
 	ifdown wan >/dev/null 2>&1 || true
 	ifdown lan >/dev/null 2>&1 || true
 	network_reload
+	/etc/init.d/firewall reload >/dev/null 2>&1 || true
 	ifdown wan >/dev/null 2>&1 || true
 	dhcp_guard_enable || return 1
 	restart_dnsmasq_checked || return 1
@@ -81,6 +274,10 @@ apply_sim_config() {
 	force=${1:-0}
 	ensure_config
 	load_saved_config
+	if [ "$(get sbair.bridge.mode)" = vlanwan ]; then restore_vlanwan_baseline || return 1; fi
+	if [ "$(get network.wan.device)" = eth1 ] && [ "$(get sbair.bridge.ethwan_orig_ready)" = 1 ]; then
+		restore_ethwan_baseline || return 1
+	fi
 	dhcp_guard_disable || true
 	fallback_remove
 	ifdown wan >/dev/null 2>&1 || true
@@ -137,6 +334,7 @@ apply_sim_config() {
 	commit dhcp || return 1
 	commit sbair || return 1
 	network_reload
+	/etc/init.d/firewall reload >/dev/null 2>&1 || true
 	dhcp_guard_disable || true
 	restart_dnsmasq_checked || return 1
 	if [ "$(get network.wan.disabled)" != 1 ] && uci -q get network.wan >/dev/null 2>&1; then
@@ -442,8 +640,20 @@ rollback_pending() {
 		/etc/init.d/sbair-netfix stop >/dev/null 2>&1 || true
 	elif [ "$previous" = ap ]; then
 		apply_ap_config || result=1
+	elif [ "$previous" = ethwan ]; then
+		apply_ethwan_config || result=1
 	else
 		apply_sim_config 0 || result=1
+	fi
+	if [ "$(get sbair.bridge.pending_mode)" = vlanwan ] && [ "$previous" != vlanwan ]; then
+		restore_vlanwan_baseline || result=1
+		commit network >/dev/null 2>&1 || result=1
+		commit firewall >/dev/null 2>&1 || result=1
+		network_reload
+		/etc/init.d/firewall reload >/dev/null 2>&1 || true
+		if [ "$(get sbair.bridge.vlanwan_orig_ethernetwan_type_present)" = 1 ]; then
+			ifup ethernetwan >/dev/null 2>&1 || true
+		fi
 	fi
 	[ "$result" -eq 0 ] || return 1
 	clear_pending || { printf '%s\n' 'error=unable to clear confirmed transaction'; return 1; }
@@ -487,7 +697,7 @@ start_apply() {
 	local mode previous previous_managed id deadline pending pending_deadline pid config_supplied lock_rc log
 	mode=$1
 	shift
-	[ "$mode" = sim ] || [ "$mode" = ap ] || { printf 'error=unknown mode %s\n' "$mode"; return 1; }
+	[ "$mode" = sim ] || [ "$mode" = ap ] || [ "$mode" = ethwan ] || [ "$mode" = vlanwan ] || { printf 'error=unknown mode %s\n' "$mode"; return 1; }
 	netmode_lock_acquire
 	lock_rc=$?
 	if [ "$lock_rc" -ne 0 ]; then
@@ -523,7 +733,11 @@ start_apply() {
 	[ -x "$SELF" ] || { printf '%s\n' 'error=network-mode worker is not executable'; return 1; }
 	command -v setsid >/dev/null 2>&1 || { printf '%s\n' 'error=setsid is unavailable'; return 1; }
 	previous=$(get sbair.bridge.mode)
-	[ "$previous" = ap ] || previous=sim
+	[ "$previous" = ap ] || [ "$previous" = ethwan ] || [ "$previous" = vlanwan ] || previous=sim
+	if { [ "$mode" = ethwan ] || [ "$mode" = vlanwan ]; } && [ "$previous" = ap ]; then
+		printf '%s\n' 'error=AP 모드에서 유선 WAN 라우터 모드로 바로 전환할 수 없습니다. 먼저 모뎀 라우터 모드로 복귀하십시오'
+		return 1
+	fi
 	previous_managed=$(get sbair.bridge.managed)
 	[ "$previous_managed" = 1 ] || previous_managed=0
 	if [ "$mode" = ap ] && [ "$previous_managed" = 0 ]; then
@@ -638,6 +852,10 @@ apply_worker() {
 	write_state "$id" applying
 	if [ "$mode" = ap ]; then
 		apply_ap_config
+	elif [ "$mode" = ethwan ]; then
+		apply_ethwan_config
+	elif [ "$mode" = vlanwan ]; then
+		apply_vlanwan_config
 	else
 		# First ownership claim from an unmanaged device must use the defined SIM
 		# LAN. A managed AP may restore only a profile captured from managed SIM.

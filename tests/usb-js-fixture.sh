@@ -68,6 +68,7 @@ const nic = {
 };
 
 const context = {
+  _: function(text) { return text; },
   Promise,
   E,
   rpc: { declare: function(options) { return function() {
@@ -97,13 +98,13 @@ view.load().then(function(data) {
     assert(text.includes(value), 'missing USB inventory value: ' + value);
   assert(!text.includes('vendor/system preinstalled'), 'unverified bound driver was classified as vendor/system');
   const buttons = flatten(rendered).filter(node => node.tag === 'button');
-  const driverButtons = buttons.filter(button => /インストール|削除/.test(textOf(button)));
+  const driverButtons = buttons.filter(button => /installation|delete/.test(textOf(button)));
   assert.strictEqual(driverButtons.length, inventory.usb_devices.length * 2);
   assert(driverButtons.every(button => button.attrs.disabled === ''));
   assert(text.includes('USB Host'));
   assert(text.includes('USB Gadget（CDC-NCM NIC）'));
-  assert(text.includes('実験的・高リスク機能'));
-  assert(text.includes('未導入'));
+  assert(text.includes('Experimental high-risk features'));
+  assert(text.includes('Not introduced'));
   const nicButtons = buttons.filter(button => /Enable|Disable/.test(textOf(button)));
   assert.strictEqual(nicButtons.length, 2);
   assert(nicButtons[0].attrs.disabled === '');

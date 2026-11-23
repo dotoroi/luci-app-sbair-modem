@@ -1,3 +1,5 @@
+[English](IP-MIGRATION.en.md) | [한국어](IP-MIGRATION.ko.md) | [日本語](IP-MIGRATION.md)
+
 # Optional IP migration notes
 
 bootstrapの標準処理は、LAN IP、DHCP、gateway、DNSを変更しません。
@@ -50,3 +52,5 @@ uci commit network
 
 この文書は任意のネットワーク移行手順です。LuCI bootstrapの標準インストールは、
 IP変更が必要だと判断しても自動でこれらを実行しません。
+
+

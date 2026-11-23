@@ -110,6 +110,17 @@ func main() {
 		}
 		emit(netmodeResult(args[1:]...))
 		return
+	case "adblock-prepare":
+		if err := writeAdblockHosts(); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	case "adblock-dns-ready":
+		if !adblockDNSReady() {
+			os.Exit(1)
+		}
+		return
 	case "adblock-boot":
 		// sbair-adblock initスクリプトから起動時に呼ばれる。hostsファイル書き出し+
 		// iptables反映のみ。専用dnsmasqの起動はinitスクリプト(シェル)側が行う。

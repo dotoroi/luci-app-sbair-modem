@@ -156,17 +156,15 @@ func esimStatus(ch *ATChannel) map[string]any {
 		out["available"] = false
 		switch {
 		case kind == cardNone && mapping == 1:
-			out["reason"] = "物理スロットにカードがありません。"
+			out["reason"] = "No card is present in the physical SIM slot."
 		case kind == cardNone:
-			out["reason"] = "SIM を読めません。"
+			out["reason"] = "Unable to read the SIM."
 		case mapping == 2:
 			// The built-in eSIM genuinely has no ISD-R. Not a failure - there
 			// is simply no eUICC to talk to until the mapping is switched.
-			out["reason"] = "内蔵 eSIM に ISD-R はありません。" +
-				"eUICC を操作するには物理スロットの eUICC カードへ切り替えてください。"
+			out["reason"] = "The built-in eSIM has no ISD-R. Switch to an eUICC card in the physical slot to use eUICC functions."
 		default:
-			out["reason"] = "物理スロットのカードは eUICC ではありません" +
-				"(通常の SIM)。既知の ISD-R AID はどれも開けませんでした。"
+			out["reason"] = "The physical-slot card is a regular SIM, not an eUICC. No known ISD-R AID could be opened."
 		}
 		return out
 	}
@@ -174,7 +172,7 @@ func esimStatus(ch *ATChannel) map[string]any {
 	client, err := openEUICC(ch, aid)
 	if err != nil {
 		out["available"] = false
-		out["reason"] = fmt.Sprintf("eUICC を開けません: %v", err)
+		out["reason"] = fmt.Sprintf("Unable to open the eUICC: %v", err)
 		return out
 	}
 	defer client.Close()
@@ -183,7 +181,7 @@ func esimStatus(ch *ATChannel) map[string]any {
 	eid, err := client.EID()
 	if err != nil {
 		out["available"] = false
-		out["reason"] = fmt.Sprintf("EID を読めません: %v", err)
+		out["reason"] = fmt.Sprintf("Unable to read EID: %v", err)
 		return out
 	}
 	out["eid"] = strings.ToUpper(hex.EncodeToString(eid))
@@ -222,25 +220,24 @@ func esimOp(ch *ATChannel, method, iccid string, extra ...string) map[string]any
 		m := simMapping(ch)
 		n, _ := m["mapping"].(int)
 		if n == 2 {
-			return map[string]any{"error": "eUICC がありません" +
-				"(SIM マッピングが内蔵 eSIM で、内蔵 eSIM に ISD-R はありません)。"}
+			return map[string]any{"error": "No eUICC is available. The built-in eSIM mapping has no ISD-R."}
 		}
 		if kind == cardNone {
-			return map[string]any{"error": "物理スロットにカードがありません。"}
+			return map[string]any{"error": "No card is present in the physical SIM slot."}
 		}
-		return map[string]any{"error": "物理スロットのカードは eUICC ではありません(通常の SIM)。"}
+		return map[string]any{"error": "The physical-slot card is a regular SIM, not an eUICC."}
 	}
 
 	client, err := openEUICC(ch, aid)
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("eUICC を開けません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to open the eUICC: %v", err)}
 	}
 	defer client.Close()
 
 	if method == "esim_list" {
 		profiles, err := client.ListProfile(nil, nil)
 		if err != nil {
-			return map[string]any{"error": fmt.Sprintf("profile を読めません: %v", err)}
+			return map[string]any{"error": fmt.Sprintf("Unable to read the eSIM profile: %v", err)}
 		}
 		list := make([]profileJSON, 0, len(profiles))
 		for _, p := range profiles {
@@ -252,11 +249,11 @@ func esimOp(ch *ATChannel, method, iccid string, extra ...string) map[string]any
 	// **空を弾く。** 空文字は NewICCID を素通りし、カード側で
 	// "undefined error" になって原因が分からなくなる。
 	if strings.TrimSpace(iccid) == "" {
-		return map[string]any{"error": "ICCID が指定されていません。"}
+		return map[string]any{"error": "ICCID is required."}
 	}
 	id, err := sgp22.NewICCID(iccid)
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("ICCID %q が不正です: %v", iccid, err)}
+		return map[string]any{"error": fmt.Sprintf("Invalid ICCID: %v", err)}
 	}
 	switch method {
 	case "esim_enable":
@@ -277,7 +274,7 @@ func esimOp(ch *ATChannel, method, iccid string, extra ...string) map[string]any
 		return map[string]any{"error": fmt.Sprintf("unknown operation %q", method)}
 	}
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("%s に失敗しました: %v", method, err)}
+		return map[string]any{"error": fmt.Sprintf("eSIM operation failed: %v", err)}
 	}
 	// Enable and disable make the card REFRESH, and it rejects AT+CCHO while
 	// it re-initialises - so the screen should re-read after a short pause,

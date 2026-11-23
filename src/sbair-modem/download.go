@@ -19,14 +19,14 @@ import (
 func startDownload(code, cc string) map[string]any {
 	code = strings.TrimSpace(code)
 	if code == "" {
-		return map[string]any{"error": "アクティベーションコードを入れてください。"}
+		return map[string]any{"error": "Enter the activation code."}
 	}
 	if _, err := parseActivationCode(code); err != nil {
 		return map[string]any{"error": err.Error()}
 	}
 	out := startJob("download", code, cc)
 	if _, bad := out["error"]; !bad {
-		out["note"] = "20〜30 秒かかります。SM-DP+ との通信が終わるまで待ってください。"
+		out["note"] = "This takes 20–30 seconds. Wait for communication with SM-DP+ to finish."
 	}
 	return out
 }
@@ -39,7 +39,7 @@ func runDownloadWorker(code, cc string) int {
 
 	ac, err := parseActivationCode(code)
 	if err != nil {
-		return j.fail("アクティベーションコード", err.Error())
+		return j.fail("Activation code", err.Error())
 	}
 	if cc != "" {
 		ac.ConfirmationCode = cc
@@ -48,19 +48,19 @@ func runDownloadWorker(code, cc string) int {
 	ch := NewATChannel(*device)
 	ch.SetTimeout(120 * time.Second)
 	if err := ch.Connect(); err != nil {
-		return j.fail("接続", err.Error())
+		return j.fail("Connect", err.Error())
 	}
 	defer ch.Disconnect()
 
-	j.step("eUICC を開く")
+	j.step("Open eUICC")
 	kind, _, _, aid := inspectCard(ch)
 	if kind != cardEUICC {
-		return j.fail("eUICC を開く",
-			"eUICC がありません。物理スロットの eUICC カードへ切り替えてください。")
+		return j.fail("Open eUICC",
+			"No eUICC is available. Switch to an eUICC card in the physical slot.")
 	}
 	client, err := openEUICC(ch, aid)
 	if err != nil {
-		return j.fail("eUICC を開く", err.Error())
+		return j.fail("Open eUICC", err.Error())
 	}
 	// os.Exit は defer を飛ばすので、返る前に必ず閉じる。
 	closed := false
@@ -73,17 +73,17 @@ func runDownloadWorker(code, cc string) int {
 	defer release()
 
 	// **SM-DP+ は IMEI を要求する。** モデムが知っているものを使う。
-	j.step("IMEI を取得")
+	j.step("Read IMEI")
 	if ac.IMEI = *imei; ac.IMEI == "" {
 		v, err := ch.IMEI()
 		if err != nil {
 			release()
-			return j.fail("IMEI", fmt.Sprintf("モデムから読めません: %v", err))
+			return j.fail("IMEI", fmt.Sprintf("Unable to read from the modem: %v", err))
 		}
 		ac.IMEI = v
 	}
 
-	j.step("SM-DP+ と通信")
+	j.step("Contact SM-DP+")
 	opts := &lpa.DownloadOptions{
 		OnProgress: func(s lpa.DownloadStage) {
 			// **string(s) と書かないこと。** DownloadStage は uint8 で、
@@ -97,21 +97,21 @@ func runDownloadWorker(code, cc string) int {
 	}
 	if _, err := client.DownloadProfile(context.Background(), ac, opts); err != nil {
 		release()
-		return j.fail("ダウンロード", err.Error())
+		return j.fail("Download", err.Error())
 	}
 	release()
-	return j.done("完了", "profile を追加しました。有効化は一覧から行ってください。")
+	return j.done("Complete", "Profile added. Activate it from the profile list.")
 }
 
 // stageLabel turns euicc-go's stage names into something a screen can show.
 func stageLabel(s string) string {
 	switch s {
 	case "Authenticating Client":
-		return "eUICC の認証"
+		return "Authenticate eUICC"
 	case "Authenticating Server":
-		return "SM-DP+ の認証"
+		return "Authenticate SM-DP+"
 	case "Installing":
-		return "profile の書き込み"
+		return "Install profile"
 	}
 	return s
 }
@@ -123,7 +123,7 @@ func parseActivationCode(s string) (*lpa.ActivationCode, error) {
 	s = strings.TrimPrefix(strings.TrimPrefix(s, "LPA:"), "1$")
 	parts := strings.Split(s, "$")
 	if len(parts) < 1 || parts[0] == "" {
-		return nil, fmt.Errorf("アクティベーションコード %q に SM-DP+ のアドレスがありません", s)
+		return nil, fmt.Errorf("Activation code does not contain an SM-DP+ address.")
 	}
 	ac := &lpa.ActivationCode{SMDP: &url.URL{Scheme: "https", Host: parts[0]}}
 	if len(parts) > 1 {

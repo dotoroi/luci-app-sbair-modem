@@ -15,6 +15,59 @@ var revealed = false;
 // 並ぶと「どちらが本当か」を迷わせる。** 見たいときだけ出す。
 var debugMode = false;
 
+// Keep dynamic modem details intact while translating the stable message prefix.
+var localizedErrorPrefixes = [
+	{ source: 'Unable to disable SIM lock: ', translated: _('Unable to disable SIM lock: ') },
+	{ source: 'SIM lock disabled (', translated: _('SIM lock disabled (') },
+	{ source: 'Saved band settings differ from the requested combination (LTE ', translated: _('Saved band settings differ from the requested combination (LTE ') },
+	{ source: 'Unable to read the current band settings: ', translated: _('Unable to read the current band settings: ') },
+	{ source: 'Unable to prepare band settings: ', translated: _('Unable to prepare band settings: ') },
+	{ source: 'Unable to write band settings: ', translated: _('Unable to write band settings: ') },
+	{ source: 'Reapplied band settings (LTE ', translated: _('Reapplied band settings (LTE ') },
+	{ source: 'The modem rejected the request: ', translated: _('The modem rejected the request: ') },
+	{ source: 'Unable to open the eUICC: ', translated: _('Unable to open the eUICC: ') },
+	{ source: 'Unable to create config file: ', translated: _('Unable to create config file: ') },
+	{ source: 'Unable to apply firewall rules: ', translated: _('Unable to apply firewall rules: ') },
+	{ source: 'Unable to inspect the hosts parent directory: ', translated: _('Unable to inspect the hosts parent directory: ') },
+	{ source: 'Unable to write the hosts file: ', translated: _('Unable to write the hosts file: ') },
+	{ source: 'Unable to remove ad-block DNAT rules: ', translated: _('Unable to remove ad-block DNAT rules: ') },
+	{ source: 'Unable to write UCI settings: ', translated: _('Unable to write UCI settings: ') },
+	{ source: 'Unable to read APN from the SIM: ', translated: _('Unable to read APN from the SIM: ') },
+	{ source: 'Unable to parse the modem response: ', translated: _('Unable to parse the modem response: ') },
+	{ source: 'Band response is too short: ', translated: _('Band response is too short: ') },
+	{ source: 'Unable to parse the band number: ', translated: _('Unable to parse the band number: ') },
+	{ source: 'Unable to read EID: ', translated: _('Unable to read EID: ') },
+	{ source: 'Unable to read the eSIM profile: ', translated: _('Unable to read the eSIM profile: ') },
+	{ source: 'Invalid ICCID: ', translated: _('Invalid ICCID: ') },
+	{ source: 'eSIM operation failed: ', translated: _('eSIM operation failed: ') },
+	{ source: 'Unable to query the modem: ', translated: _('Unable to query the modem: ') },
+	{ source: 'Unable to change the setting: ', translated: _('Unable to change the setting: ') },
+	{ source: 'Unable to safely prepare the job directory: ', translated: _('Unable to safely prepare the job directory: ') },
+	{ source: 'Unable to start the job: ', translated: _('Unable to start the job: ') },
+	{ source: 'Unable to determine the executable path: ', translated: _('Unable to determine the executable path: ') },
+	{ source: 'Unable to save job status: ', translated: _('Unable to save job status: ') },
+	{ source: 'Unable to start the worker: ', translated: _('Unable to start the worker: ') },
+	{ source: 'Invalid DHCP pool start address: ', translated: _('Invalid DHCP pool start address: ') },
+	{ source: 'Invalid DHCP pool end address: ', translated: _('Invalid DHCP pool end address: ') },
+	{ source: 'Router IP is invalid: ', translated: _('Router IP is invalid: ') },
+	{ source: 'Unable to inspect the SIM LAN DHCP range: ', translated: _('Unable to inspect the SIM LAN DHCP range: ') },
+	{ source: 'PDU is not valid hexadecimal data: ', translated: _('PDU is not valid hexadecimal data: ') },
+	{ source: 'Unable to get the br-lan IPv4 network: ', translated: _('Unable to get the br-lan IPv4 network: ') },
+	{ source: 'Scan rejected because the connected-device list could not be verified: ', translated: _('Scan rejected because the connected-device list could not be verified: ') },
+	{ source: 'AT+ESIMMAP? response is missing +ESIMMAP: ', translated: _('AT+ESIMMAP? response is missing +ESIMMAP: ') },
+	{ source: 'Unable to enable PDU mode: ', translated: _('Unable to enable PDU mode: ') },
+	{ source: 'Unable to read SMS: ', translated: _('Unable to read SMS: ') },
+	{ source: 'Unable to read the SMS storage: ', translated: _('Unable to read the SMS storage: ') },
+	{ source: 'Unable to secure the SMS database parent directory: ', translated: _('Unable to secure the SMS database parent directory: ') },
+	{ source: 'Unable to securely open the SMS database: ', translated: _('Unable to securely open the SMS database: ') },
+	{ source: 'Unable to inspect SQLite sidecar: ', translated: _('Unable to inspect SQLite sidecar: ') },
+	{ source: 'Unable to secure SQLite sidecar permissions: ', translated: _('Unable to secure SQLite sidecar permissions: ') },
+	{ source: 'Unable to open the SMS database: ', translated: _('Unable to open the SMS database: ') },
+	{ source: 'Unable to save the message: ', translated: _('Unable to save the message: ') },
+	{ source: 'Unable to read from the SMS database: ', translated: _('Unable to read from the SMS database: ') },
+	{ source: 'Unable to delete the message: ', translated: _('Unable to delete the message: ') }
+];
+
 // セクションの余白。**1 回だけ差し込む。** node で描画を試すときは
 // document が無いので、その場合は何もしない。
 var sectionStyled = false;
@@ -34,31 +87,31 @@ function injectSectionStyle() {
 
 function softBrickWarning(kind) {
 	var message = kind === 'wifi'
-		? 'Wi-Fiやネットワーク設定の切り替えや設定変更を行うと、全てのネットワーク接続が失われ、ソフトブリック状態になるおそれがあります。'
-		: '接続モードの切り替えや設定変更を行うと、全てのネットワーク接続が失われ、ソフトブリック状態になるおそれがあります。';
+		? _("If you switch or change Wi-Fi or network settings, you may lose all network connections and end up in a soft brick state.")
+		: _("If you switch connection modes or change settings, all network connections may be lost and a soft brick state may occur.");
 	if (kind === 'wifi')
 		return E('div', { 'class': 'alert-message warning' }, [
-			E('strong', {}, '⚠ ソフトブリックのおそれがあります'),
+			E('strong', {}, _("⚠ There is a risk of soft bricks")),
 			E('p', {}, message)
 		]);
 
 	return E('div', { 'class': 'alert-message warning' }, [
-		E('strong', {}, '⚠ ソフトブリックのおそれがあります'),
+		E('strong', {}, _("⚠ There is a risk of soft bricks")),
 		E('p', {}, message),
-		E('p', {}, 'リセットボタンを押しても復旧できない場合があり、その場合はUART接続による復旧が必要になります。'),
-		E('p', {}, 'UARTなどの復旧手段を確保できない場合は、これらの設定を変更しないでください。また、Safe Applyの自動ロールバック機能も、あらゆる設定失敗からの復旧を保証するものではありません。'),
+		E('p', {}, _("Recovery may not be possible even if you press the reset button, in which case recovery via UART connection is required.")),
+		E('p', {}, _("Do not change these settings unless you have a means of recovery such as UART. Additionally, Safe Apply's automatic rollback feature does not guarantee recovery from all configuration failures.")),
 		E('div', { 'class': 'sbair-recovery-details', 'style': 'margin-top:1em;padding:.75em 1em;border-top:1px solid rgba(128,128,128,.45);font-size:85%;line-height:1.5' }, [
-			E('p', {}, 'なお、ソフトブリックした場合は、以下の環境で復旧できることを確認しています。'),
+			E('p', {}, _("In addition, we have confirmed that in the case of soft bricking, recovery is possible in the following environments.")),
 			E('ul', { 'style': 'margin:.5em 0 .75em 1.5em' }, [
-				E('li', {}, 'UART：FT232RL（電圧：1.8 V）'),
-				E('li', {}, '配線：GND＝黒、RX＝緑、TX＝白'),
-				E('li', {}, 'ボーレート：115200'),
-				E('li', {}, '変換：ピンソケット（メス）→ USB-Aメス'),
-				E('li', {}, 'ケーブル：一般的なMicro-USBケーブル')
+				E('li', {}, _("UART: FT232RL (Voltage: 1.8V)")),
+				E('li', {}, _("Wiring: GND = black, RX = green, TX = white")),
+				E('li', {}, _("Baud rate: 115200")),
+				E('li', {}, _("Conversion: Pin socket (female) → USB-A female")),
+				E('li', {}, _("Cable: Regular Micro-USB cable"))
 			]),
-			E('p', {}, 'UART接続を行った状態で、シェルから以下のコマンドを実行することで、工場出荷状態に戻せることを確認しています。'),
+			E('p', {}, _("We have confirmed that it is possible to return to the factory default state by executing the following command from the shell while connected to UART.")),
 			E('pre', { 'style': 'white-space:pre-wrap;font-size:95%;margin:.5em 0' }, 'sync\n/sbin/firstboot -r -y'),
-			E('p', { 'style': 'margin-bottom:0' }, '※LuCIを含む設定や環境も初期化されるため、この操作は最終手段として行ってください。')
+			E('p', { 'style': 'margin-bottom:0' }, _("※The settings and environment, including LuCI, will also be initialized, so please perform this operation as a last resort."))
 		])
 	]);
 }
@@ -90,7 +143,7 @@ return baseclass.extend({
 					redraw();
 				}
 			}),
-			' デバッグ表示 (AT の生の応答を出す)'
+			_("Show debug (show raw response from AT)")
 		]);
 	},
 
@@ -192,30 +245,42 @@ return baseclass.extend({
 		var pct = this.signalPercent(dbm);
 		return E('span', {
 			'class': 'ifacebadge',
-			'title': (dbm != null && dbm !== '') ? (dbm + ' dBm') : '不明'
+			'title': (dbm != null && dbm !== '') ? (dbm + ' dBm') : _("unknown")
 		}, [
 			E('img', { 'src': this.signalIcon(pct) }),
 			' ',
-			(pct === null) ? '不明' : (pct + '%'),
+			(pct === null) ? _("unknown") : (pct + '%'),
 			label ? E('span', { 'style': 'margin-left:.5em;opacity:.7' }, label) : ''
 		]);
 	},
 
 	simMappingLabel: function(n) {
-		if (n === 1) return '物理スロット (uSIM)';
-		if (n === 2) return '内蔵 eSIM';
-		return n ? ('不明 (' + n + ')') : '-';
+		if (n === 1) return _("Physical slot (uSIM)");
+		if (n === 2) return _("Built-in eSIM");
+		return n ? (_("Unknown (") + n + ')') : '-';
 	},
 
 	// 取得できなかった AT を出す。モデムが黙っているのか、こちらが読めて
 	// いないのかを区別できるようにするため。
+	errorText: function(message) {
+		var text = String(message);
+		for (var i = 0; i < localizedErrorPrefixes.length; i++) {
+			var item = localizedErrorPrefixes[i];
+			if (text.indexOf(item.source) === 0)
+				return item.translated + text.substring(item.source.length);
+		}
+		return _(text);
+	},
+
 	errorBox: function(errors) {
 		if (!errors || !errors.length)
 			return '';
 		injectSectionStyle();
 		return E('div', { 'class': 'cbi-section sbair-section' }, [
-			E('h3', {}, '取得できなかった項目'),
-			E('pre', { 'style': 'white-space:pre-wrap' }, errors.join('\n'))
+			E('h3', {}, _("Items that cannot be obtained")),
+			E('pre', { 'style': 'white-space:pre-wrap' }, errors.map(function(message) {
+				return this.errorText(message);
+			}, this).join('\n'))
 		]);
 	},
 

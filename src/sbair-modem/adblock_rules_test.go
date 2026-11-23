@@ -19,6 +19,23 @@ func saveAdblockRuleHooks(t *testing.T) {
 	})
 }
 
+func TestAdblockDNSListenerUsesLocalUDPAddress(t *testing.T) {
+	for _, tc := range []struct {
+		line   string
+		column int
+		want   bool
+	}{
+		{"udp UNCONN 0 0 127.0.0.1:5300 0.0.0.0:*", 4, true},
+		{"udp 0 0 127.0.0.1:5300 0.0.0.0:*", 3, true},
+		{"udp 0 0 127.0.0.1:53 192.0.2.1:5300", 3, false},
+		{"tcp 0 0 127.0.0.1:5300 0.0.0.0:*", 3, false},
+	} {
+		if got := hasAdblockDNSListener(tc.line, tc.column); got != tc.want {
+			t.Errorf("hasAdblockDNSListener(%q) = %v, want %v", tc.line, got, tc.want)
+		}
+	}
+}
+
 func TestRemoveAdblockRulesAllowsAnAbsentChainAfterSuccessfulEnumeration(t *testing.T) {
 	saveAdblockRuleHooks(t)
 	called := false
@@ -84,7 +101,7 @@ func TestApplyAdblockRulesJoinsDNSAndCleanupErrors(t *testing.T) {
 	enumerationErr := errors.New("iptables -S failed")
 	adblockIptablesOutput = func(...string) (string, error) { return "", enumerationErr }
 	err := applyAdblockRules()
-	if !errors.Is(err, enumerationErr) || !strings.Contains(err.Error(), "専用dnsmasq") {
+	if !errors.Is(err, enumerationErr) || !strings.Contains(err.Error(), "The dedicated DNS service is unavailable") {
 		t.Fatalf("error = %v, want DNS and cleanup errors", err)
 	}
 }

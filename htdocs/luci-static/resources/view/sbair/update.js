@@ -37,33 +37,33 @@ function render(data, onSet) {
 		return [ sbair.errorBox([ data.error ]) ];
 
 	var f = data.fota || {};
-	return [ sbair.section('OTA / FOTA 自動更新', [
-		E('p', { 'style': 'opacity:.8' }, '純正のkn_fotadによる本体自動更新を管理します。サーバー遮断、バイナリ変更、respawn設定の変更は行いません。'),
+	return [ sbair.section(_("OTA/FOTA automatic renewal"), [
+		E('p', { 'style': 'opacity:.8' }, _("Manage automatic body updates with genuine kn_fotad. It does not block servers, change binaries, or change respawn settings.")),
 		statusTable([
-			[ 'FOTA本体', value(f.config_enabled) ],
-			[ 'Provisioning', value(f.provision_enabled) ],
-			[ 'respawn設定', value(f.config_respawn) ],
+			[ _("FOTA body"), value(f.config_enabled) ],
+			[ _("Provisioning"), value(f.provision_enabled) ],
+			[ _("respawn settings"), value(f.config_respawn) ],
 			[ 'kn_fotad', value(f.kn_fotad) ],
-			[ '自動起動', value(f.autostart) ]
+			[ _("auto start"), value(f.autostart) ]
 		]),
 		E('div', { 'class': 'sbair-button-group', 'style': 'margin-top:.75em' }, [
-			actionButton('OTA/FOTA自動更新を無効化', false, function() {
-				if (confirm('OTA/FOTA自動更新を無効化します。fota.config.enabled と fota.provision.enabled を0にし、kn_fotadを停止・自動起動無効化します。続行しますか?'))
+			actionButton(_("Disable OTA/FOTA automatic updates"), false, function() {
+				if (confirm(_("Disable OTA/FOTA automatic updates. Set fota.config.enabled and fota.provision.enabled to 0, stop kn_fotad and disable autostart. Do you want to continue?")))
 					onSet(false);
 			}),
-			actionButton('OTA/FOTA自動更新を有効化', true, function() {
-				if (confirm('OTA/FOTA自動更新を有効化し、kn_fotadを起動します。続行しますか?'))
+			actionButton(_("Enable OTA/FOTA automatic updates"), true, function() {
+				if (confirm(_("Enable OTA/FOTA automatic updates and start kn_fotad. Do you want to continue?")))
 					onSet(true);
 			})
 		]),
-		E('p', { 'style': 'opacity:.8;font-size:90%' }, '無効化時も fota.config.respawn は変更しません。10秒待機後にkn_fotadの再起動有無を確認します。')
+		E('p', { 'style': 'opacity:.8;font-size:90%' }, _("Even when invalidated, fota.config.respawn does not change. Wait 10 seconds and make sure you restart kn_fotad."))
 	]) ];
 }
 
 return view.extend({
 	load: function() {
 		return callStatus().catch(function(err) {
-			return { error: String(err) };
+			return { error: sbair.errorText(err) };
 		});
 	},
 
@@ -77,21 +77,21 @@ return view.extend({
 				self.data = result || {};
 				dom.content(container, render(self.data, change));
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'danger');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 			});
 		}
 
 		function change(enabled) {
 			return callFOTA(enabled).then(function(result) {
 				if (result && result.error) {
-					ui.addNotification(null, E('p', {}, result.error), 'danger');
+					ui.addNotification(null, E('p', {}, sbair.errorText(result.error)), 'danger');
 					return;
 				}
 				if (result && result.warning)
 					ui.addNotification(null, E('p', {}, result.warning), 'warning');
 				return reload();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'danger');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 			});
 		}
 
@@ -101,7 +101,7 @@ return view.extend({
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral',
 					'click': reload
-				}, '再読み込み')
+				}, _("reload"))
 			]),
 			container
 		]);

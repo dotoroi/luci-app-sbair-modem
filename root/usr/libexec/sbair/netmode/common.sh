@@ -218,7 +218,7 @@ ensure_config() {
 		changed=1
 	fi
 	mode=$(get sbair.bridge.mode)
-	if [ "$mode" != sim ] && [ "$mode" != ap ]; then
+	if [ "$mode" != sim ] && [ "$mode" != ap ] && [ "$mode" != ethwan ] && [ "$mode" != vlanwan ]; then
 		# Never infer AP mode from dhcp.lan.ignore. Installing the package must not
 		# change a live network; AP is entered only by an explicit apply request.
 		mode=sim

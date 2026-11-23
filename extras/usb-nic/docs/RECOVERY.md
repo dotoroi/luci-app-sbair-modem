@@ -1,3 +1,5 @@
+[English](RECOVERY.en.md) | [한국어](RECOVERY.ko.md) | [日本語](RECOVERY.md)
+
 # USB NIC gadget の復旧方針
 
 この機能は、USB UDC / ConfigFS の ownership を変更するため、別の LAN または Wi-Fi
@@ -33,3 +35,5 @@ status が示す snapshot の場所を、独立した管理経路から保全し
 
 この bundle は工場出荷状態への復元や firmware recovery を提供しません。リセット、
 `firstboot`、firmware 書き込みなどはこの機能の自動復旧処理ではありません。
+
+

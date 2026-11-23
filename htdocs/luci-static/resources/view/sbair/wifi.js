@@ -38,11 +38,11 @@ var bandLabel = { '2.4G': '2.4GHz', '5G': '5GHz', '6G': '6GHz' };
 
 var encryptionOptions = [
 	{ value: 'sae', label: 'WPA3-SAE' },
-	{ value: 'sae-mixed', label: 'WPA2/WPA3(混在)' },
+	{ value: 'sae-mixed', label: _("WPA2/WPA3 (mixed)") },
 	{ value: 'psk2+ccmp', label: 'WPA2-PSK' },
-	{ value: 'psk-mixed+ccmp', label: 'WPA/WPA2(混在)' },
-	{ value: 'owe', label: 'OWE(Enhanced Open)' },
-	{ value: 'none', label: '暗号化なし' }
+	{ value: 'psk-mixed+ccmp', label: _("WPA/WPA2 (mixed)") },
+	{ value: 'owe', label: _("OWE(Enhanced Open)") },
+	{ value: 'none', label: _("No encryption") }
 ];
 
 // 純正UIの実際のテンプレート(angouka.phtml)では2.4GHz/5GHzに「WPA3単体」「OWE」の
@@ -104,15 +104,15 @@ var protocolChoices = {
 // 作り直してしまい、入力中のフォーカスが飛んで打てなくなるため。
 function ifaceTable(list, pendingIface, onIfaceChange) {
 	if (!list || !list.length)
-		return E('p', {}, 'Wi-Fiインターフェースを取得できませんでした。');
+		return E('p', {}, _("Unable to get Wi-Fi interface."));
 
 	var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-		E('th', { 'class': 'th' }, '帯域'),
-		E('th', { 'class': 'th' }, 'SSID'),
-		E('th', { 'class': 'th' }, '暗号方式'),
-		E('th', { 'class': 'th' }, 'パスワード'),
-		E('th', { 'class': 'th' }, 'ステルス'),
-		E('th', { 'class': 'th' }, '無効化'),
+		E('th', { 'class': 'th' }, _("Type")),
+		E('th', { 'class': 'th' }, _('SSID')),
+		E('th', { 'class': 'th' }, _("encryption method")),
+		E('th', { 'class': 'th' }, _("password")),
+		E('th', { 'class': 'th' }, _("stealth")),
+		E('th', { 'class': 'th' }, _("deactivate")),
 		E('th', { 'class': 'th' }, '')
 	]) ];
 
@@ -143,7 +143,7 @@ function ifaceTable(list, pendingIface, onIfaceChange) {
 		var pwInput = E('input', {
 			'class': 'cbi-input-text', 'type': 'password',
 			'value': (pend && pend.password) ? pend.password : '',
-			'placeholder': '変更する場合のみ', 'style': 'width:100%'
+			'placeholder': _("Only when changed"), 'style': 'width:100%'
 		});
 		pwInput.addEventListener('change', function() { onIfaceChange(w.iface, 'password', pwInput.value); });
 
@@ -167,7 +167,7 @@ function ifaceTable(list, pendingIface, onIfaceChange) {
 			E('td', { 'class': 'td left' }, hiddenInput),
 			E('td', { 'class': 'td left' }, disabledInput),
 			E('td', { 'class': 'td left' }, pend
-				? E('span', { 'class': 'ifacebadge', 'style': 'background:#f0ad4e;color:#fff' }, '適用待ち')
+				? E('span', { 'class': 'ifacebadge', 'style': 'background:#f0ad4e;color:#fff' }, _("wait for apply"))
 				: '')
 		]));
 	});
@@ -185,13 +185,13 @@ function effectiveBandValue(r, pendingBand, field, fallback) {
 
 function channelTable(radios, pendingBand, onBandChange) {
 	if (!radios || !radios.length)
-		return E('p', {}, '無線デバイスの情報を取得できませんでした。');
+		return E('p', {}, _("Wireless device information could not be retrieved."));
 
 	var rows = [ E('tr', { 'class': 'tr table-titles' }, [
-		E('th', { 'class': 'th' }, '帯域'),
-		E('th', { 'class': 'th' }, '通信規格'),
-		E('th', { 'class': 'th' }, 'チャンネル'),
-		E('th', { 'class': 'th' }, '帯域幅'),
+		E('th', { 'class': 'th' }, _("Type")),
+		E('th', { 'class': 'th' }, _("communication standards")),
+		E('th', { 'class': 'th' }, _("Channel")),
+		E('th', { 'class': 'th' }, _("Bandwidth")),
 		E('th', { 'class': 'th' }, '')
 	]) ];
 
@@ -214,7 +214,7 @@ function channelTable(radios, pendingBand, onBandChange) {
 				return E('option', {
 					'value': String(ch),
 					'selected': (String(ch) === curCh) ? '' : null
-				}, ch === 0 ? '自動' : ('ch ' + ch));
+				}, ch === 0 ? _("automatic") : ('ch ' + ch));
 			})
 		);
 		var bwInput = E('select', { 'class': 'cbi-input-select' },
@@ -235,7 +235,7 @@ function channelTable(radios, pendingBand, onBandChange) {
 			E('td', { 'class': 'td left' }, chInput),
 			E('td', { 'class': 'td left' }, bwInput),
 			E('td', { 'class': 'td left' }, pend
-				? E('span', { 'class': 'ifacebadge', 'style': 'background:#f0ad4e;color:#fff' }, '適用待ち')
+				? E('span', { 'class': 'ifacebadge', 'style': 'background:#f0ad4e;color:#fff' }, _("wait for apply"))
 				: '')
 		]));
 	});
@@ -245,15 +245,15 @@ function channelTable(radios, pendingBand, onBandChange) {
 function applyBar(pendingCount, onApply, onDiscard) {
 	if (pendingCount === 0)
 		return E('div', { 'style': 'margin:.5em 0;opacity:.7' },
-			'未適用の変更はありません。SSID編集やチャンネル/帯域幅/通信規格の変更は、ここで「変更を適用」を押すまで実機には反映されません。');
+			_("There are no changes that do not apply. SSID edits and channel/bandwidth/communication specification changes will not be reflected on the actual device until you press “Apply Changes” here."));
 
 	return E('div', {
 		'class': 'alert-message notice',
 		'style': 'margin:.5em 0;display:flex;align-items:center;gap:.6em'
 	}, [
-		E('span', {}, '未適用の変更が' + pendingCount + '件あります。'),
-		E('button', { 'class': 'cbi-button cbi-button-positive', 'click': onApply }, '変更を適用'),
-		E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': onDiscard }, '破棄')
+		E('span', {}, _("Changes that do not apply") + pendingCount + _("There is.")),
+		E('button', { 'class': 'cbi-button cbi-button-positive', 'click': onApply }, _("Apply changes")),
+		E('button', { 'class': 'cbi-button cbi-button-neutral', 'click': onDiscard }, _("Discard"))
 	]);
 }
 
@@ -264,12 +264,12 @@ function render(data, opts) {
 
 	body.push(sbair.softBrickWarning('wifi'));
 	body.push(E('p', { 'style': 'opacity:.8' },
-		'この機体の無線ドライバ(mt_wifi)は OpenWrt 標準の Network → Wireless 画面に対応していないため、' +
-		'ここで直接編集します。'));
+		_("Because the wireless driver (mt_wifi) of this aircraft does not support the Network → Wireless screen of the OpenWrt standard,") +
+		_("Edit it yourself here.")));
 	body.push(applyBar(opts.pendingCount, opts.onApply, opts.onDiscard));
 
-	body.push(sbair.section('Wi-Fi', [ ifaceTable(data.ifaces, opts.pendingIface, opts.onIfaceChange) ]));
-	body.push(sbair.section('通信規格・チャンネル・帯域幅（UCI設定値。実動作は「Wi-Fi > 診断」で確認）', [
+	body.push(sbair.section(_('Wi-Fi'), [ ifaceTable(data.ifaces, opts.pendingIface, opts.onIfaceChange) ]));
+	body.push(sbair.section(_("Communication standard/channel/bandwidth (UCI setting value. Check actual operation with “Wi-Fi > Diagnosis”)"), [
 		channelTable(data.radios, opts.pendingBand, opts.onBandChange)
 	]));
 	body.push(sbair.errorBox(data.error ? [ data.error ] : null));
@@ -279,7 +279,7 @@ function render(data, opts) {
 return view.extend({
 	load: function() {
 		return callWifiStatus().catch(function(err) {
-			return { error: String(err) };
+			return { error: sbair.errorText(err) };
 		});
 	},
 
@@ -314,7 +314,7 @@ return view.extend({
 				self.pendingBand = {};
 				redraw();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'warning');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'warning');
 			});
 		};
 
@@ -364,14 +364,14 @@ return view.extend({
 
 			callWifiApplyBatch(JSON.stringify(changes)).then(function(res) {
 				if (res && res.error) {
-					ui.addNotification(null, E('p', {}, res.error), 'danger');
+					ui.addNotification(null, E('p', {}, res.error === 'Pending wireless changes exist. Save or discard them before changing settings.' ? _('Pending wireless changes exist. Save or discard them before changing settings.') : sbair.errorText(res.error)), 'danger');
 					return;
 				}
 				ui.addNotification(null, E('p', {},
-					'設定を保存し、Wi-Fi再起動を開始しました。数秒切断・再接続されます。'), 'info');
+					_("I saved the settings and started the Wi-Fi reboot. It disconnects for a few seconds and reconnects.")), 'info');
 				return reload();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'danger');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 			});
 		}
 
@@ -382,7 +382,7 @@ return view.extend({
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral',
 					'click': ui.createHandlerFn(this, reload)
-				}, '再読み込み(未適用の変更は破棄されます)')
+				}, _("Reload (unapplied changes will be discarded)"))
 			]),
 			container
 		]);

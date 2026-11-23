@@ -199,23 +199,151 @@ func bandsteeringStatus() map[string]any {
 	return map[string]any{"enabled": len(m) > 1 && m[1] == "1"}
 }
 
+// stockWiFiPreflight checks all packages because stock uses an unscoped commit.
+// Never return the changes themselves: they may include credentials.
+func stockWiFiPreflight() error {
+	out, err := uci("changes")
+	if err != nil {
+		return fmt.Errorf("cannot inspect pending UCI settings: %w", err)
+	}
+	if strings.TrimSpace(out) != "" {
+		return fmt.Errorf("pending UCI settings exist; preserve or resolve them before changing band steering")
+	}
+	return nil
+}
+
 func bandsteeringSet(on string) map[string]any {
-	if err := ensureKnosSection("network"); err != nil {
-		return map[string]any{"error": err.Error()}
-	}
 	val := boolArg(on)
-	wifiDriftRecord("bandsteering_before")
-	if out, err := knshOutput("wlan", "bandsteering", val); err != nil {
-		return map[string]any{"error": fmt.Sprintf("knsh wlan bandsteering: %v: %s", err, out)}
+	if err := stockWiFiPreflight(); err != nil {
+		return map[string]any{"error": err.Error(), "stage": "preflight"}
 	}
-	if err := commitKnos(); err != nil {
-		return map[string]any{"error": err.Error()}
+	if err := ensureKnosSection("network"); err != nil {
+		return map[string]any{"error": err.Error(), "stage": "prepare"}
+	}
+	// Stock UI forces MLO off when band steering is disabled.
+	mlo := ""
+	if val == "0" {
+		out, err := knshOutput("wlan", "mlo")
+		if err != nil {
+			return map[string]any{"error": "cannot read MLO status", "stage": "preflight"}
+		}
+		match := modeDigitRe.FindStringSubmatch(out)
+		if len(match) < 2 || (match[1] != "0" && match[1] != "1") {
+			return map[string]any{"error": "unrecognized MLO status", "stage": "preflight"}
+		}
+		mlo = match[1]
+	}
+	wifiDriftRecord("bandsteering_before")
+	if _, err := knshOutput("wlan", "bandsteering", val); err != nil {
+		return map[string]any{"error": "band steering command failed; configuration may be partially changed", "stage": "bandsteering"}
+	}
+	if mlo == "1" {
+		if _, err := knshOutput("wlan", "mlo", "0"); err != nil {
+			return map[string]any{"error": "MLO command failed; configuration may be partially changed", "stage": "mlo"}
+		}
+		if err := verifyKnshBoolean("MLO", "0", "wlan", "mlo"); err != nil {
+			return map[string]any{"error": "MLO read-back failed; configuration may be partially changed", "stage": "mlo_verify"}
+		}
 	}
 	if err := verifyUCIValue("bandsteering", "knos.network.bandsteering", val); err != nil {
-		return map[string]any{"error": err.Error()}
+		return map[string]any{"error": "band steering read-back failed; configuration may be partially changed", "stage": "verify"}
+	}
+	// The stock UI commits all UCI changes before knsh save. Do not automatically
+	// reboot: the caller must present a distinct reboot action and its implications.
+	if _, err := uci("commit"); err != nil {
+		return map[string]any{"error": "UCI commit failed; configuration may be partially saved", "stage": "commit"}
+	}
+	if _, err := knshOutput("save"); err != nil {
+		return map[string]any{"error": "knsh save failed after UCI commit", "stage": "save"}
 	}
 	wifiDriftRecord("bandsteering_after")
-	return map[string]any{"result": "ok", "enabled": val == "1"}
+	return map[string]any{"result": "ok", "enabled": val == "1", "restart_required": true, "runtime_verified": false}
+}
+
+// Stock WebUI exposes MLO and mesh through these exact knsh commands.
+// MLO is disabled by the stock UI whenever band steering is off. Disabling
+// mesh also clears WPS state under the same conditions as Denpa.php.
+func mloStatus() map[string]any {
+	return knshModeStatus("mlo")
+}
+
+func meshStatus() map[string]any {
+	return knshModeStatus("mesh")
+}
+
+func knshModeStatus(mode string) map[string]any {
+	out, err := knshOutput("wlan", mode)
+	if err != nil {
+		return map[string]any{"error": fmt.Sprintf("cannot read %s status", mode)}
+	}
+	m := modeDigitRe.FindStringSubmatch(out)
+	if len(m) < 2 || (m[1] != "0" && m[1] != "1") {
+		return map[string]any{"error": fmt.Sprintf("unrecognized %s status", mode)}
+	}
+	return map[string]any{"enabled": m[1] == "1"}
+}
+
+func mloSet(on string) map[string]any {
+	val := boolArg(on)
+	if err := stockWiFiPreflight(); err != nil {
+		return map[string]any{"error": err.Error(), "stage": "preflight"}
+	}
+	if val == "1" {
+		steering, err := knshOutput("wlan", "bandsteering")
+		match := modeDigitRe.FindStringSubmatch(steering)
+		if err != nil || len(match) < 2 || match[1] != "1" {
+			return map[string]any{"error": "stock constraint: MLO can only be enabled while band steering is enabled", "stage": "constraint"}
+		}
+	}
+	return stockKnshModeSet("mlo", val)
+}
+
+func meshSet(on string) map[string]any {
+	val := boolArg(on)
+	if err := stockWiFiPreflight(); err != nil {
+		return map[string]any{"error": err.Error(), "stage": "preflight"}
+	}
+	if err := ensureKnosSection("network"); err != nil {
+		return map[string]any{"error": err.Error(), "stage": "prepare"}
+	}
+	if _, err := knshOutput("wlan", "mesh", val); err != nil {
+		return map[string]any{"error": "mesh command failed; configuration may be partially changed", "stage": "mesh"}
+	}
+	if val == "0" {
+		wpsState, _ := uci("get", "wireless.ra0.wps_state")
+		filterPolicy, _ := uci("get", "knos.network.wlan_filterPolicy")
+		if wpsState == "2" || filterPolicy == "1" {
+			for _, key := range []string{"wireless.ra0.wps_state", "wireless.rai0.wps_state", "knos.network.wlan_wps_enabled"} {
+				if _, err := uci("set", key+"=0"); err != nil {
+					return map[string]any{"error": "mesh is off but stock WPS cleanup failed", "stage": "wps_cleanup"}
+				}
+			}
+		}
+	}
+	return stockKnshModeSave("mesh", val)
+}
+
+func stockKnshModeSet(mode, val string) map[string]any {
+	if err := ensureKnosSection("network"); err != nil {
+		return map[string]any{"error": err.Error(), "stage": "prepare"}
+	}
+	if _, err := knshOutput("wlan", mode, val); err != nil {
+		return map[string]any{"error": fmt.Sprintf("%s command failed; configuration may be partially changed", mode), "stage": mode}
+	}
+	return stockKnshModeSave(mode, val)
+}
+
+func stockKnshModeSave(mode, val string) map[string]any {
+	if err := verifyKnshBoolean(mode, val, "wlan", mode); err != nil {
+		return map[string]any{"error": fmt.Sprintf("%s read-back failed; configuration may be partially changed", mode), "stage": "verify"}
+	}
+	if _, err := uci("commit"); err != nil {
+		return map[string]any{"error": "UCI commit failed; configuration may be partially saved", "stage": "commit"}
+	}
+	if _, err := knshOutput("save"); err != nil {
+		return map[string]any{"error": "knsh save failed after UCI commit", "stage": "save"}
+	}
+	return map[string]any{"result": "ok", "enabled": val == "1", "restart_required": true, "runtime_verified": false}
 }
 
 // ---------------------------------------------------------------------------
@@ -476,12 +604,12 @@ func wpsStatus() map[string]any {
 func wpsRun(band, mode, pin string) map[string]any {
 	arg, ok := wpsBandArg[band]
 	if !ok {
-		return map[string]any{"error": fmt.Sprintf("WPS未対応の帯域です: %q(2.4G/5Gのみ)", band)}
+		return map[string]any{"error": "WPS is supported only on the 2.4 GHz and 5 GHz bands."}
 	}
 	args := []string{"wlan", "wps", "run", arg, mode}
 	if mode == "pin" {
 		if pin == "" {
-			return map[string]any{"error": "PINが必要です"}
+			return map[string]any{"error": "A WPS PIN is required."}
 		}
 		args = append(args, pin)
 	}
@@ -509,7 +637,7 @@ func wpsPinRandom() map[string]any {
 func wpsReset(band string) map[string]any {
 	arg, ok := wpsBandArg[band]
 	if !ok {
-		return map[string]any{"error": fmt.Sprintf("WPS未対応の帯域です: %q(2.4G/5Gのみ)", band)}
+		return map[string]any{"error": "WPS is supported only on the 2.4 GHz and 5 GHz bands."}
 	}
 	out, err := knshOutput("wlan", "wps", "reset", arg)
 	if err != nil {

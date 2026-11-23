@@ -63,17 +63,17 @@ assert.match(clientsSource, /callClientList/);
 assert.match(clientsSource, /callAdblockList/);
 assert.match(clientsSource, /callAdblockSet/);
 assert.match(clientsSource, /adblockControl/);
-assert.match(clientsSource, /広告ブロック/);
+assert.match(clientsSource, /ad block/);
 assert.match(clientsSource, /:8090\//);
 assert.match(clientsSource, /key: 'device'/);
 assert.doesNotMatch(clientsSource, /key: 'vendor'/);
 assert.match(toolsSource, /\.sbair-section\{margin-bottom:28px\}/);
 assert.match(toolsSource, /\.sbair-section > h3\{margin-bottom:12px\}/);
 assert.doesNotMatch(toolsSource, /\.sbair-section\{margin-bottom:18px\}/);
-assert.ok(simSource.indexOf("body.push(this.simLockSection());") < simSource.indexOf("body.push(sbair.section('通信設定'"));
-assert.match(simSource, /SIMロック操作を表示（危険）/);
+assert.ok(simSource.indexOf("body.push(this.simLockSection());") < simSource.indexOf("body.push(sbair.section(_(\"Communication settings\")"));
+assert.match(simSource, /SIM lock operation indication \(danger\)/);
 assert.match(simSource, /font-size:115%/);
-assert.doesNotMatch(simSource, /details\('SIMロック',/);
+assert.doesNotMatch(simSource, /details\(_\("SIM lock"\),/);
 
 function E(tag, attrs, children) {
   return { tag, attrs: attrs || {}, children: Array.isArray(children) ? children : (children === undefined ? [] : [ children ]) };
@@ -106,6 +106,7 @@ const rpc = {
   }
 };
 const context = {
+  _: function(text) { return text; },
   Promise,
   Node: function Node() {},
   E,
@@ -127,11 +128,11 @@ view.load().then(function(data) {
   assert.strictEqual(data.adblock_available, true);
   assert.strictEqual(data.clients[0].adblock, true);
   const rendered = view.render(data);
-  assert.match(textOf(rendered), /広告ブロック/);
-  assert.match(textOf(rendered), /有効（無効化）/);
-  assert.match(textOf(rendered), /操作/);
+  assert.match(textOf(rendered), /ad block/);
+  assert.match(textOf(rendered), /Enable \(Disable\)/);
+  assert.match(textOf(rendered), /functioning/);
   const headers = flatten(rendered).filter(node => node.tag === 'th').map(node => textOf(node).replace(/ [▲▼]$/, ''));
-  assert.deepStrictEqual(headers, [ '端末', 'IPアドレス', '接続', 'メモ', '広告ブロック', '操作' ]);
+  assert.deepStrictEqual(headers, [ 'terminal', 'IP address', 'connection', 'reference', 'ad block', 'functioning' ]);
   assert.ok(flatten(rendered).some(node => node.tag === 'a' && node.attrs.href === 'http://192.168.1.1:8090/'));
   assert.ok(rpcCalls.includes('client_list'));
   assert.ok(rpcCalls.includes('adblock_list'));

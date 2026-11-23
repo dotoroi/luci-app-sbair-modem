@@ -59,7 +59,7 @@ func imsStatus(ch *ATChannel) map[string]any {
 			}
 		}
 	} else {
-		out["error"] = fmt.Sprintf("モデムに聞けません: %v", err)
+		out["error"] = fmt.Sprintf("Unable to query the modem: %v", err)
 	}
 
 	// 参考値。**実態と食い違うので、これで判定しない。**
@@ -82,10 +82,10 @@ func imsSet(ch *ATChannel, on bool) map[string]any {
 	}
 	v, err := mipc("--ims_set_config", arg)
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("切り替えられません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to change the setting: %v", err)}
 	}
 	if !strings.Contains(v, "success") {
-		return map[string]any{"error": "モデムが受け付けませんでした: " + strings.TrimSpace(v)}
+		return map[string]any{"error": "The modem rejected the request: " + strings.TrimSpace(v)}
 	}
 	out := imsStatus(ch)
 	out["result"] = "ok"

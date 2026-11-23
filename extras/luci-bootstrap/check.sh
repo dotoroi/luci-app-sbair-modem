@@ -20,7 +20,7 @@ warn() {
 
 release_value() {
 	key=$1
-	sed -n "s/^$key='//; s/'\$//; p" /etc/openwrt_release 2>/dev/null | head -n 1
+	awk -F"'" -v key="$key" '$1 == key "=" { print $2; exit }' /etc/openwrt_release 2>/dev/null
 }
 
 runtime_lan_ip() {
@@ -40,6 +40,14 @@ arch=$(release_value DISTRIB_ARCH)
 [ "$release" = "21.02.7" ] && ok "OpenWrt release: $release" || ng "OpenWrt release: ${release:-unknown}"
 [ "$target" = "gem6xxx/evb6990_cpe_mt7990_emmc" ] && ok "target: $target" || ng "target: ${target:-unknown}"
 [ "$arch" = "aarch64_cortex-a55_neon-vfpv4" ] && ok "vendor architecture: $arch" || ng "vendor architecture: ${arch:-unknown}"
+
+for lang in ja ko; do
+	if opkg status "luci-i18n-base-$lang" 2>/dev/null | grep -q '^Status: .* installed'; then
+		ok "LuCI base language catalog: $lang"
+	else
+		ng "LuCI base language catalog is missing: $lang"
+	fi
+done
 
 configured=$(uci -q get network.lan.ipaddr 2>/dev/null || true)
 runtime=$(runtime_lan_ip)

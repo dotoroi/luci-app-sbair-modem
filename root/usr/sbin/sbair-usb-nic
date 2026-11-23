@@ -70,12 +70,16 @@ release_value() {
 	printf '%s\n' "$line" | sed "s/^$1='//; s/'$//"
 }
 
-stat_mode() {
-	stat -c %a "$1" 2>/dev/null || stat -f %Lp "$1" 2>/dev/null
-}
-
-stat_owner() {
-	stat -c %u "$1" 2>/dev/null || stat -f %u "$1" 2>/dev/null
+private_metadata() {
+	local entry expected mode owner uid
+	expected=$2
+	# The Air 6 BusyBox build has numeric ls output but no stat applet.
+	entry=$(LC_ALL=C ls -ldn "$1" 2>/dev/null) || return 1
+	mode=$(printf '%s\n' "$entry" | awk '{print $1}')
+	owner=$(printf '%s\n' "$entry" | awk '{print $3}')
+	uid=$(id -u 2>/dev/null) || return 1
+	[ "${mode%@*}" = "$expected" ] || return 1
+	[ "$owner" = 0 ] || [ "$owner" = "$uid" ]
 }
 
 private_path() {
@@ -92,22 +96,14 @@ private_dir() {
 	private_path "$dir" || return 1
 	[ -d "$dir" ] || mkdir -p "$dir" 2>/dev/null || return 1
 	chmod 700 "$dir" 2>/dev/null || return 1
-	mode=$(stat_mode "$dir" 2>/dev/null || true)
-	case "$mode" in 700|0700) ;; *) return 1 ;; esac
-	owner=$(stat_owner "$dir" 2>/dev/null || true)
-	uid=$(id -u 2>/dev/null || printf '0')
-	[ "$owner" = 0 ] || [ "$owner" = "$uid" ] || return 1
+	private_metadata "$dir" drwx------
 }
 
 private_file() {
 	file=$1
 	[ -f "$file" ] || return 1
 	[ ! -L "$file" ] || return 1
-	mode=$(stat_mode "$file" 2>/dev/null || true)
-	case "$mode" in 600|0600) ;; *) return 1 ;; esac
-	owner=$(stat_owner "$file" 2>/dev/null || true)
-	uid=$(id -u 2>/dev/null || printf '0')
-	[ "$owner" = 0 ] || [ "$owner" = "$uid" ] || return 1
+	private_metadata "$file" -rw-------
 }
 
 profile_get() {

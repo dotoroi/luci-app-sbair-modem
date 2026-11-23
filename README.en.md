@@ -26,8 +26,9 @@ Sensitive identifiers are masked by default in the interface.
 
 See the repository documentation for prerequisites, build steps, and installation guidance. In particular:
 
-- [Build and installation guide](docs/INSTALL-NON-CODEX-KO.md)
-- [Access and password guidance](docs/INSTALL-ACCESS-KO.md)
+- [Build and installation guide](docs/INSTALL-NON-CODEX-EN.md)
+- [Access and password guidance](docs/INSTALL-ACCESS-EN.md)
+- [Firmware compatibility](docs/FIRMWARE-COMPATIBILITY-EN.md)
 - [Overlay whiteout read-only audit (Korean)](docs/OVERLAY-WHITEOUT-AUDIT-KO.md)
 - [API and UI reference](docs/API.md)
 

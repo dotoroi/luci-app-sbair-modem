@@ -46,6 +46,18 @@ jobs:
             esac
           done
 
+      - name: Check localized release notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          notes="docs/releases/${version}.md"
+          test -s "$notes" || { echo "Missing localized release notes: $notes" >&2; exit 1; }
+          grep -Fq '[English](#english)' "$notes"
+          grep -Fq '[日本語](#日本語)' "$notes"
+          grep -Fq '[한국어](#한국어)' "$notes"
+          grep -Fq '## English' "$notes"
+          grep -Fq '## 日本語' "$notes"
+          grep -Fq '## 한국어' "$notes"
+
       - name: Package release bundle
         run: sh ./tools/package-release.sh "$GITHUB_REF_NAME" --use-existing-binary
 
@@ -56,7 +68,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          version="${GITHUB_REF_NAME#v}"
           gh release create "$GITHUB_REF_NAME" \
             "out/release/floop3-$GITHUB_REF_NAME-air6-linux-arm64.tar.gz" \
             "out/release/floop3-$GITHUB_REF_NAME-air6-linux-arm64.tar.gz.sha256" \
-            --verify-tag --generate-notes
+            --verify-tag --title "$GITHUB_REF_NAME" \
+            --notes-file "docs/releases/$version.md"

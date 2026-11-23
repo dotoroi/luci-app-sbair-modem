@@ -30,7 +30,7 @@ func cellularWANAllowed() bool {
 	managed, managedErr := uci("get", "sbair.bridge.managed")
 	mode, err := uci("get", "sbair.bridge.mode")
 	if managedErr == nil && managed == "1" && err == nil {
-		return mode != "ap"
+		return mode == "sim" || mode == "vlanwan"
 	}
 	// Before an explicit mode apply, retain the old AP hint. This also covers
 	// configurations created by the pre-snapshot release.
@@ -118,6 +118,13 @@ func netmodeStatus() map[string]any {
 			"interface":       netmodeString(fields, "cellular.interface", "-"),
 			"routing_enabled": netmodeBool(fields, "cellular.routing_enabled"),
 			"default_route":   netmodeBool(fields, "cellular.default_route"),
+		},
+		"ethernet_wan": map[string]any{
+			"proto":         netmodeString(fields, "ethernet_wan.proto", "-"),
+			"device":        netmodeString(fields, "ethernet_wan.device", "-"),
+			"address":       netmodeString(fields, "ethernet_wan.address", "-"),
+			"link":          netmodeFlag(fields, "ethernet_wan.link"),
+			"default_route": netmodeBool(fields, "ethernet_wan.default_route"),
 		},
 		"wifi": map[string]any{
 			"mlo":          netmodeFlag(fields, "wifi.mlo"),
@@ -222,15 +229,29 @@ func netmodeResult(args ...string) map[string]any {
 	return result
 }
 
+func netmodeUSBLANAdd(iface string) map[string]any {
+	if !netdevUSBHostInterface(iface) {
+		return map[string]any{"error": "The selected interface is not verified as a connected USB host Ethernet device."}
+	}
+	return netmodeResult("usb-lan-add", iface)
+}
+
+func netmodeUSBLANRemove(iface string) map[string]any {
+	if iface == "" || len(iface) > 15 || strings.Trim(iface, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-") != "" {
+		return map[string]any{"error": "Invalid network interface name."}
+	}
+	return netmodeResult("usb-lan-remove", iface)
+}
+
 func netmodeSet(mode string) map[string]any {
-	if mode != "sim" && mode != "ap" {
+	if mode != "sim" && mode != "ap" && mode != "ethwan" && mode != "vlanwan" {
 		return map[string]any{"error": fmt.Sprintf("unknown mode %q", mode)}
 	}
 	return netmodeResult("apply", mode)
 }
 
 func netmodeApply(in rpcdArgs) map[string]any {
-	if in.Mode != "sim" && in.Mode != "ap" {
+	if in.Mode != "sim" && in.Mode != "ap" && in.Mode != "ethwan" && in.Mode != "vlanwan" {
 		return map[string]any{"error": fmt.Sprintf("unknown mode %q", in.Mode)}
 	}
 	args := []string{"apply", in.Mode}
@@ -322,28 +343,28 @@ func dhcpPoolToUCI(startIP, endIP, network, netmask, router string) (string, str
 	}
 	start, err := ipv4Uint32(startIP)
 	if err != nil {
-		return "", "", fmt.Errorf("DHCP開始アドレス: %v", err)
+		return "", "", fmt.Errorf("Invalid DHCP pool start address: %v", err)
 	}
 	end, err := ipv4Uint32(endIP)
 	if err != nil {
-		return "", "", fmt.Errorf("DHCP終了アドレス: %v", err)
+		return "", "", fmt.Errorf("Invalid DHCP pool end address: %v", err)
 	}
 	if start > end {
-		return "", "", fmt.Errorf("DHCP開始アドレスは終了アドレス以下にしてください")
+		return "", "", fmt.Errorf("DHCP pool start address must not exceed the end address.")
 	}
 	if start <= base || end >= broadcast {
-		return "", "", fmt.Errorf("DHCP範囲はnetwork address/broadcastを含められません")
+		return "", "", fmt.Errorf("DHCP pool cannot include the network or broadcast address.")
 	}
 	if router != "" {
 		routerValue, routerErr := ipv4Uint32(router)
 		if routerErr != nil {
-			return "", "", fmt.Errorf("ルーターのIPが不正です: %v", routerErr)
+		return "", "", fmt.Errorf("Router IP is invalid: %v", routerErr)
 		}
 		if routerValue < base || routerValue > broadcast {
-			return "", "", fmt.Errorf("ルーターのIPがDHCPサブネット外です")
+		return "", "", fmt.Errorf("Router IP is outside the DHCP subnet.")
 		}
 		if routerValue >= start && routerValue <= end {
-			return "", "", fmt.Errorf("DHCP範囲にルーター自身のIPを含められません")
+		return "", "", fmt.Errorf("DHCP pool cannot include the router IP.")
 		}
 	}
 	return strconv.FormatUint(uint64(start-base), 10), strconv.FormatUint(uint64(end-start+1), 10), nil
@@ -376,16 +397,16 @@ func netmodePoolArgs(startIP, endIP, leasetime string) ([]string, error) {
 			return nil, nil
 		}
 		if !validDHCPLeasetime(leasetime) {
-			return nil, fmt.Errorf("DHCPリース時間が不正です")
+		return nil, fmt.Errorf("DHCP lease time is invalid.")
 		}
 		return []string{"dhcp_leasetime=" + leasetime}, nil
 	}
 	if startIP == "" || endIP == "" {
-		return nil, fmt.Errorf("DHCP開始アドレスと終了アドレスは両方指定してください")
+		return nil, fmt.Errorf("Specify both DHCP pool start and end addresses.")
 	}
 	context, err := netmodePoolContext("sim")
 	if err != nil {
-		return nil, fmt.Errorf("SIM LANのDHCP範囲を確認できません: %v", err)
+		return nil, fmt.Errorf("Unable to inspect the SIM LAN DHCP range: %v", err)
 	}
 	start, limit, err := dhcpPoolToUCI(startIP, endIP, context["network"], context["netmask"], context["router"])
 	if err != nil {
@@ -394,7 +415,7 @@ func netmodePoolArgs(startIP, endIP, leasetime string) ([]string, error) {
 	args := []string{"dhcp_start=" + start, "dhcp_limit=" + limit}
 	if leasetime != "" {
 		if !validDHCPLeasetime(leasetime) {
-			return nil, fmt.Errorf("DHCPリース時間が不正です")
+		return nil, fmt.Errorf("DHCP lease time is invalid.")
 		}
 		args = append(args, "dhcp_leasetime="+leasetime)
 	}
@@ -485,7 +506,7 @@ func validNetmask(value string) bool {
 
 func netmodeSetConfig(in rpcdArgs) map[string]any {
 	if in.Proto != "dhcp" && in.Proto != "static" {
-		return map[string]any{"error": "管理IP方式は dhcp または static です"}
+		return map[string]any{"error": "Management IP method must be DHCP or static."}
 	}
 	if in.FallbackIP == "" {
 		in.FallbackIP = "192.168.3.1"
@@ -497,25 +518,25 @@ func netmodeSetConfig(in rpcdArgs) map[string]any {
 		in.FallbackTimeout = 15
 	}
 	if in.Proto == "static" && in.IPAddr != "" && !validIPv4(in.IPAddr) {
-		return map[string]any{"error": "固定IPは空欄または有効なIPv4値が必要です（空欄は純正設定を継承）"}
+		return map[string]any{"error": "Static IP must be blank or a valid IPv4 address (blank inherits the stock setting)."}
 	}
 	if in.Proto == "static" && in.Netmask != "" && !validNetmask(in.Netmask) {
-		return map[string]any{"error": "ネットマスクは空欄または有効なIPv4値が必要です（空欄は純正設定を継承）"}
+		return map[string]any{"error": "Netmask must be blank or a valid IPv4 netmask (blank inherits the stock setting)."}
 	}
 	if in.Gateway != "" && !validIPv4(in.Gateway) {
-		return map[string]any{"error": "Gateway は有効なIPv4値が必要です"}
+		return map[string]any{"error": "Gateway must be a valid IPv4 address."}
 	}
 	if in.FallbackIP != "" && !validIPv4(in.FallbackIP) {
-		return map[string]any{"error": "Fallback IP は有効なIPv4値が必要です"}
+		return map[string]any{"error": "Fallback IP must be a valid IPv4 address."}
 	}
 	if in.FallbackIP == "172.16.255.254" {
-		return map[string]any{"error": "172.16.255.254 はvendor aliasのためFallbackに使えません"}
+		return map[string]any{"error": "172.16.255.254 is reserved as a vendor alias and cannot be used as the fallback IP."}
 	}
 	if in.FallbackNetmask != "" && !validNetmask(in.FallbackNetmask) {
-		return map[string]any{"error": "Fallback netmask は有効なIPv4値が必要です"}
+		return map[string]any{"error": "Fallback netmask must be a valid IPv4 netmask."}
 	}
 	if in.FallbackTimeout < 5 || in.FallbackTimeout > 3600 {
-		return map[string]any{"error": "Fallback待機時間は5〜3600秒です"}
+		return map[string]any{"error": "Fallback wait time must be between 5 and 3600 seconds."}
 	}
 
 	fallbackEnabled := "0"

@@ -292,6 +292,7 @@ function textOf(node) {
   return textOf(node.children || []);
 }
 const context = {
+  _: function(text) { return text; },
   Promise,
   Node: function Node() {},
   E,
@@ -318,12 +319,12 @@ const lanRendered = lanView.render({
 const updateRendered = updateView.render({
   fota: { config_enabled: '1', provision_enabled: '1', config_respawn: '1', kn_fotad: 'running', autostart: 'enabled' }
 });
-assert.match(textOf(lanRendered), /LAN DHCPサーバー/);
-assert.match(textOf(lanRendered), /DHCPクライアント設定/);
-assert.match(textOf(lanRendered), /DHCPサーバーを無効化/);
-assert.match(textOf(lanRendered), /DHCPサーバーを有効化/);
-assert.match(textOf(updateRendered), /OTA \/ FOTA 自動更新/);
-assert.match(textOf(updateRendered), /OTA\/FOTA自動更新を無効化/);
+assert.match(textOf(lanRendered), /LAN DHCP server/);
+assert.match(textOf(lanRendered), /DHCP client setting/);
+assert.match(textOf(lanRendered), /Disable DHCP server/);
+assert.match(textOf(lanRendered), /Enable DHCP server/);
+assert.match(textOf(updateRendered), /OTA\/FOTA automatic renewal/);
+assert.match(textOf(updateRendered), /Disable OTA\/FOTA automatic updates/);
 assert.match(lanSource, /maintenance_status/);
 assert.match(lanSource, /dhcp_server_set/);
 assert.match(updateSource, /maintenance_status/);

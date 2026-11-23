@@ -75,11 +75,11 @@ func collectSMS(ch *ATChannel) ([]smsMessage, []string, error) {
 	// **毎回 PDU モードを立てる。** 既定は 0 だが、モデムはベンダの
 	// スタックと共用なので誰かがテキストモードにしている前提で書く。
 	if _, err := ch.Command("AT+CMGF=0"); err != nil {
-		return nil, nil, fmt.Errorf("PDU モードにできません: %w", err)
+		return nil, nil, fmt.Errorf("Unable to enable PDU mode: %w", err)
 	}
 	lines, err := ch.Command("AT+CMGL=4") // 4 = ALL
 	if err != nil {
-		return nil, nil, fmt.Errorf("SMS を読めません: %w", err)
+		return nil, nil, fmt.Errorf("Unable to read SMS: %w", err)
 	}
 	parts, bad := parseCMGL(lines)
 	msgs := reassemble(parts)
@@ -95,11 +95,11 @@ func collectSMS(ch *ATChannel) ([]smsMessage, []string, error) {
 func smsStatus(ch *ATChannel) map[string]any {
 	lines, err := ch.Command("AT+CPMS?")
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("保存領域を読めません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to read the SMS storage: %v", err)}
 	}
 	v, ok := First(lines, "+CPMS:")
 	if !ok {
-		return map[string]any{"error": "保存領域の応答がありません。"}
+		return map[string]any{"error": "Storage returned no response."}
 	}
 	f := splitAT(v)
 	out := map[string]any{}

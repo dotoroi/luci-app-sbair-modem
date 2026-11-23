@@ -1,6 +1,13 @@
 #!/bin/sh
 # SPDX-License-Identifier: MIT
-# Register the package-owned firewall include once on first boot.
+# Register this app's language choices and firewall include on first boot.
+
+# Languages used by this app's LuCI catalogs. Preserve administrator choices;
+# only advertise a language when it has not already been registered.
+uci -q get luci.languages.en >/dev/null 2>&1 || uci -q set luci.languages.en='English'
+uci -q get luci.languages.ja >/dev/null 2>&1 || uci -q set luci.languages.ja='日本語 (Japanese)'
+uci -q get luci.languages.ko >/dev/null 2>&1 || uci -q set luci.languages.ko='한국어 (Korean)'
+uci -q commit luci
 
 uci -q get firewall.sbair_dhcp_guard >/dev/null 2>&1 || \
 	uci -q set firewall.sbair_dhcp_guard=include

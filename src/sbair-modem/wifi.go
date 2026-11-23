@@ -261,7 +261,7 @@ func applyWifiRestart() error {
 		"fi; /usr/bin/sbair-modem wifi-drift snapshot wlan_restart_after >/dev/null 2>&1")
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
 	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("Wi-Fi再起動の開始に失敗しました: %v", err)
+		return fmt.Errorf("Wi-Fi restart failed.")
 	}
 	return nil
 }
@@ -270,7 +270,7 @@ func runKnshSave() error {
 	if err := exec.Command("knsh", "save").Run(); err != nil {
 		// Do not include command output here: future vendor versions might echo
 		// wireless credentials while reporting an error.
-		return fmt.Errorf("knsh saveに失敗しました: %v", err)
+		return fmt.Errorf("Settings could not be saved.")
 	}
 	return nil
 }
@@ -354,7 +354,7 @@ func wifiTxPowerMax() map[string]any {
 		return map[string]any{"error": fmt.Sprintf("uci show wireless: %v", err)}
 	}
 	if pending, pendingErr := uci("changes", "wireless"); pendingErr == nil && strings.TrimSpace(pending) != "" {
-		return map[string]any{"error": "wirelessに未コミットの別変更があります。先に保存または破棄してください"}
+		return map[string]any{"error": "Pending wireless changes exist. Save or discard them before changing settings."}
 	}
 
 	var radios []string
@@ -369,12 +369,12 @@ func wifiTxPowerMax() map[string]any {
 		}
 		if _, err := uci("set", "wireless."+name+".txpower="+maxFirmwareTxPower); err != nil {
 			_, _ = uci("revert", "wireless")
-			return map[string]any{"error": "無線出力設定の書き込みに失敗しました"}
+			return map[string]any{"error": "Could not write wireless power settings."}
 		}
 		changed = true
 	}
 	if len(radios) == 0 {
-		return map[string]any{"error": "無線デバイスが見つかりません"}
+		return map[string]any{"error": "Wireless device not found."}
 	}
 	if !changed {
 		return map[string]any{
@@ -405,7 +405,7 @@ func wifiTxPowerDefault() map[string]any {
 		return map[string]any{"error": fmt.Sprintf("uci show wireless: %v", err)}
 	}
 	if pending, pendingErr := uci("changes", "wireless"); pendingErr == nil && strings.TrimSpace(pending) != "" {
-		return map[string]any{"error": "wirelessに未コミットの別変更があります。先に保存または破棄してください"}
+		return map[string]any{"error": "Pending wireless changes exist. Save or discard them before changing settings."}
 	}
 
 	var radios []string
@@ -420,12 +420,12 @@ func wifiTxPowerDefault() map[string]any {
 		}
 		if _, err := uci("delete", "wireless."+name+".txpower"); err != nil {
 			_, _ = uci("revert", "wireless")
-			return map[string]any{"error": "無線出力設定の削除に失敗しました"}
+			return map[string]any{"error": "Could not remove wireless power settings."}
 		}
 		changed = true
 	}
 	if len(radios) == 0 {
-		return map[string]any{"error": "無線デバイスが見つかりません"}
+		return map[string]any{"error": "Wireless device not found."}
 	}
 	if !changed {
 		return map[string]any{
@@ -478,11 +478,11 @@ func protocolOption(band, value string) (*protocolOpt, bool) {
 // only after UCI validation/commit and is reported as a non-atomic operation.
 func wifiApplyBatch(changes string) map[string]any {
 	if strings.TrimSpace(changes) == "" || len(changes) > 64*1024 {
-		return map[string]any{"error": "Wi-Fi一括変更のデータが不正です"}
+		return map[string]any{"error": "Invalid Wi-Fi batch change data."}
 	}
 	var request wifiBatchRequest
 	if err := json.Unmarshal([]byte(changes), &request); err != nil {
-		return map[string]any{"error": "Wi-Fi一括変更のデータを読み取れません"}
+		return map[string]any{"error": "Could not read Wi-Fi batch change data."}
 	}
 	if len(request.Interfaces) == 0 && len(request.Bands) == 0 {
 		return map[string]any{"result": "noop"}
@@ -493,7 +493,7 @@ func wifiApplyBatch(changes string) map[string]any {
 	}
 	// Do not discard another writer's staged UCI edits when an operation fails.
 	if pending, pendingErr := uci("changes", "wireless"); pendingErr == nil && strings.TrimSpace(pending) != "" {
-		return map[string]any{"error": "wirelessに未コミットの別変更があります。先に保存または破棄してください"}
+		return map[string]any{"error": "Pending wireless changes exist. Save or discard them before changing settings."}
 	}
 
 	operations := make([][2]string, 0)
@@ -503,7 +503,7 @@ func wifiApplyBatch(changes string) map[string]any {
 	changed := false
 	for _, change := range request.Interfaces {
 		if change.Iface == "" || seenIfaces[change.Iface] {
-			return map[string]any{"error": "Wi-Fiインターフェース指定が重複または空です"}
+			return map[string]any{"error": "Wi-Fi interface is empty or duplicated."}
 		}
 		seenIfaces[change.Iface] = true
 		band, ok := wifiAPBandsFromSections(sections, order, change.Iface)
@@ -511,7 +511,7 @@ func wifiApplyBatch(changes string) map[string]any {
 			return map[string]any{"error": fmt.Sprintf("unknown AP interface %q", change.Iface)}
 		}
 		if !validBinaryOption(change.Hidden) || !validBinaryOption(change.Disabled) {
-			return map[string]any{"error": "hidden/disabledは0または1です"}
+			return map[string]any{"error": "hidden and disabled must be 0 or 1."}
 		}
 		if change.Encryption != "" {
 			allowed := validEncryption2G5G
@@ -536,7 +536,7 @@ func wifiApplyBatch(changes string) map[string]any {
 
 	for _, change := range request.Bands {
 		if change.Band == "" || seenBands[change.Band] {
-			return map[string]any{"error": "Wi-Fi帯域指定が重複または空です"}
+			return map[string]any{"error": "Wi-Fi band is empty or duplicated."}
 		}
 		_, supportedBand := map[string]string{"2.4G": "2.4GHz", "5G": "5GHz", "6G": "6GHz"}[change.Band]
 		if !supportedBand {
@@ -545,10 +545,10 @@ func wifiApplyBatch(changes string) map[string]any {
 		seenBands[change.Band] = true
 		device, current := wifiRadioForBand(sections, order, change.Band)
 		if device == "" {
-			return map[string]any{"error": fmt.Sprintf("band %q の無線デバイスが見つかりません", change.Band)}
+			return map[string]any{"error": "Wireless device not found for the selected band."}
 		}
 		if change.Channel != "" && !validWiFiChannel(change.Channel) {
-			return map[string]any{"error": fmt.Sprintf("band %sのchannelが不正です", change.Band)}
+			return map[string]any{"error": "Invalid channel for the selected Wi-Fi band."}
 		}
 		prefix := htmodePrefixRe.FindString(current["htmode"])
 		if prefix == "" {
@@ -559,7 +559,7 @@ func wifiApplyBatch(changes string) map[string]any {
 		if change.Protocol != "" {
 			chosen, ok := protocolOption(change.Band, change.Protocol)
 			if !ok {
-				return map[string]any{"error": fmt.Sprintf("%sでは通信規格%qは選べません", change.Band, change.Protocol)}
+				return map[string]any{"error": "The selected Wi-Fi protocol is not available on this band."}
 			}
 			chosenPrefix = chosen.Prefix
 			pureB = "0"
@@ -573,7 +573,7 @@ func wifiApplyBatch(changes string) map[string]any {
 		}
 		if change.Width != "" {
 			if chosenPrefix == "NOHT" {
-				return map[string]any{"error": "レガシー通信規格では帯域幅を変更できません"}
+				return map[string]any{"error": "Bandwidth cannot be changed for legacy Wi-Fi protocols."}
 			}
 			validWidth := false
 			for _, choice := range widthChoicesForProtocol(change.Band, chosenPrefix) {
@@ -583,7 +583,7 @@ func wifiApplyBatch(changes string) map[string]any {
 				}
 			}
 			if !validWidth {
-				return map[string]any{"error": fmt.Sprintf("%sでは帯域幅%qは選べません", change.Band, width)}
+				return map[string]any{"error": "The selected bandwidth is not available on this band."}
 			}
 		}
 		if change.Protocol != "" {
@@ -629,7 +629,7 @@ func wifiApplyBatch(changes string) map[string]any {
 	for _, operation := range operations {
 		if _, err := uci("set", "wireless."+operation[0]+"="+operation[1]); err != nil {
 			_, _ = uci("revert", "wireless")
-			return map[string]any{"error": "wireless設定の書き込みに失敗しました"}
+			return map[string]any{"error": "Could not write wireless settings."}
 		}
 	}
 	if len(operations) > 0 {
@@ -643,7 +643,7 @@ func wifiApplyBatch(changes string) map[string]any {
 		wifiDriftRecord("wifi_channel_before")
 		if _, err := exec.Command("knsh", "wlan", token, "channel", change.Channel).CombinedOutput(); err != nil {
 			// Do not echo vendor output: it could contain unrelated credentials.
-			return map[string]any{"error": fmt.Sprintf("%sのチャンネル変更に失敗しました（UCI設定は保存済み）", change.Band), "saved": len(operations) > 0}
+			return map[string]any{"error": "Wi-Fi channel update failed; UCI settings were saved.", "saved": len(operations) > 0}
 		}
 		wifiDriftRecord("wifi_channel_after")
 	}
@@ -684,11 +684,11 @@ func wifiSetChannel(band, channel, apply string) map[string]any {
 		return map[string]any{"error": "channel must be a decimal value from 0 to 233"}
 	}
 	if apply == "0" {
-		return map[string]any{"error": "channelの保留変更はwifi_apply_batchから送信してください"}
+		return map[string]any{"error": "Send pending channel changes with wifi_apply_batch."}
 	}
 	wifiDriftRecord("wifi_channel_before")
 	if err := exec.Command("knsh", "wlan", token, "channel", channel).Run(); err != nil {
-		return map[string]any{"error": fmt.Sprintf("knsh wlan %s channel %sに失敗しました: %v", token, channel, err)}
+		return map[string]any{"error": "The device rejected the Wi-Fi channel command."}
 	}
 	wifiDriftRecord("wifi_channel_after")
 	return finishWifiApply()
@@ -805,7 +805,7 @@ func wifiSetBandwidth(band, width, apply string) map[string]any {
 		}
 	}
 	if device == "" {
-		return map[string]any{"error": fmt.Sprintf("band %q の無線デバイスが見つかりません", band)}
+		return map[string]any{"error": "Wireless device not found for the selected band."}
 	}
 
 	prefix := htmodePrefixRe.FindString(curHtmode)
@@ -821,10 +821,10 @@ func wifiSetBandwidth(band, width, apply string) map[string]any {
 		}
 	}
 	if !valid {
-		return map[string]any{"error": fmt.Sprintf("現在の通信規格では帯域幅 %q は選べません(選択肢: %v)", width, choices)}
+		return map[string]any{"error": "Requested bandwidth is not supported by the current Wi-Fi protocol."}
 	}
 	if prefix == "NOHT" {
-		return map[string]any{"error": "現在の通信規格(レガシー)では帯域幅を変更できません。先に通信規格を変更してください"}
+		return map[string]any{"error": "Legacy Wi-Fi protocols do not support bandwidth changes. Change the Wi-Fi protocol first."}
 	}
 
 	newHtmode := prefix + width
@@ -869,7 +869,7 @@ func wifiSetProtocol(band, protocol, apply string) map[string]any {
 		}
 	}
 	if chosen == nil {
-		return map[string]any{"error": fmt.Sprintf("%s では通信規格 %q は選べません", band, protocol)}
+		return map[string]any{"error": "The selected Wi-Fi protocol is not available on this band."}
 	}
 
 	sections, order, err := parseWireless()
@@ -885,7 +885,7 @@ func wifiSetProtocol(band, protocol, apply string) map[string]any {
 		}
 	}
 	if device == "" {
-		return map[string]any{"error": fmt.Sprintf("band %q の無線デバイスが見つかりません", band)}
+		return map[string]any{"error": "Wireless device not found for the selected band."}
 	}
 
 	var newHtmode, coex string

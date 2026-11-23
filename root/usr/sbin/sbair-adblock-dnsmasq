@@ -1,7 +1,20 @@
 #!/bin/sh
 # SPDX-License-Identifier: MIT
-# Keep DNAT fail-closed if the dedicated dnsmasq exits unexpectedly.
-/usr/sbin/dnsmasq -C /etc/sbair/adblock-dnsmasq.conf -k
+# Forward procd's stop signal so a restart releases port 5300.
+stop_dnsmasq() {
+	trap '' TERM INT
+	[ -z "${dnsmasq_pid:-}" ] || kill -TERM "$dnsmasq_pid" 2>/dev/null || true
+	[ -z "${dnsmasq_pid:-}" ] || wait "$dnsmasq_pid" 2>/dev/null || true
+	/usr/bin/sbair-modem adblock-stop >/dev/null 2>&1 || true
+	exit 0
+}
+
+trap stop_dnsmasq TERM INT
+/usr/sbin/dnsmasq -C /etc/sbair/adblock-dnsmasq.conf -k &
+dnsmasq_pid=$!
+wait "$dnsmasq_pid"
 status=$?
+trap - TERM INT
+# If dnsmasq exits unexpectedly, restore normal DNS before procd respawns it.
 /usr/bin/sbair-modem adblock-stop >/dev/null 2>&1 || true
 exit "$status"

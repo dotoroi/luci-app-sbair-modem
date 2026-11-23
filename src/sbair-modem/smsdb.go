@@ -120,18 +120,18 @@ func openSMSDB() (*sql.DB, error) {
 	// default and UCI-selected locations use the same root-only parent and
 	// regular-file/no-symlink checks.
 	if err := ensurePrivateDir(filepath.Dir(path)); err != nil {
-		return nil, fmt.Errorf("SMSデータベースの親ディレクトリを保護できません: %w", err)
+		return nil, fmt.Errorf("Unable to secure the SMS database parent directory: %w", err)
 	}
 	file, err := secureRuntimePath(path, 0600)
 	if err != nil {
-		return nil, fmt.Errorf("SMSデータベースを安全に開けません: %w", err)
+		return nil, fmt.Errorf("Unable to securely open the SMS database: %w", err)
 	}
 	if info, statErr := file.Stat(); statErr != nil {
 		_ = file.Close()
 		return nil, statErr
 	} else if uid, ok := fileOwnerUID(info); ok && int(uid) != os.Getuid() {
 		_ = file.Close()
-		return nil, fmt.Errorf("SMSデータベースの所有者uid=%dが現在のuidと異なります", uid)
+		return nil, fmt.Errorf("SMS database owner does not match the current user.")
 	}
 	if err := file.Close(); err != nil {
 		return nil, err
@@ -199,13 +199,13 @@ func secureSQLiteSidecars(path string) error {
 			continue
 		}
 		if err != nil {
-			return fmt.Errorf("SQLite sidecar %sを確認できません: %w", name, err)
+			return fmt.Errorf("Unable to inspect SQLite sidecar: %w", err)
 		}
 		if info.Mode()&os.ModeSymlink != 0 || !info.Mode().IsRegular() {
-			return fmt.Errorf("SQLite sidecar %sは通常ファイルではありません", name)
+			return fmt.Errorf("SQLite sidecar is not a regular file.")
 		}
 		if err := secureExistingRuntimeFile(name, 0600); err != nil {
-			return fmt.Errorf("SQLite sidecar %sの権限を保護できません: %w", name, err)
+			return fmt.Errorf("Unable to secure SQLite sidecar permissions: %w", err)
 		}
 	}
 	return nil
@@ -218,7 +218,7 @@ func secureSQLiteSidecars(path string) error {
 func smsImport(ch *ATChannel) map[string]any {
 	iccid := currentICCID(ch)
 	if iccid == "" {
-		return map[string]any{"error": "SIM の ICCID を読めません。"}
+		return map[string]any{"error": "Unable to read the SIM ICCID."}
 	}
 	number := currentNumber(ch)
 
@@ -229,7 +229,7 @@ func smsImport(ch *ATChannel) map[string]any {
 
 	db, err := openSMSDB()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("データベースを開けません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to open the SMS database: %v", err)}
 	}
 	defer db.Close()
 
@@ -240,7 +240,7 @@ func smsImport(ch *ATChannel) map[string]any {
 			last_seen = excluded.last_seen,
 			number    = COALESCE(NULLIF(excluded.number,''), sim.number)`,
 		iccid, number, now, now); err != nil {
-		return map[string]any{"error": fmt.Sprintf("SIM を記録できません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to record the SIM: %v", err)}
 	}
 
 	added := 0
@@ -260,7 +260,7 @@ func smsImport(ch *ATChannel) map[string]any {
 			m.Parts, strings.Join(missing, ","), m.Hash, now,
 			strings.Join(m.raw, "|"), m.Hash)
 		if err != nil {
-			return map[string]any{"error": fmt.Sprintf("保存できません: %v", err)}
+			return map[string]any{"error": fmt.Sprintf("Unable to save the message: %v", err)}
 		}
 		if n, _ := res.RowsAffected(); n > 0 {
 			added++
@@ -272,7 +272,7 @@ func smsImport(ch *ATChannel) map[string]any {
 		if _, err := db.Exec(`UPDATE message SET raw = ?
 			WHERE hash = ? AND (raw IS NULL OR raw = '')`,
 			strings.Join(m.raw, "|"), m.Hash); err != nil {
-			return map[string]any{"error": fmt.Sprintf("保存できません: %v", err)}
+			return map[string]any{"error": fmt.Sprintf("Unable to save the message: %v", err)}
 		}
 	}
 	out := map[string]any{"result": "ok", "iccid": iccid, "number": number,
@@ -290,7 +290,7 @@ func smsImport(ch *ATChannel) map[string]any {
 func smsSIMs() map[string]any {
 	db, err := openSMSDB()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("データベースを開けません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to open the SMS database: %v", err)}
 	}
 	defer db.Close()
 
@@ -300,7 +300,7 @@ func smsSIMs() map[string]any {
 		(SELECT COUNT(*) FROM message m WHERE m.iccid = s.iccid AND m.unread = 1)
 		FROM sim s ORDER BY s.last_seen DESC`)
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("読み出せません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to read from the SMS database: %v", err)}
 	}
 	defer rows.Close()
 
@@ -327,21 +327,21 @@ func smsSIMs() map[string]any {
 // smsMessages returns the stored messages of one SIM, newest first.
 func smsMessages(iccid string, limit int) map[string]any {
 	if strings.TrimSpace(iccid) == "" {
-		return map[string]any{"error": "ICCID が指定されていません。"}
+		return map[string]any{"error": "ICCID is required."}
 	}
 	if limit <= 0 || limit > 1000 {
 		limit = 200
 	}
 	db, err := openSMSDB()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("データベースを開けません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to open the SMS database: %v", err)}
 	}
 	defer db.Close()
 
 	rows, err := db.Query(`SELECT sender, received, tz_offset, body, unread, parts, missing, hash
 		FROM message WHERE iccid = ? ORDER BY received DESC, id DESC LIMIT ?`, iccid, limit)
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("読み出せません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to read from the SMS database: %v", err)}
 	}
 	defer rows.Close()
 
@@ -403,18 +403,18 @@ func currentNumber(ch *ATChannel) string {
 // 記録するので、少なくとも画面には二度と出ない。
 func smsDelete(ch *ATChannel, hash string) map[string]any {
 	if strings.TrimSpace(hash) == "" {
-		return map[string]any{"error": "hash が指定されていません。"}
+		return map[string]any{"error": "Message hash is required."}
 	}
 	db, err := openSMSDB()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("データベースを開けません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to open the SMS database: %v", err)}
 	}
 	defer db.Close()
 
 	var raw string
 	if err := db.QueryRow(`SELECT COALESCE(raw,'') FROM message WHERE hash = ?`, hash).
 		Scan(&raw); err != nil {
-		return map[string]any{"error": "そのメッセージは保管庫にありません。"}
+		return map[string]any{"error": "Message was not found in the archive."}
 	}
 	return finishDelete(db, ch, map[string]bool{hash: true}, rawSet([]string{raw}))
 }
@@ -422,17 +422,17 @@ func smsDelete(ch *ATChannel, hash string) map[string]any {
 // smsPurge removes every stored message of one SIM, and their modem copies.
 func smsPurge(ch *ATChannel, iccid string) map[string]any {
 	if strings.TrimSpace(iccid) == "" {
-		return map[string]any{"error": "ICCID が指定されていません。"}
+		return map[string]any{"error": "ICCID is required."}
 	}
 	db, err := openSMSDB()
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("データベースを開けません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to open the SMS database: %v", err)}
 	}
 	defer db.Close()
 
 	rows, err := db.Query(`SELECT hash, COALESCE(raw,'') FROM message WHERE iccid = ?`, iccid)
 	if err != nil {
-		return map[string]any{"error": fmt.Sprintf("読み出せません: %v", err)}
+		return map[string]any{"error": fmt.Sprintf("Unable to read from the SMS database: %v", err)}
 	}
 	hashes := map[string]bool{}
 	var raws []string
@@ -510,10 +510,10 @@ func finishDelete(db *sql.DB, ch *ATChannel, hashes map[string]bool, raws map[st
 	deleted := 0
 	for h := range hashes {
 		if _, err := db.Exec(`DELETE FROM message WHERE hash = ?`, h); err != nil {
-			return map[string]any{"error": fmt.Sprintf("消せません: %v", err)}
+			return map[string]any{"error": fmt.Sprintf("Unable to delete the message: %v", err)}
 		}
 		if _, err := db.Exec(`INSERT OR IGNORE INTO deleted(hash, at) VALUES(?,?)`, h, now); err != nil {
-			return map[string]any{"error": fmt.Sprintf("消せません: %v", err)}
+			return map[string]any{"error": fmt.Sprintf("Unable to delete the message: %v", err)}
 		}
 		deleted++
 	}

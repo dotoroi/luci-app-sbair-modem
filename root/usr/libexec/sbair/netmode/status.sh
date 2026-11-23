@@ -114,12 +114,12 @@ show_config() {
 }
 
 show_status() {
-	local mode configured_mode managed proto address fallback_active_value fallback_conflict_value configured udp67 guard route members member_count health warnings repair_count repair_last pending_id pending_mode deadline remaining cellular_iface bridge_up_value
+	local mode configured_mode managed proto address fallback_active_value fallback_conflict_value configured udp67 guard route members member_count health warnings repair_count repair_last pending_id pending_mode deadline remaining cellular_iface bridge_up_value ethwan_proto ethwan_device ethwan_address ethwan_link ethwan_route vlan3 vlan1
 	ensure_config
 	static_resolution_reset
 	warnings=
 	configured_mode=$(get sbair.bridge.mode)
-	[ "$configured_mode" = ap ] || configured_mode=sim
+	[ "$configured_mode" = ap ] || [ "$configured_mode" = ethwan ] || [ "$configured_mode" = vlanwan ] || configured_mode=sim
 	managed=$(get sbair.bridge.managed)
 	[ "$managed" = 1 ] || managed=0
 	mode=$configured_mode
@@ -182,12 +182,55 @@ show_status() {
 				add_warning '管理IPを取得できていません'; health=warn
 			fi
 		fi
+	elif [ "$configured_mode" = ethwan ]; then
+		[ "$(get network.wan.proto)" = dhcp ] && [ "$(get network.wan.device)" = eth1 ] || { add_warning '유선 WAN이 eth1/DHCP로 구성되지 않았습니다'; health=danger; }
+		[ "$(get dhcp.lan.ignore)" != 1 ] || { add_warning '유선 라우터 모드에서 LAN DHCP 서버가 꺼져 있습니다'; health=danger; }
+		[ "$(get network.lan.proto)" = static ] || { add_warning 'LAN 사설 주소가 고정 설정이 아닙니다'; health=danger; }
+		[ "$guard" -eq 0 ] || { add_warning '유선 라우터 모드인데 DHCP packet guard가 남아 있습니다'; health=danger; }
+		[ "$route" -eq 0 ] || { add_warning '셀룰러 기본 경로가 남아 있습니다'; health=warn; }
+		bridge_up || { add_warning 'br-lan이 중지되어 있습니다'; health=danger; }
+	elif [ "$configured_mode" = vlanwan ]; then
+		[ "$(get network.ethernetwan.proto)" = dhcp ] || { add_warning 'ethernetwan이 DHCP 클라이언트가 아닙니다'; health=danger; }
+		[ "$(get network.ethernetwan.device)" = eth0.3 ] || { add_warning 'ethernetwan이 eth0.3에 연결되지 않았습니다'; health=danger; }
+		[ "$(get dhcp.lan.ignore)" != 1 ] || { add_warning 'VLAN WAN 라우터 모드에서 LAN DHCP가 꺼져 있습니다'; health=danger; }
+		[ "$(get network.lan.proto)" = static ] || { add_warning 'LAN 사설 주소가 고정 설정이 아닙니다'; health=danger; }
+		[ "$guard" -eq 0 ] || { add_warning 'VLAN WAN 라우터 모드인데 DHCP packet guard가 남아 있습니다'; health=danger; }
+		bridge_up || { add_warning 'br-lan이 중지되어 있습니다'; health=danger; }
 	else
 		[ "$(get dhcp.lan.ignore)" = 1 ] && { add_warning 'SIMルーターモードなのにDHCPが停止しています'; health=danger; }
 		[ "$guard" -eq 0 ] || { add_warning 'SIMルーターモードなのにDHCP packet guardが残っています'; health=danger; }
 	fi
 	cellular_iface=$(get network.wan.device)
 	[ "$(get network.wan.proto)" = ql_datacall ] || cellular_iface=
+	ethwan_proto=$(get network.wan.proto)
+	ethwan_device=$(get network.wan.device)
+	ethwan_address=$(ip -4 -o addr show dev eth1 2>/dev/null | awk 'NR==1 {split($4,p,"/"); print p[1]}')
+	ethwan_link=$(cat /sys/class/net/eth1/carrier 2>/dev/null || printf unknown)
+	ethwan_route=0
+	ip route show default dev eth1 2>/dev/null | grep -q '^default' && ethwan_route=1
+	if [ "$managed" = 1 ] && [ "$configured_mode" = vlanwan ]; then
+		ethwan_proto=$(get network.ethernetwan.proto)
+		ethwan_device=$(get network.ethernetwan.device)
+		[ -n "$ethwan_device" ] || ethwan_device=$(get network.ethernetwan.ifname)
+		ethwan_address=$(ip -4 -o addr show dev eth0.3 2>/dev/null | awk 'NR==1 {split($4,p,"/"); print p[1]}')
+		ethwan_link=$(cat /sys/class/net/eth0.3/carrier 2>/dev/null || cat /sys/class/net/eth0/carrier 2>/dev/null || printf unknown)
+		ethwan_route=0
+		ip route show default dev eth0.3 2>/dev/null | grep -q '^default' && ethwan_route=1
+		vlan3=$(find_switch_vlan 3 2>/dev/null || true)
+		[ -n "$vlan3" ] || [ "$(get network.ethwan_vlan.vlan)" = 3 ] || { add_warning 'switch0 VLAN 3 항목이 없습니다'; health=danger; }
+		vlan1=$(find_switch_vlan 1 2>/dev/null || true)
+		[ -z "$vlan1" ] || case " $(get "network.$vlan1.ports") " in *' 1 '*) add_warning 'VLAN 1에도 스위치 포트 1이 남아 있습니다'; health=danger;; esac
+	fi
+	if [ "$managed" = 1 ] && [ "$configured_mode" = ethwan ]; then
+		if [ "$ethwan_link" != 1 ]; then add_warning 'eth1 링크가 연결되지 않았습니다'; [ "$health" = ok ] && health=warn; fi
+		if [ -z "$ethwan_address" ]; then add_warning 'eth1에서 DHCP 주소를 받지 못했습니다'; [ "$health" = ok ] && health=warn; fi
+		if [ "$ethwan_route" != 1 ]; then add_warning 'eth1 기본 경로를 확인할 수 없습니다'; [ "$health" = ok ] && health=warn; fi
+	fi
+	if [ "$managed" = 1 ] && [ "$configured_mode" = vlanwan ]; then
+		[ -e /sys/class/net/eth0.3 ] || { add_warning 'eth0.3 인터페이스가 아직 생성되지 않았습니다'; health=danger; }
+		[ -n "$ethwan_address" ] || { add_warning 'eth0.3에서 DHCP 주소를 받지 못했습니다'; [ "$health" = ok ] && health=warn; }
+		[ "$ethwan_route" = 1 ] || { add_warning 'ethernetwan 기본 경로가 없습니다'; [ "$health" = ok ] && health=warn; }
+	fi
 	bridge_up_value=0
 	bridge_up && bridge_up_value=1
 	repair_count=0
@@ -208,4 +251,6 @@ show_status() {
 		"$BRIDGE" "$bridge_up_value" "$members" "$member_count" \
 		"$cellular_iface" "$route" "$route" "$(wifi_mlo)" "$(get knos.network.bandsteering)" "$(wifi_band ra0 2.4G)" "$(wifi_band rai0 5G)" "$(wifi_band rax0 6G)" \
 		"$repair_last" "$repair_count" "$pending_id" "$pending_mode" "$remaining" "$warnings"
+	printf 'ethernet_wan.proto=%s\nethernet_wan.device=%s\nethernet_wan.address=%s\nethernet_wan.link=%s\nethernet_wan.default_route=%s\n' \
+		"$ethwan_proto" "$ethwan_device" "$ethwan_address" "$ethwan_link" "$ethwan_route"
 }

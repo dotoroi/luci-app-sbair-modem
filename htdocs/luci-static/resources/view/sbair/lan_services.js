@@ -20,9 +20,9 @@ function value(v) {
 
 function onOff(v) {
 	if (v === true || v === 1 || v === '1' || v === 'running' || v === 'enabled')
-		return '有効 / 稼働中';
+		return _('Enabled / running');
 	if (v === false || v === 0 || v === '0' || v === 'stopped' || v === 'disabled')
-		return '無効 / 停止';
+		return _('Disabled / stopped');
 	return value(v);
 }
 
@@ -46,45 +46,45 @@ function render(data, onSet) {
 
 	var d = data.dhcp_server || {};
 	var enabled = d.enabled === true || d.enabled === 1 || d.enabled === '1';
-	return [ sbair.section('LAN DHCPサーバー', [
-		E('p', { 'style': 'opacity:.8' }, 'Air 6からLANクライアントへのIP配布を管理します。'),
+	return [ sbair.section(_('LAN DHCP server'), [
+		E('p', { 'style': 'opacity:.8' }, _('Manage IP addresses assigned by Air 6 to LAN clients.')),
 		E('p', {}, [
-			'この設定はAir 6がLAN端末へIPを配る「LAN DHCPサーバー」です。',
+			_('This setting controls the LAN DHCP server that assigns IP addresses to LAN devices.'),
 			E('br'),
-			'Air 6自身が親ルーターから管理IPを取得する「DHCPクライアント設定」には影響しません。'
+			_('This does not affect the DHCP client setting Air 6 uses to obtain its management IP from the upstream router.')
 		]),
 		statusTable([
-			[ 'LAN DHCPサーバー', onOff(enabled) ],
+			[ _('LAN DHCP server'), onOff(enabled) ],
 			[ 'dhcp.lan.ignore', value(d.uci_ignore) ],
 			[ 'UDP/67', onOff(d.udp67_listening) + ' / ' + value(d.udp67_scope) ],
 			[ 'dnsmasq', value(d.dnsmasq) ],
 			[ 'DNS :53', onOff(d.port53_listening) + ' / TCP: ' + value(d.port53_tcp_scope) + ' / UDP: ' + value(d.port53_udp_scope) ],
 			[ 'odhcpd', value(d.odhcpd) ],
 			[ 'RA / DHCPv6 / NDP', value(d.ra) + ' / ' + value(d.dhcpv6) + ' / ' + value(d.ndp) ],
-			[ '管理元', d.owner === 'netmode-ap' ? '接続モード（AP / Bridge）' : '手動' ],
-			[ 'DHCP packet guard', onOff(d.guard_active) ],
-			[ 'Safe Apply pending', onOff(d.pending) ]
+			[ _('Managed by'), d.owner === 'netmode-ap' ? _('Network mode (AP / Bridge)') : _('Manual') ],
+			[ _("DHCP packet guard"), onOff(d.guard_active) ],
+			[ _("Safe Apply pending"), onOff(d.pending) ]
 		]),
 		E('div', { 'class': 'sbair-button-group', 'style': 'margin-top:.75em' }, [
-			actionButton('DHCPサーバーを無効化', false, function() {
-				if (confirm('LAN端末へのDHCPサーバーを無効化します。DHCPをAir 6に依存する端末はIPを更新できなくなる場合があります。続行しますか?'))
+			actionButton(_('Disable DHCP server'), false, function() {
+				if (confirm(_('Disable DHCP for LAN clients? Devices relying on Air 6 may be unable to renew their IP addresses. Continue?')))
 					onSet(false);
 			}),
-			actionButton('DHCPサーバーを有効化', true, function() {
-				if (confirm('LAN端末へのDHCPサーバーを有効化します。同一LAN上に別のDHCPサーバーがあると競合する場合があります。続行しますか?'))
+			actionButton(_('Enable DHCP server'), true, function() {
+				if (confirm(_('Enable DHCP for LAN clients? It may conflict with another DHCP server on the same LAN. Continue?')))
 					onSet(true);
 			})
 		]),
 		E('p', { 'class': 'alert-message warning' },
-			'EasyMeshが有効になっている場合、自動的にDHCPが有効に戻ることがあります。本機能ではEasyMeshの設定を自動変更しません。' +
-			'AP / Bridgeとして運用する前に、必要に応じて純正WebUI側でEasyMeshの設定を手動で確認してください。')
+			_('EasyMesh may automatically re-enable DHCP. This feature does not change EasyMesh settings.') +
+			_('Before using AP / Bridge mode, check EasyMesh in the stock web UI if needed.'))
 	]) ];
 }
 
 return view.extend({
 	load: function() {
 		return callStatus().catch(function(err) {
-			return { error: String(err) };
+			return { error: sbair.errorText(err) };
 		});
 	},
 
@@ -98,21 +98,21 @@ return view.extend({
 				self.data = result || {};
 				dom.content(container, render(self.data, change));
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'danger');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 			});
 		}
 
 		function change(enabled) {
 			return callDHCPServer(enabled).then(function(result) {
 				if (result && result.error) {
-					ui.addNotification(null, E('p', {}, result.error), 'danger');
+					ui.addNotification(null, E('p', {}, sbair.errorText(result.error)), 'danger');
 					return;
 				}
 				if (result && result.warning)
 					ui.addNotification(null, E('p', {}, result.warning), 'warning');
 				return reload();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'danger');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 			});
 		}
 
@@ -122,7 +122,7 @@ return view.extend({
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral',
 					'click': reload
-				}, '再読み込み')
+				}, _('Reload'))
 			]),
 			container
 		]);

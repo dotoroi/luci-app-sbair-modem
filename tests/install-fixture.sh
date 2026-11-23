@@ -46,13 +46,28 @@ for path in \
 	[ -f "$rootfs$path" ] || { echo "missing $path" >&2; exit 1; }
 done
 
-# An exact historical Floop3 helper is still app-owned and may be updated.
+sha256() {
+	if command -v sha256sum >/dev/null 2>&1; then
+		sha256sum "$1" | awk '{print $1}'
+	else
+		shasum -a 256 "$1" | awk '{print $1}'
+	fi
+}
+
+# The router's existing helper is byte-for-byte the published main source
+# revision (3f279b1), so the exact hash must be recognized as app-owned and
+# upgraded. Similar-looking unknown files below must still fail closed.
 old_rootfs="$tmp/old-rootfs"
 mkdir -p "$old_rootfs/usr/sbin"
-legacy_commit=$(git rev-parse HEAD^)
-git show "$legacy_commit:root/usr/sbin/sbair-netmode" > "$old_rootfs/usr/sbin/sbair-netmode"
-sh "$repo/install.sh" "$old_rootfs" >/dev/null
-sh "$old_rootfs/usr/sbin/sbair-netmode" version | grep -q '^implementation=luci-app-sbair-modem$'
+git show '3f279b1c4084d49a8189396cad5ffc4d29972f5c:root/usr/sbin/sbair-netmode' > "$old_rootfs/usr/sbin/sbair-netmode"
+old_before=$(sha256 "$old_rootfs/usr/sbin/sbair-netmode")
+sh "$repo/install.sh" "$old_rootfs" >"$tmp/old-install.out" 2>&1
+old_after=$(sha256 "$old_rootfs/usr/sbin/sbair-netmode")
+candidate_hash=$(sha256 "$repo/root/usr/sbin/sbair-netmode")
+[ "$old_before" != "$old_after" ]
+[ "$old_after" = "$candidate_hash" ]
+[ -e "$old_rootfs/usr/bin/sbair-modem" ]
+grep -q 'APP_OWNED_OLD' "$tmp/old-install.out"
 
 # An unknown existing implementation must remain byte-for-byte untouched and
 # must stop before the installer creates or copies any other app file.
@@ -60,12 +75,12 @@ foreign_rootfs="$tmp/foreign-rootfs"
 mkdir -p "$foreign_rootfs/usr/sbin"
 printf '%s\n' '#!/bin/sh' 'echo foreign' > "$foreign_rootfs/usr/sbin/sbair-netmode"
 chmod 755 "$foreign_rootfs/usr/sbin/sbair-netmode"
-foreign_before=$(shasum -a 256 "$foreign_rootfs/usr/sbin/sbair-netmode" | awk '{print $1}')
+foreign_before=$(sha256 "$foreign_rootfs/usr/sbin/sbair-netmode")
 if sh "$repo/install.sh" "$foreign_rootfs" >"$tmp/foreign-install.out" 2>&1; then
 	echo 'unknown foreign sbair-netmode was overwritten' >&2
 	exit 1
 fi
-foreign_after=$(shasum -a 256 "$foreign_rootfs/usr/sbin/sbair-netmode" | awk '{print $1}')
+foreign_after=$(sha256 "$foreign_rootfs/usr/sbin/sbair-netmode")
 [ "$foreign_before" = "$foreign_after" ]
 [ ! -e "$foreign_rootfs/usr/bin/sbair-modem" ]
 grep -q '未知の外部実装' "$tmp/foreign-install.out"
@@ -75,23 +90,27 @@ grep -q '未知の外部実装' "$tmp/foreign-install.out"
 [ ! -e "$rootfs/usr/lib/sbair/usb-nic/t6a_usb_ncm_65532_candidate_v1.ko" ]
 [ ! -e "$rootfs/etc/sbair/usb-nic/profile" ]
 
-mode_of() {
-	if mode=$(stat -c '%a' "$1" 2>/dev/null); then
-		printf '%s\n' "$mode"
-		return 0
-	fi
-	stat -f '%Lp' "$1"
-}
-
-[ "$(mode_of "$rootfs/etc/sbair")" = 700 ]
-[ "$(mode_of "$rootfs/etc/sbair/adblock-dnsmasq.conf")" = 600 ]
-[ "$(readlink "$rootfs/etc/rc.d/S90sbair-adblock")" = ../init.d/sbair-adblock ]
-[ "$(readlink "$rootfs/etc/rc.d/S91sbair-portal")" = ../init.d/sbair-portal ]
-[ "$(readlink "$rootfs/etc/rc.d/K10sbair-adblock")" = ../init.d/sbair-adblock ]
-[ "$(readlink "$rootfs/etc/rc.d/K09sbair-portal")" = ../init.d/sbair-portal ]
-[ "$(readlink "$rootfs/etc/rc.d/S95sbair-apn")" = ../init.d/sbair-apn ]
-[ "$(readlink "$rootfs/etc/rc.d/S99zzzzz_air6_ssh_watchdog")" = ../init.d/zzzzz_air6_ssh_watchdog ]
-[ "$(readlink "$rootfs/etc/rc.d/K01zzzzz_air6_ssh_watchdog")" = ../init.d/zzzzz_air6_ssh_watchdog ]
+case "$(uname -s)" in
+	MINGW*|MSYS*|CYGWIN*) echo 'install-fixture: skipping POSIX mode-bit and symlink-target assertions on Windows filesystem' ;;
+	*)
+		mode_of() {
+			if mode=$(stat -c '%a' "$1" 2>/dev/null); then
+				printf '%s\n' "$mode"
+				return 0
+			fi
+			stat -f '%Lp' "$1"
+		}
+		[ "$(mode_of "$rootfs/etc/sbair")" = 700 ]
+		[ "$(mode_of "$rootfs/etc/sbair/adblock-dnsmasq.conf")" = 600 ]
+		[ "$(readlink "$rootfs/etc/rc.d/S90sbair-adblock")" = ../init.d/sbair-adblock ]
+		[ "$(readlink "$rootfs/etc/rc.d/S91sbair-portal")" = ../init.d/sbair-portal ]
+		[ "$(readlink "$rootfs/etc/rc.d/K10sbair-adblock")" = ../init.d/sbair-adblock ]
+		[ "$(readlink "$rootfs/etc/rc.d/K09sbair-portal")" = ../init.d/sbair-portal ]
+		[ "$(readlink "$rootfs/etc/rc.d/S95sbair-apn")" = ../init.d/sbair-apn ]
+		[ "$(readlink "$rootfs/etc/rc.d/S99zzzzz_air6_ssh_watchdog")" = ../init.d/zzzzz_air6_ssh_watchdog ]
+		[ "$(readlink "$rootfs/etc/rc.d/K01zzzzz_air6_ssh_watchdog")" = ../init.d/zzzzz_air6_ssh_watchdog ]
+		;;
+esac
 [ -x "$rootfs/usr/sbin/air6-band-restore" ]
 [ -x "$rootfs/usr/bin/air6-ssh-watchdog" ]
 [ -x "$rootfs/etc/init.d/zzzzz_air6_ssh_watchdog" ]
@@ -109,9 +128,10 @@ grep -q 'wifi_txpower_max' "$repo/src/sbair-modem/rpcd.go"
 grep -q 'wifi_txpower_default' "$repo/src/sbair-modem/rpcd.go"
 grep -q 'uci.*delete.*txpower' "$repo/src/sbair-modem/wifi.go"
 grep -q 'regulatory_settings_kept' "$repo/src/sbair-modem/wifi.go"
-grep -q '全てのネットワーク接続が失われ' "$repo/htdocs/luci-static/resources/tools/sbair.js"
-grep -q 'Wi-Fiやネットワーク設定の切り替えや設定変更' "$repo/htdocs/luci-static/resources/tools/sbair.js"
-grep -q '接続モードの切り替えや設定変更' "$repo/htdocs/luci-static/resources/tools/sbair.js"
+grep -Fq '_("If you switch or change Wi-Fi or network settings' "$repo/htdocs/luci-static/resources/tools/sbair.js"
+grep -Fq '_("If you switch connection modes or change settings' "$repo/htdocs/luci-static/resources/tools/sbair.js"
+grep -Fq 'msgstr "Wi-Fiやネットワークの設定を切り替えたり変更したりすると' "$repo/po/ja/luci-app-sbair-modem.po"
+grep -Fq 'msgstr "接続モードを切り替えたり設定を変更したりすると' "$repo/po/ja/luci-app-sbair-modem.po"
 grep -q 'uci.*sbair.wifi_drift.enabled.*= 1' "$repo/root/etc/init.d/sbair-wifidrift"
 
 # Network-mode mutation remains owned by the target helper; Go only invokes it

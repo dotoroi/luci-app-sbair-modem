@@ -7,7 +7,7 @@ CR=$(printf '\r')
 check_file() {
 	file=$1
 	if LC_ALL=C grep -Fq "$CR" "$file"; then
-		echo "!! CR character found in shell input: $file" >&2
+		echo "!! CR character found in a file that requires LF: $file" >&2
 		return 1
 	fi
 }
@@ -15,6 +15,7 @@ check_file() {
 for file in \
 	"$SELF/install.sh" "$SELF/build.sh" \
 	"$SELF"/tools/*.sh "$SELF"/extras/*/*.sh \
+	"$SELF"/extras/usb-nic/driver.lock \
 	"$SELF"/root/etc/init.d/* \
 	"$SELF"/root/etc/uci-defaults/* \
 	"$SELF"/root/etc/udhcpc.user.d/* \

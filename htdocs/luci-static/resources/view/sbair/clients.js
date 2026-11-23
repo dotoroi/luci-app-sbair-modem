@@ -28,7 +28,7 @@ var bandLabel = { '2.4G': '2.4GHz', '5G': '5GHz', '6G': '6GHz' };
 
 function linkLabel(link) {
 	if (link === 'wired')
-		return '有線';
+		return _("cable");
 	return bandLabel[link] || link || '-';
 }
 
@@ -56,11 +56,11 @@ function deviceCell(c) {
 }
 
 var columns = [
-	{ key: 'device', label: '端末' },
-	{ key: 'ip', label: 'IPアドレス', numeric: true },
-	{ key: 'link', label: '接続' },
-	{ key: 'note', label: 'メモ' },
-	{ key: 'adblock', label: '広告ブロック' }
+	{ key: 'device', label: _("terminal") },
+	{ key: 'ip', label: _("IP address"), numeric: true },
+	{ key: 'link', label: _("connection") },
+	{ key: 'note', label: _("reference") },
+	{ key: 'adblock', label: _("ad block") }
 ];
 
 function macKey(mac) {
@@ -90,8 +90,8 @@ function mergeAdblockState(clients, adblockData) {
 
 function loadClientData() {
 	return Promise.all([
-		callClientList().catch(function(err) { return { error: String(err) }; }),
-		callAdblockList().catch(function(err) { return { error: String(err) }; })
+		callClientList().catch(function(err) { return { error: sbair.errorText(err) }; }),
+		callAdblockList().catch(function(err) { return { error: sbair.errorText(err) }; })
 	]).then(function(values) {
 		var clients = values[0] || {};
 		var adblock = values[1] || {};
@@ -143,16 +143,16 @@ function sortClients(list, key, dir) {
 function showPortScanResult(ip, res, onRescan) {
 	var body;
 	if (res.error) {
-		body = E('p', { 'style': 'color:#c00' }, res.error);
+		body = E('p', { 'style': 'color:#c00' }, sbair.errorText(res.error));
 	} else {
 		var open = res.open || [];
-		var scannedNote = res.scanned ? ('(' + res.scanned + 'ポート確認)') : '(よく使う約25ポートのみ確認)';
+		var scannedNote = res.scanned ? ('(' + res.scanned + _("check port)")) : _("(Check only about 25 frequently used ports)");
 		body = !open.length
-			? E('p', {}, '開いているポートは見つかりませんでした' + scannedNote + '。')
+			? E('p', {}, _("No open ports found.") + scannedNote + '。')
 			: sbair.table([ E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, 'ポート'),
-				E('th', { 'class': 'th' }, 'サービス'),
-				E('th', { 'class': 'th' }, 'バナー')
+				E('th', { 'class': 'th' }, _("port")),
+				E('th', { 'class': 'th' }, _("service")),
+				E('th', { 'class': 'th' }, _("banner"))
 			]) ].concat(open.map(function(p) {
 				return E('tr', { 'class': 'tr' }, [
 					E('td', { 'class': 'td left' }, String(p.port)),
@@ -164,40 +164,40 @@ function showPortScanResult(ip, res, onRescan) {
 
 	var rangeInput = E('input', {
 		'class': 'cbi-input-text', 'type': 'text', 'style': 'width:12em',
-		'placeholder': '例: 1-1024,8080'
+		'placeholder': _("Example: 1-1024,8080")
 	});
 	var rescanBtn = E('button', {
 		'class': 'cbi-button cbi-button-action',
 		'click': function() { onRescan(ip, rangeInput.value); }
-	}, '指定範囲でスキャン');
+	}, _("Scan in a specified range"));
 
-	ui.showModal(ip + ' のポートスキャン', [
+	ui.showModal(ip + _("port scan"), [
 		body,
 		E('div', { 'style': 'margin-top:1em;padding-top:.8em;border-top:1px solid #ccc;display:flex;gap:.5em;align-items:center;flex-wrap:wrap' }, [
 			rangeInput,
 			rescanBtn,
-			E('span', { 'style': 'opacity:.7;font-size:.9em' }, '空欄なら次回もよく使う約25ポートのみ(最大4096ポートまで)')
+			E('span', { 'style': 'opacity:.7;font-size:.9em' }, _("If left blank, only about 25 frequently used ports will be used next time (up to a maximum of 4096 ports)."))
 		]),
 		E('div', { 'style': 'text-align:right;margin-top:1em' }, [
-			E('button', { 'class': 'cbi-button', 'click': function() { ui.hideModal(); } }, '閉じる')
+			E('button', { 'class': 'cbi-button', 'click': function() { ui.hideModal(); } }, _("close"))
 		])
 	]);
 }
 
 function adblockControl(c, available, onToggle) {
 	if (!available || c.adblock_known !== true)
-		return E('span', { 'style': 'opacity:.7' }, available ? '状態不明' : '取得失敗');
+		return E('span', { 'style': 'opacity:.7' }, available ? _("Status unknown") : _("acquisition failure"));
 	return E('button', {
 		'class': c.adblock ? 'cbi-button cbi-button-positive' : 'cbi-button cbi-button-neutral',
-		'title': c.adblock ? 'クリックで広告ブロックを無効化' : 'クリックで広告ブロックを有効化',
+		'title': c.adblock ? _("Disable ad blocking with a click") : _("Enable ad blocking with a click"),
 		'disabled': (!c.mac || c.mac === '-') ? '' : null,
 		'click': function() { onToggle(c.mac, !c.adblock); }
-	}, c.adblock ? '有効（無効化）' : '無効（有効化）');
+	}, c.adblock ? _("Enable (Disable)") : _("Disable (Enable)"));
 }
 
 function clientTable(list, sortKey, sortDir, onSort, onSaveNote, onScan, onDisconnect, adblockAvailable, onToggle) {
 	if (!list || !list.length)
-		return E('p', {}, '接続機器を取得できませんでした(またはまだいません)。');
+		return E('p', {}, _("A connection device cannot be acquired (or does not exist yet)."));
 
 	var head = columns.map(function(c) {
 		var arrow = (c.key === sortKey) ? (sortDir > 0 ? ' ▲' : ' ▼') : '';
@@ -207,7 +207,7 @@ function clientTable(list, sortKey, sortDir, onSort, onSaveNote, onScan, onDisco
 			'click': function() { onSort(c.key); }
 		}, c.label + arrow);
 	});
-	head.push(E('th', { 'class': 'th' }, '操作'));
+	head.push(E('th', { 'class': 'th' }, _("functioning")));
 	var rows = [ E('tr', { 'class': 'tr table-titles' }, head) ];
 
 	sortClients(list, sortKey, sortDir).forEach(function(c) {
@@ -250,13 +250,13 @@ function clientTable(list, sortKey, sortDir, onSort, onSaveNote, onScan, onDisco
 				E('div', { 'class': 'sbair-button-group' }, [
 					E('button', {
 						'class': 'cbi-button cbi-button-action',
-						'title': 'ポートスキャン',
+						'title': _("port scan"),
 						'disabled': (!c.ip || c.ip === '-') ? '' : null,
 						'click': function() { onScan(c.ip, ''); }
 					}, '🔍'),
 					E('button', {
 						'class': 'cbi-button cbi-button-remove',
-						'title': '一時切断(Wi-Fiのみ。恒久ブロックではない)',
+						'title': _("Temporary connection (Wi-Fi only, not a permanent block)"),
 						// 有線接続は切断コマンドの対象外(Wi-Fiクライアントのみ)。
 						// 「一時切断」= knsh経由でAP側からその場でdeauthするだけで、
 						// パスワードを知っていれば端末側からすぐ再接続される。恒久的な
@@ -265,7 +265,7 @@ function clientTable(list, sortKey, sortDir, onSort, onSaveNote, onScan, onDisco
 						// ⏸(一時停止)に変更。「切る」ではなく「今だけ止める」イメージ。
 						'disabled': (c.link === 'wired' || !c.mac || c.mac === '-') ? '' : null,
 						'click': function() {
-							if (confirm((c.name || c.mac) + ' をWi-Fiから一時的に切断します。パスワードを知っていればすぐ再接続されます。よろしいですか?'))
+							if (confirm((c.name || c.mac) + _("Temporarily disconnect your device from Wi-Fi. If you know the password, you will be reconnected immediately. Are you okay?")))
 								onDisconnect(c.mac);
 						}
 					}, '⏸')
@@ -280,17 +280,17 @@ function render(data, opts) {
 	data = data || {};
 	opts = opts || {};
 	var body = [];
-	body.push(sbair.section('接続機器 (' + ((data.clients || []).length) + '台)', [
+	body.push(sbair.section(_("Connection device (") + ((data.clients || []).length) + _("big)"), [
 		E('div', { 'class': 'sbair-table-scroll', 'style': 'overflow-x:auto' }, [
 			clientTable(data.clients, opts.sortKey, opts.sortDir, opts.onSort, opts.onSaveNote, opts.onScan, opts.onDisconnect, data.adblock_available, opts.onToggle)
 		])
 	]));
 	body.push(E('p', { 'style': 'opacity:.8' }, [
-		'広告ブロックは端末のMACアドレス単位で管理します。各端末は管理画面を使わなくても、',
+		_("Advertising blocks are managed per device MAC address. Each terminal does not need to use the management screen."),
 		E('a', { 'href': 'http://' + window.location.hostname + ':8090/', 'target': '_blank' },
 			'http://' + window.location.hostname + ':8090/'),
-		' を開けば、自分の端末だけをログインなしでON/OFFできます。',
-		data.adblock_error ? ' 広告ブロック状態の取得に失敗しました。' : ''
+		_("If you open , you can turn on/off only your own terminal without logging in."),
+		data.adblock_error ? _("I didn't get the ad blocking status.") : ''
 	]));
 	body.push(sbair.errorBox(data.error ? [ data.error ] : null));
 	return body;
@@ -316,7 +316,7 @@ return view.extend({
 			callScanPorts(ip, ports || '').then(function(res) {
 				showPortScanResult(ip, res || {}, onScan);
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'danger');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 			});
 		};
 
@@ -336,37 +336,37 @@ return view.extend({
 				onSaveNote: function(mac, note) {
 					callNoteSet(mac, note).then(function(res) {
 						if (res && res.error) {
-							ui.addNotification(null, E('p', {}, res.error), 'danger');
+							ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'danger');
 							return;
 						}
-						ui.addNotification(null, E('p', {}, 'メモを保存しました。'), 'info');
+						ui.addNotification(null, E('p', {}, _("You have saved your note.")), 'info');
 						return reload();
 					}).catch(function(err) {
-						ui.addNotification(null, E('p', {}, String(err)), 'danger');
+						ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 					});
 				},
 				onToggle: function(mac, enabled) {
 					callAdblockSet(mac, enabled ? '1' : '0').then(function(res) {
 						if (res && res.error) {
-							ui.addNotification(null, E('p', {}, res.error), 'danger');
+							ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'danger');
 							return;
 						}
 						return reload();
 					}).catch(function(err) {
-						ui.addNotification(null, E('p', {}, String(err)), 'danger');
+						ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 					});
 				},
 				onScan: onScan,
 				onDisconnect: function(mac) {
 					callDisconnect(mac).then(function(res) {
 						if (res && res.error) {
-							ui.addNotification(null, E('p', {}, res.error), 'danger');
+							ui.addNotification(null, E('p', {}, sbair.errorText(res.error)), 'danger');
 							return;
 						}
-						ui.addNotification(null, E('p', {}, '切断を要求しました。再接続されるまで少し時間がかかることがあります。'), 'info');
+						ui.addNotification(null, E('p', {}, _("I requested amputation. It may take some time to reconnect.")), 'info');
 						return reload();
 					}).catch(function(err) {
-						ui.addNotification(null, E('p', {}, String(err)), 'danger');
+						ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
 					});
 				}
 			}));
@@ -377,7 +377,7 @@ return view.extend({
 				self.data = res;
 				redraw();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, String(err)), 'warning');
+				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'warning');
 			});
 		};
 
@@ -388,7 +388,7 @@ return view.extend({
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral',
 					'click': ui.createHandlerFn(this, reload)
-				}, '再読み込み')
+				}, _("reload"))
 			]),
 			container
 		]);

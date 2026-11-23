@@ -102,16 +102,18 @@ var rpcRegistry = map[string]rpcMethodSpec{
 	"wifi_drift_restart_test": rpcWriteSpec(map[string]any{}),
 	"system_reboot":           rpcWriteSpec(map[string]any{}),
 	// SIMルータ / 光回線AP化の切替。
-	"netmode_status":        rpcReadSpec(map[string]any{}),
-	"netmode_netdev_status": rpcReadSpec(map[string]any{}),
-	"netmode_get_config":    rpcReadSpec(map[string]any{}),
-	"netmode_set_config":    rpcWriteSpec(map[string]any{"proto": "", "ipaddr": "", "netmask": "", "gateway": "", "dns": "", "fallback_enabled": false, "fallback_ip": "", "fallback_netmask": "", "fallback_timeout": 0, "dhcp_start_ip": "", "dhcp_end_ip": "", "dhcp_leasetime": ""}),
-	"netmode_set":           rpcWriteSpec(map[string]any{"mode": ""}),
-	"netmode_apply":         rpcWriteSpec(map[string]any{"mode": "", "proto": "", "ipaddr": "", "netmask": "", "gateway": "", "dns": "", "fallback_enabled": false, "fallback_ip": "", "fallback_netmask": "", "fallback_timeout": 0, "dhcp_start_ip": "", "dhcp_end_ip": "", "dhcp_leasetime": ""}),
-	"netmode_confirm":       rpcWriteSpec(map[string]any{}),
-	"netmode_rollback":      rpcWriteSpec(map[string]any{}),
-	"netmode_unmanage":      rpcWriteSpec(map[string]any{}),
-	"netmode_repair":        rpcWriteSpec(map[string]any{}),
+	"netmode_status":         rpcReadSpec(map[string]any{}),
+	"netmode_netdev_status":  rpcReadSpec(map[string]any{}),
+	"netmode_usb_lan_add":    rpcWriteSpec(map[string]any{"iface": ""}),
+	"netmode_usb_lan_remove": rpcWriteSpec(map[string]any{"iface": ""}),
+	"netmode_get_config":     rpcReadSpec(map[string]any{}),
+	"netmode_set_config":     rpcWriteSpec(map[string]any{"proto": "", "ipaddr": "", "netmask": "", "gateway": "", "dns": "", "fallback_enabled": false, "fallback_ip": "", "fallback_netmask": "", "fallback_timeout": 0, "dhcp_start_ip": "", "dhcp_end_ip": "", "dhcp_leasetime": ""}),
+	"netmode_set":            rpcWriteSpec(map[string]any{"mode": ""}),
+	"netmode_apply":          rpcWriteSpec(map[string]any{"mode": "", "proto": "", "ipaddr": "", "netmask": "", "gateway": "", "dns": "", "fallback_enabled": false, "fallback_ip": "", "fallback_netmask": "", "fallback_timeout": 0, "dhcp_start_ip": "", "dhcp_end_ip": "", "dhcp_leasetime": ""}),
+	"netmode_confirm":        rpcWriteSpec(map[string]any{}),
+	"netmode_rollback":       rpcWriteSpec(map[string]any{}),
+	"netmode_unmanage":       rpcWriteSpec(map[string]any{}),
+	"netmode_repair":         rpcWriteSpec(map[string]any{}),
 	// Device maintenance. These methods are deliberately separate from the
 	// connection-mode DHCP client controls.
 	"maintenance_status": rpcReadSpec(map[string]any{}),
@@ -129,6 +131,10 @@ var rpcRegistry = map[string]rpcMethodSpec{
 	"wifi_enabled_set":    rpcWriteSpec(map[string]any{"enabled": ""}),
 	"bandsteering_status": rpcReadSpec(map[string]any{}),
 	"bandsteering_set":    rpcWriteSpec(map[string]any{"enabled": ""}),
+	"mlo_status":          rpcReadSpec(map[string]any{}),
+	"mlo_set":             rpcWriteSpec(map[string]any{"enabled": ""}),
+	"mesh_status":         rpcReadSpec(map[string]any{}),
+	"mesh_set":            rpcWriteSpec(map[string]any{"enabled": ""}),
 	"isolation_status":    rpcReadSpec(map[string]any{}),
 	"isolation_set":       rpcWriteSpec(map[string]any{"kind": "", "enabled": ""}),
 	"wifi_11r_status":     rpcReadSpec(map[string]any{}),
@@ -391,6 +397,12 @@ func rpcdCall(method string) int {
 	case "netmode_netdev_status":
 		emit(netdevStatus())
 		return 0
+	case "netmode_usb_lan_add":
+		emit(netmodeUSBLANAdd(in.Iface))
+		return 0
+	case "netmode_usb_lan_remove":
+		emit(netmodeUSBLANRemove(in.Iface))
+		return 0
 	case "usb_status":
 		emit(usbStatus())
 		return 0
@@ -450,6 +462,18 @@ func rpcdCall(method string) int {
 		return 0
 	case "bandsteering_set":
 		emit(bandsteeringSet(in.Enabled.String()))
+		return 0
+	case "mlo_status":
+		emit(mloStatus())
+		return 0
+	case "mlo_set":
+		emit(mloSet(in.Enabled.String()))
+		return 0
+	case "mesh_status":
+		emit(meshStatus())
+		return 0
+	case "mesh_set":
+		emit(meshSet(in.Enabled.String()))
 		return 0
 	case "isolation_status":
 		emit(isolationStatus())
@@ -574,7 +598,7 @@ func simMapping(ch *ATChannel) map[string]any {
 	}
 	v, ok := First(lines, "+ESIMMAP:")
 	if !ok {
-		out["error"] = fmt.Sprintf("AT+ESIMMAP? に +ESIMMAP: がありません: %v", lines)
+		out["error"] = fmt.Sprintf("AT+ESIMMAP? response is missing +ESIMMAP: %v", lines)
 		return out
 	}
 	var n int
