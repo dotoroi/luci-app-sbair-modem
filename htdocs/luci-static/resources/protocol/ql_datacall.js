@@ -7,6 +7,9 @@
 'use strict';
 'require form';
 'require network';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 // ccmni* はデータコールが作る L3 デバイス。単独の interface として
 // 一覧に出さない。

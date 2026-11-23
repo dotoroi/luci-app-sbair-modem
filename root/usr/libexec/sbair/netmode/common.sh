@@ -192,15 +192,15 @@ resolve_static_config() {
 		[ -n "$static_effective_dns" ] && static_effective_dns_source='純正設定を継承'
 	fi
 	if [ -z "$static_effective_ipaddr" ] || ! is_ipv4 "$static_effective_ipaddr"; then
-		static_resolve_error='固定IPを解決できません。明示指定するか、先に純正のnetwork.lan.ipaddrを保存できる状態にしてください'
+		static_resolve_error='Unable to resolve the static IP. Specify it explicitly or save the stock network.lan.ipaddr first.'
 		return 1
 	fi
 	if [ -z "$static_effective_netmask" ] || ! mask_to_prefix "$static_effective_netmask" >/dev/null 2>&1; then
-		static_resolve_error='ネットマスクを解決できません。明示指定するか、先に純正のnetwork.lan.netmaskを保存できる状態にしてください'
+		static_resolve_error='Unable to resolve the netmask. Specify it explicitly or save the stock network.lan.netmask first.'
 		return 1
 	fi
 	[ -z "$static_effective_gateway" ] || is_ipv4 "$static_effective_gateway" || {
-		static_resolve_error='Gateway は有効なIPv4値が必要です'
+		static_resolve_error='The gateway must be a valid IPv4 address.'
 		return 1
 	}
 }
@@ -292,7 +292,7 @@ validate_ap_proto() {
 	mode=$1
 	proto=$2
 	if [ "$mode" = ap ] && [ "$proto" = dhcp ] && ! ap_dhcp_allowed; then
-		printf '%s\n' 'error=APモードのDHCPクライアントは安全フラグで無効化されています。非常に高リスクなため、sbair.bridge.ap_dhcp_enabled=1を明示的に設定してから適用してください'
+		printf '%s\n' 'error=The AP mode DHCP client is disabled for safety. Set sbair.bridge.ap_dhcp_enabled=1 explicitly before applying.'
 		return 1
 	fi
 }

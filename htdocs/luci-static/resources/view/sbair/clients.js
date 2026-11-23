@@ -16,6 +16,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callClientList = rpc.declare({ object: 'sbair', method: 'client_list' });
 var callAdblockList = rpc.declare({ object: 'sbair', method: 'adblock_list' });
@@ -42,7 +45,7 @@ function linkCell(c) {
 
 function deviceCell(c) {
 	var name = c.name || '-';
-	var vendorOS = [ c.vendor, c.os ].filter(function(v) { return v; }).join(' / ');
+	var vendorOS = [ c.vendor, _(c.os) ].filter(function(v) { return v; }).join(' / ');
 	return E('td', { 'class': 'td left' }, [
 		E('div', {
 			'style': 'max-width:14em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden',
@@ -287,7 +290,7 @@ function render(data, opts) {
 	]));
 	body.push(E('p', { 'style': 'opacity:.8' }, [
 		_("Advertising blocks are managed per device MAC address. Each terminal does not need to use the management screen."),
-		E('a', { 'href': 'http://' + window.location.hostname + ':8090/', 'target': '_blank' },
+		E('a', { 'href': 'http://' + window.location.hostname + ':8090/?lang=' + i18n.language, 'target': '_blank' },
 			'http://' + window.location.hostname + ':8090/'),
 		_("If you open , you can turn on/off only your own terminal without logging in."),
 		data.adblock_error ? _("I didn't get the ad blocking status.") : ''

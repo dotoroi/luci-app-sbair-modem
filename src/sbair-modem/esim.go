@@ -197,7 +197,7 @@ func esimStatus(ch *ATChannel) map[string]any {
 	// A profile listing that fails does not make the card unavailable, so it
 	// is reported alongside rather than replacing everything above.
 	if profiles, err := client.ListProfile(nil, nil); err != nil {
-		out["profiles_error"] = fmt.Sprintf("profile を読めません: %v", err)
+		out["profiles_error"] = fmt.Sprintf("Unable to read eSIM profiles: %v", err)
 	} else {
 		list := make([]profileJSON, 0, len(profiles))
 		for _, p := range profiles {

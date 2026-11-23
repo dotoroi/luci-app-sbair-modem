@@ -16,6 +16,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 function translateWifiError(message) {
 	if (String(message).indexOf('pending UCI settings exist') !== -1)

@@ -532,7 +532,7 @@ func rpcdCall(method string) int {
 	ch := NewATChannel(*device)
 	ch.SetTimeout(overviewTimeout)
 	if err := ch.Connect(); err != nil {
-		return rpcdError("モデムに繋がりません: %v", err)
+		return rpcdError("Unable to connect to the modem: %v", err)
 	}
 	defer ch.Disconnect()
 

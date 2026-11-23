@@ -28,10 +28,10 @@ var imsService = []struct {
 	bit  int
 	name string
 }{
-	{1, "音声 (MMTEL)"},
-	{2, "テキスト"},
+	{1, "Voice (MMTEL)"},
+	{2, "Text messaging"},
 	{4, "SMS over IMS"},
-	{8, "ビデオ"},
+	{8, "Video"},
 }
 
 func imsStatus(ch *ATChannel) map[string]any {
@@ -91,9 +91,9 @@ func imsSet(ch *ATChannel, on bool) map[string]any {
 	out["result"] = "ok"
 	if on {
 		// 登録まで 10 秒ほどかかる。押した直後は未登録に見えるのが普通。
-		out["note"] = "有効にしました。登録まで 10〜30 秒かかります。"
+		out["note"] = "Enabled. Registration can take 10 to 30 seconds."
 	} else {
-		out["note"] = "無効にしました。"
+		out["note"] = "Disabled."
 	}
 	return out
 }

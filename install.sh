@@ -34,10 +34,14 @@ fi
 [ -f "$SELF/out/sbair-modem" ] || { echo "!! out/sbair-modem が無い。先に ./build.sh" >&2; exit 1; }
 for lang in ja ko; do
 	[ -s "$SELF/out/i18n/luci-app-sbair-modem.$lang.lmo" ] || {
-		echo "!! $lang 言語カタログがありません。先に PO2LMO または LUCI_ROOT を指定して ./tools/build-i18n.sh を実行してください。" >&2
+		echo "!! Missing $lang LuCI catalog. Run sh ./tools/build-i18n.sh first." >&2
 		exit 1
 	}
 done
+[ -s "$SELF/out/i18n/sbair-i18n.js" ] || {
+	echo '!! Missing Floop3 browser catalog. Run sh ./tools/build-i18n.sh first.' >&2
+	exit 1
+}
 
 preflight_live_air6() {
 	[ "$(id -u)" = 0 ] || { echo '!! 実機への導入にはrootが必要です' >&2; return 1; }
@@ -218,15 +222,6 @@ mkdir -p "$ROOT/usr/bin" \
          "$ROOT/usr/share/sbair" \
          "$ROOT/etc/uci-defaults"
 
-# English is the source locale and needs no LMO file. Require the translated
-# catalogs before installation so the advertised Japanese and Korean choices work.
-mkdir -p "$ROOT/usr/lib/lua/luci/i18n"
-for lang in ja ko; do
-	catalog="$SELF/out/i18n/luci-app-sbair-modem.$lang.lmo"
-	cp "$catalog" "$ROOT/usr/lib/lua/luci/i18n/"
-	chmod 0644 "$ROOT/usr/lib/lua/luci/i18n/$(basename "$catalog")"
-done
-
 put() {   # put <src> <dst> <mode>
 	cp "$1" "$2"
 	chmod "$3" "$2"
@@ -241,13 +236,12 @@ trap 'rm -f "$receipt"' EXIT
 if [ -f "$SELF/release-manifest.json" ]; then
 	put "$SELF/release-manifest.json" "$ROOT/www/luci-static/resources/sbair-release.json" 0644
 fi
-if [ -d "$SELF/out/i18n" ]; then
-	mkdir -p "$ROOT/usr/lib/lua/luci/i18n"
-	for lang in ja ko; do
-		name="luci-app-sbair-modem.$lang.lmo"
-		put "$SELF/out/i18n/$name" "$ROOT/usr/lib/lua/luci/i18n/$name" 0644
-	done
-fi
+mkdir -p "$ROOT/usr/lib/lua/luci/i18n"
+for lang in ja ko; do
+	name="luci-app-sbair-modem.$lang.lmo"
+	put "$SELF/out/i18n/$name" "$ROOT/usr/lib/lua/luci/i18n/$name" 0644
+done
+put "$SELF/out/i18n/sbair-i18n.js" "$ROOT/www/luci-static/resources/tools/sbair-i18n.js" 0644
 
 put "$SELF/out/sbair-modem"             "$ROOT/usr/bin/sbair-modem"          0755
 put "$SELF/root/usr/sbin/sbair-netmode" "$ROOT/usr/sbin/sbair-netmode"       0755

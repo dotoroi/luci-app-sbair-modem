@@ -3504,3 +3504,213 @@ msgstr "モバイルWANのカウンターを読み取れません"
 
 msgid "None"
 msgstr "なし"
+
+msgid "A Safe Apply connection mode change is pending. Confirm or roll it back before retrying."
+msgstr "Safe Applyの接続モード変更が保留中です。完了またはロールバック後に再試行してください。"
+
+msgid "Backup source does not exist: "
+msgstr "バックアップ対象がありません: "
+
+msgid "Unable to create the backup directory: "
+msgstr "バックアップディレクトリを作成できません: "
+
+msgid "Unable to back up the configuration: "
+msgstr "設定バックアップに失敗しました: "
+
+msgid "AP / Bridge mode manages the LAN DHCP server. The server cannot be enabled in AP mode."
+msgstr "接続モード「AP / Bridge」がLAN DHCPサーバーを管理しています。APモード中はDHCPサーバーを有効化できません。"
+
+msgid "Unable to save dhcp.lan.ignore=0."
+msgstr "dhcp.lan.ignore=0 を保存できません"
+
+msgid "Unable to save dhcp.lan.ignore=1."
+msgstr "dhcp.lan.ignore=1 を保存できません"
+
+msgid "Unable to commit DHCP settings."
+msgstr "DHCP設定をcommitできません"
+
+msgid "Unable to restart dnsmasq."
+msgstr "dnsmasqを再起動できません"
+
+msgid "The DHCP server was enabled, but UDP port 67 could not be verified."
+msgstr "DHCPサーバーを有効化しましたが、UDP/67を確認できません。"
+
+msgid "The DHCP server was disabled, but UDP port 67 is still listening."
+msgstr "DHCPサーバーを無効化しましたが、UDP/67がまだ待受中です。"
+
+msgid "Unable to save fota.config.enabled=0."
+msgstr "fota.config.enabled=0 を保存できません"
+
+msgid "Unable to save fota.config.enabled=1."
+msgstr "fota.config.enabled=1 を保存できません"
+
+msgid "Unable to save fota.provision.enabled=0."
+msgstr "fota.provision.enabled=0 を保存できません"
+
+msgid "Unable to save fota.provision.enabled=1."
+msgstr "fota.provision.enabled=1 を保存できません"
+
+msgid "Unable to commit FOTA settings."
+msgstr "FOTA設定をcommitできません"
+
+msgid "Unable to stop kn_fotad."
+msgstr "kn_fotadを停止できません"
+
+msgid "Unable to disable kn_fotad autostart."
+msgstr "kn_fotadの自動起動を無効化できません"
+
+msgid "Unable to enable kn_fotad autostart."
+msgstr "kn_fotadの自動起動を有効化できません"
+
+msgid "kn_fotad restarted after stopping. The respawn setting was preserved."
+msgstr "kn_fotadが停止後も再起動しました。respawn設定は変更していません。"
+
+msgid "Unable to start kn_fotad."
+msgstr "kn_fotadを起動できません"
+
+msgid "kn_fotad was started, but its running state could not be verified."
+msgstr "kn_fotadを起動しましたが、稼働中であることを確認できません。"
+
+msgid "kn_fotad was enabled, but the autostart link could not be verified."
+msgstr "kn_fotadを有効化しましたが、自動起動リンクを確認できません。"
+
+msgid "Unmanaged: existing settings are preserved until you explicitly apply AP / Bridge or SIM router mode."
+msgstr "未管理（既存設定）: AP / BridgeまたはSIMルーターを明示的に適用するまで既存設定を変更しません"
+
+msgid "The AP mode DHCP client is disabled for safety. Switch to a static IP, or secure UART recovery before enabling it again."
+msgstr "APモードのDHCPクライアントは安全フラグで無効化されています。非常に高リスクなため、固定IPへ移行するか、UART復旧手段を確保したうえで明示的に再有効化してください"
+
+msgid "The DHCP server is still enabled."
+msgstr "DHCP設定が停止状態ではありません"
+
+msgid "UDP port 67 is listening, but the guard blocks DHCP replies on br-lan."
+msgstr "システム上のUDP/67は待機中ですが、br-lan向け応答はguardで遮断しています"
+
+msgid "DHCP is listening on UDP port 67, and the br-lan guard could not be verified."
+msgstr "UDP/67でDHCPサーバーが待機中で、br-lan向けguardも確認できません"
+
+msgid "The DHCP packet guard is disabled."
+msgstr "DHCP packet guardが有効ではありません"
+
+msgid "The management IP mode does not match network.lan."
+msgstr "管理IP方式とnetwork.lanが不一致です"
+
+msgid "Cellular WAN is still enabled."
+msgstr "Cellular WANが無効化されていません"
+
+msgid "A default route exists on the cellular WAN."
+msgstr "Cellular側にデフォルトルートがあります"
+
+msgid "br-lan is down."
+msgstr "br-lanが停止しています"
+
+msgid "Unable to verify br-lan members."
+msgstr "br-lanのメンバーを確認できません"
+
+msgid "The fallback IP could not be assigned safely because of a conflict or unavailable ARP probe."
+msgstr "Fallback IPを安全に付与できません（競合またはARP probe未使用）"
+
+msgid "No management IP address was obtained."
+msgstr "管理IPを取得できていません"
+
+msgid "DHCP is disabled in SIM router mode."
+msgstr "SIMルーターモードなのにDHCPが停止しています"
+
+msgid "The DHCP packet guard is still active in SIM router mode."
+msgstr "SIMルーターモードなのにDHCP packet guardが残っています"
+
+msgid "Unable to resolve the static IP. Specify it explicitly or save the stock network.lan.ipaddr first."
+msgstr "固定IPを解決できません。明示指定するか、先に純正のnetwork.lan.ipaddrを保存できる状態にしてください"
+
+msgid "Unable to resolve the netmask. Specify it explicitly or save the stock network.lan.netmask first."
+msgstr "ネットマスクを解決できません。明示指定するか、先に純正のnetwork.lan.netmaskを保存できる状態にしてください"
+
+msgid "The gateway must be a valid IPv4 address."
+msgstr "Gateway は有効なIPv4値が必要です"
+
+msgid "The AP mode DHCP client is disabled for safety. Set sbair.bridge.ap_dhcp_enabled=1 explicitly before applying."
+msgstr "APモードのDHCPクライアントは安全フラグで無効化されています。非常に高リスクなため、sbair.bridge.ap_dhcp_enabled=1を明示的に設定してから適用してください"
+
+msgid "Unable to migrate the AP DHCP settings to a static IP."
+msgstr "AP DHCP設定を固定IPへ移行できません"
+
+msgid "Obtain a management IP other than the fallback address before disabling management."
+msgstr "管理解除の前にFallbackではない管理IPを確立してください"
+
+msgid "Unable to read eSIM profiles: "
+msgstr "profile を読めません: "
+
+msgid "Linux / Unix based"
+msgstr "Linux / Unix 系"
+
+msgid "Network device"
+msgstr "Network系"
+
+msgid "Unknown"
+msgstr "不明"
+
+msgid "Applying the settings briefly disconnects the modem. The previous settings are restored if it does not reconnect."
+msgstr "適用すると数秒だけ電波が切れます。戻らなければ自動で元の設定に巻き戻します。"
+
+msgid "Voice (MMTEL)"
+msgstr "音声 (MMTEL)"
+
+msgid "Text messaging"
+msgstr "テキスト"
+
+msgid "Video"
+msgstr "ビデオ"
+
+msgid "Enabled. Registration can take 10 to 30 seconds."
+msgstr "有効にしました。登録まで 10〜30 秒かかります。"
+
+msgid "Disabled."
+msgstr "無効にしました。"
+
+msgid "Not registered (not searching)"
+msgstr "未登録(検索していない)"
+
+msgid "Registered"
+msgstr "登録済み"
+
+msgid "Not registered (searching)"
+msgstr "未登録(検索中)"
+
+msgid "Registration denied"
+msgstr "登録拒否"
+
+msgid "Registered (roaming)"
+msgstr "登録済み(ローミング)"
+
+msgid "Skipped because the time limit expired: "
+msgstr "時間切れのため実行しませんでした: "
+
+msgid "r8152 (reference)"
+msgstr "r8152（参照）"
+
+msgid "Needs verification"
+msgstr "要確認"
+
+msgid "USB driver management is read-only."
+msgstr "USB driver操作は読み取り専用です"
+
+msgid "No driver bundle matches the Air 6 kernel."
+msgstr "Air 6向けのkernel-matched driver bundleがありません"
+
+msgid "The device could not be verified as USB Ethernet."
+msgstr "USB Ethernetであることを確定できないため操作できません"
+
+msgid "This takes 40 to 60 seconds. The modem disconnects to reload the SIM."
+msgstr "40〜60 秒かかります。SIM を読み直すため電波を止めます。"
+
+msgid "Unable to connect to the modem: "
+msgstr "モデムに繋がりません: "
+
+msgid "unknown / unverified"
+msgstr "不明 / 未検証"
+
+msgid "not-bound"
+msgstr "未バインド"
+
+msgid "The standard fields reported an unknown value. Extra modem fields contain values, but their units are unverified. See the raw response."
+msgstr "標準フィールドが不明を返しました。モデムの追加フィールドには値がありますが、単位は未確認です。生の応答を参照してください。"

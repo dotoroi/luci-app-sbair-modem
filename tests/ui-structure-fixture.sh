@@ -106,7 +106,7 @@ const rpc = {
   }
 };
 const context = {
-  _: function(text) { return text; },
+  i18n: { language: 'en', translate: function(text) { return text; } },
   Promise,
   Node: function Node() {},
   E,
@@ -133,7 +133,7 @@ view.load().then(function(data) {
   assert.match(textOf(rendered), /functioning/);
   const headers = flatten(rendered).filter(node => node.tag === 'th').map(node => textOf(node).replace(/ [▲▼]$/, ''));
   assert.deepStrictEqual(headers, [ 'terminal', 'IP address', 'connection', 'reference', 'ad block', 'functioning' ]);
-  assert.ok(flatten(rendered).some(node => node.tag === 'a' && node.attrs.href === 'http://192.168.1.1:8090/'));
+  assert.ok(flatten(rendered).some(node => node.tag === 'a' && node.attrs.href === 'http://192.168.1.1:8090/?lang=en'));
   assert.ok(rpcCalls.includes('client_list'));
   assert.ok(rpcCalls.includes('adblock_list'));
   process.stdout.write('ui-structure-fixture-ok\n');

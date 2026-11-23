@@ -10,6 +10,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callStatus = rpc.declare({ object: 'sbair', method: 'netmode_status' });
 var callGetConfig = rpc.declare({ object: 'sbair', method: 'netmode_get_config' });
@@ -174,7 +177,7 @@ function warningSection(warnings) {
 	if (!warnings || !warnings.length) return '';
 	return E('div', { 'class': 'cbi-section sbair-section' }, [
 		E('h3', {}, _("warning")),
-		E('ul', {}, warnings.map(function(w) { return E('li', {}, w); }))
+		E('ul', {}, warnings.map(function(w) { return E('li', {}, sbair.errorText(w)); }))
 	]);
 }
 

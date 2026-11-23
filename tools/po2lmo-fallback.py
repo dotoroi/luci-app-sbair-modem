@@ -7,7 +7,7 @@ Intended only for catalogs without msgctxt/msgid_plural; use upstream po2lmo
 for general catalogs. Standard-library Python; does not flash a device.
 """
 from __future__ import annotations
-import pathlib,struct,sys,re
+import ast,pathlib,re,struct,sys
 M=0xffffffff
 
 def sfh_hash(data:bytes)->int:
@@ -45,21 +45,9 @@ def sfh_hash(data:bytes)->int:
     h=(h+(h>>6))&M
     return h
 
-# Replicate po2lmo.c extract_string()'s handling: unescape \\" and \\\\ only.
 def extract(quoted:str)->str:
-    assert quoted[0]=='"'
-    out=[];escaped=False
-    for c in quoted[1:]:
-        if escaped:
-            if c in ('"','\\'):
-                assert out and out[-1]=='\\'
-                out.pop()
-            out.append(c)
-            escaped=False
-        elif c=='\\':out.append(c);escaped=True
-        elif c=='"':break
-        else:out.append(c)
-    return ''.join(out)
+    # Hash the decoded gettext message ID, including real line breaks.
+    return ast.literal_eval(quoted)
 
 def parse(path):
     pairs=[];key=None;value=None;mode=None
@@ -81,10 +69,11 @@ def parse(path):
 def build(inp: pathlib.Path,out:pathlib.Path):
     blobs=bytearray();indices=[];hashes=set()
     for key,val in parse(inp):
-        if not key or not val:continue
-        a=key.encode();b=val.encode()
-        h=sfh_hash(a)
-        if h==sfh_hash(b):continue
+        if not key or not val or key==val:continue
+        # LuCI normalizes ASCII whitespace before hashing a runtime key.
+        canonical=re.sub(r"[ \t\n\r\v\f]+", " ", key).strip(" ")
+        b=val.encode()
+        h=sfh_hash(canonical.encode())
         if h in hashes:raise ValueError(f'LMO hash collision: {key!r}')
         hashes.add(h)
         offset=len(blobs);blobs.extend(b);blobs.extend(b'\0'*((-len(b))%4))

@@ -3504,3 +3504,213 @@ msgstr "셀룰러 WAN 카운터를 읽을 수 없음"
 
 msgid "None"
 msgstr "없음"
+
+msgid "A Safe Apply connection mode change is pending. Confirm or roll it back before retrying."
+msgstr "Safe Apply 연결 모드 변경이 대기 중입니다. 확정하거나 되돌린 뒤 다시 시도하세요."
+
+msgid "Backup source does not exist: "
+msgstr "백업할 파일이 없습니다: "
+
+msgid "Unable to create the backup directory: "
+msgstr "백업 디렉터리를 만들 수 없습니다: "
+
+msgid "Unable to back up the configuration: "
+msgstr "설정을 백업하지 못했습니다: "
+
+msgid "AP / Bridge mode manages the LAN DHCP server. The server cannot be enabled in AP mode."
+msgstr "AP / 브리지 모드가 LAN DHCP 서버를 관리합니다. AP 모드에서는 서버를 켤 수 없습니다."
+
+msgid "Unable to save dhcp.lan.ignore=0."
+msgstr "dhcp.lan.ignore=0 값을 저장하지 못했습니다."
+
+msgid "Unable to save dhcp.lan.ignore=1."
+msgstr "dhcp.lan.ignore=1 값을 저장하지 못했습니다."
+
+msgid "Unable to commit DHCP settings."
+msgstr "DHCP 설정을 저장하지 못했습니다."
+
+msgid "Unable to restart dnsmasq."
+msgstr "dnsmasq를 다시 시작하지 못했습니다."
+
+msgid "The DHCP server was enabled, but UDP port 67 could not be verified."
+msgstr "DHCP 서버를 켰지만 UDP 67 포트를 확인할 수 없습니다."
+
+msgid "The DHCP server was disabled, but UDP port 67 is still listening."
+msgstr "DHCP 서버를 껐지만 UDP 67 포트가 여전히 열려 있습니다."
+
+msgid "Unable to save fota.config.enabled=0."
+msgstr "fota.config.enabled=0 값을 저장하지 못했습니다."
+
+msgid "Unable to save fota.config.enabled=1."
+msgstr "fota.config.enabled=1 값을 저장하지 못했습니다."
+
+msgid "Unable to save fota.provision.enabled=0."
+msgstr "fota.provision.enabled=0 값을 저장하지 못했습니다."
+
+msgid "Unable to save fota.provision.enabled=1."
+msgstr "fota.provision.enabled=1 값을 저장하지 못했습니다."
+
+msgid "Unable to commit FOTA settings."
+msgstr "FOTA 설정을 저장하지 못했습니다."
+
+msgid "Unable to stop kn_fotad."
+msgstr "kn_fotad를 중지하지 못했습니다."
+
+msgid "Unable to disable kn_fotad autostart."
+msgstr "kn_fotad 자동 시작을 끄지 못했습니다."
+
+msgid "Unable to enable kn_fotad autostart."
+msgstr "kn_fotad 자동 시작을 켜지 못했습니다."
+
+msgid "kn_fotad restarted after stopping. The respawn setting was preserved."
+msgstr "중지한 kn_fotad가 다시 시작됐습니다. 자동 재시작 설정은 유지했습니다."
+
+msgid "Unable to start kn_fotad."
+msgstr "kn_fotad를 시작하지 못했습니다."
+
+msgid "kn_fotad was started, but its running state could not be verified."
+msgstr "kn_fotad를 시작했지만 실행 상태를 확인할 수 없습니다."
+
+msgid "kn_fotad was enabled, but the autostart link could not be verified."
+msgstr "kn_fotad를 켰지만 자동 시작 링크를 확인할 수 없습니다."
+
+msgid "Unmanaged: existing settings are preserved until you explicitly apply AP / Bridge or SIM router mode."
+msgstr "관리되지 않음: AP / 브리지 또는 SIM 라우터 모드를 직접 적용할 때까지 기존 설정을 유지합니다."
+
+msgid "The AP mode DHCP client is disabled for safety. Switch to a static IP, or secure UART recovery before enabling it again."
+msgstr "안전을 위해 AP 모드 DHCP 클라이언트를 껐습니다. 고정 IP로 전환하거나 UART 복구 수단을 확보한 뒤 다시 켜세요."
+
+msgid "The DHCP server is still enabled."
+msgstr "DHCP 서버가 아직 켜져 있습니다."
+
+msgid "UDP port 67 is listening, but the guard blocks DHCP replies on br-lan."
+msgstr "UDP 67 포트가 열려 있지만 보호 규칙이 br-lan의 DHCP 응답을 차단합니다."
+
+msgid "DHCP is listening on UDP port 67, and the br-lan guard could not be verified."
+msgstr "DHCP 서버가 UDP 67 포트를 사용 중이며 br-lan 보호 규칙을 확인할 수 없습니다."
+
+msgid "The DHCP packet guard is disabled."
+msgstr "DHCP 패킷 보호 규칙이 꺼져 있습니다."
+
+msgid "The management IP mode does not match network.lan."
+msgstr "관리 IP 방식이 network.lan 설정과 일치하지 않습니다."
+
+msgid "Cellular WAN is still enabled."
+msgstr "셀룰러 WAN이 아직 켜져 있습니다."
+
+msgid "A default route exists on the cellular WAN."
+msgstr "셀룰러 WAN에 기본 경로가 있습니다."
+
+msgid "br-lan is down."
+msgstr "br-lan이 중지돼 있습니다."
+
+msgid "Unable to verify br-lan members."
+msgstr "br-lan에 연결된 인터페이스를 확인할 수 없습니다."
+
+msgid "The fallback IP could not be assigned safely because of a conflict or unavailable ARP probe."
+msgstr "주소 충돌 또는 ARP 확인 불가로 대체 IP를 안전하게 할당할 수 없습니다."
+
+msgid "No management IP address was obtained."
+msgstr "관리 IP 주소를 받지 못했습니다."
+
+msgid "DHCP is disabled in SIM router mode."
+msgstr "SIM 라우터 모드에서 DHCP가 꺼져 있습니다."
+
+msgid "The DHCP packet guard is still active in SIM router mode."
+msgstr "SIM 라우터 모드에서 DHCP 패킷 보호 규칙이 여전히 활성화돼 있습니다."
+
+msgid "Unable to resolve the static IP. Specify it explicitly or save the stock network.lan.ipaddr first."
+msgstr "고정 IP를 확인할 수 없습니다. 직접 지정하거나 순정 network.lan.ipaddr를 먼저 저장하세요."
+
+msgid "Unable to resolve the netmask. Specify it explicitly or save the stock network.lan.netmask first."
+msgstr "넷마스크를 확인할 수 없습니다. 직접 지정하거나 순정 network.lan.netmask를 먼저 저장하세요."
+
+msgid "The gateway must be a valid IPv4 address."
+msgstr "게이트웨이는 유효한 IPv4 주소여야 합니다."
+
+msgid "The AP mode DHCP client is disabled for safety. Set sbair.bridge.ap_dhcp_enabled=1 explicitly before applying."
+msgstr "안전을 위해 AP 모드 DHCP 클라이언트를 껐습니다. 적용 전에 sbair.bridge.ap_dhcp_enabled=1을 명시적으로 설정하세요."
+
+msgid "Unable to migrate the AP DHCP settings to a static IP."
+msgstr "AP DHCP 설정을 고정 IP로 전환하지 못했습니다."
+
+msgid "Obtain a management IP other than the fallback address before disabling management."
+msgstr "관리를 해제하기 전에 대체 주소가 아닌 관리 IP를 확보하세요."
+
+msgid "Unable to read eSIM profiles: "
+msgstr "eSIM 프로필을 읽을 수 없습니다: "
+
+msgid "Linux / Unix based"
+msgstr "Linux / Unix 계열"
+
+msgid "Network device"
+msgstr "네트워크 장치"
+
+msgid "Unknown"
+msgstr "알 수 없음"
+
+msgid "Applying the settings briefly disconnects the modem. The previous settings are restored if it does not reconnect."
+msgstr "설정을 적용하면 모뎀 연결이 잠시 끊깁니다. 다시 연결되지 않으면 이전 설정으로 돌아갑니다."
+
+msgid "Voice (MMTEL)"
+msgstr "음성 (MMTEL)"
+
+msgid "Text messaging"
+msgstr "텍스트 메시지"
+
+msgid "Video"
+msgstr "영상"
+
+msgid "Enabled. Registration can take 10 to 30 seconds."
+msgstr "켜졌습니다. 등록까지 10~30초가 걸릴 수 있습니다."
+
+msgid "Disabled."
+msgstr "꺼졌습니다."
+
+msgid "Not registered (not searching)"
+msgstr "등록 안 됨(검색하지 않음)"
+
+msgid "Registered"
+msgstr "등록됨"
+
+msgid "Not registered (searching)"
+msgstr "등록 안 됨(검색 중)"
+
+msgid "Registration denied"
+msgstr "등록 거부됨"
+
+msgid "Registered (roaming)"
+msgstr "등록됨(로밍)"
+
+msgid "Skipped because the time limit expired: "
+msgstr "시간 제한을 초과해 실행하지 않았습니다: "
+
+msgid "r8152 (reference)"
+msgstr "r8152 (참고)"
+
+msgid "Needs verification"
+msgstr "확인 필요"
+
+msgid "USB driver management is read-only."
+msgstr "USB 드라이버 관리는 읽기 전용입니다."
+
+msgid "No driver bundle matches the Air 6 kernel."
+msgstr "Air 6 커널과 일치하는 드라이버 묶음이 없습니다."
+
+msgid "The device could not be verified as USB Ethernet."
+msgstr "이 장치가 USB 이더넷인지 확인할 수 없습니다."
+
+msgid "This takes 40 to 60 seconds. The modem disconnects to reload the SIM."
+msgstr "40~60초가 걸립니다. SIM을 다시 읽는 동안 모뎀 연결이 끊깁니다."
+
+msgid "Unable to connect to the modem: "
+msgstr "모뎀에 연결할 수 없습니다: "
+
+msgid "unknown / unverified"
+msgstr "알 수 없음 / 미검증"
+
+msgid "not-bound"
+msgstr "연결되지 않음"
+
+msgid "The standard fields reported an unknown value. Extra modem fields contain values, but their units are unverified. See the raw response."
+msgstr "표준 필드에서 알 수 없는 값을 반환했습니다. 모뎀 추가 필드에 값이 있지만 단위를 확인하지 못했습니다. 원시 응답을 확인하세요."

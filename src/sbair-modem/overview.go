@@ -77,12 +77,12 @@ type Temperature struct {
 // regStat maps the stat field shared by +CREG/+CEREG/+CGREG/+C5GREG.
 // 3GPP TS 27.007 §7.2.
 var regStat = map[string]string{
-	"0": "未登録(検索していない)",
-	"1": "登録済み",
-	"2": "未登録(検索中)",
-	"3": "登録拒否",
-	"4": "不明",
-	"5": "登録済み(ローミング)",
+	"0": "Not registered (not searching)",
+	"1": "Registered",
+	"2": "Not registered (searching)",
+	"3": "Registration denied",
+	"4": "Unknown",
+	"5": "Registered (roaming)",
 }
 
 // accessTech maps the access technology field shared by +COPS and the
@@ -105,7 +105,7 @@ func collectOverview(ch *ATChannel) *Overview {
 
 	ask := func(cmd string) []string {
 		if time.Now().After(deadline) {
-			o.Errors = append(o.Errors, cmd+": 時間切れのため実行していません")
+			o.Errors = append(o.Errors, "Skipped because the time limit expired: "+cmd)
 			return nil
 		}
 		lines, err := ch.Command(cmd)
@@ -369,8 +369,8 @@ func collectSignal(o *Overview, ask func(string) []string) {
 	// would be publishing guessed dBm - worse than an empty field. Say so
 	// instead, and let the raw line above carry the numbers.
 	if o.RSRPdBm == "" && o.RSRQdB == "" && len(f) > 8 {
-		o.SignalNote = "標準フィールドが「不明」を返しています。" +
-			"規格外の追加フィールドには値がありますが、単位が未確認のため表示しません(生の行を参照)。"
+		o.SignalNote = "The standard fields reported an unknown value. " +
+			"Extra modem fields contain values, but their units are unverified. See the raw response."
 	}
 }
 

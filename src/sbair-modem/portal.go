@@ -8,10 +8,12 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 	"fmt"
+	"html"
 	"log"
 	"net"
 	"net/http"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -73,45 +75,110 @@ func portalRequesterMAC(r *http.Request) (mac, ip string) {
 	return portalMACFromIPFn(host), host
 }
 
-func portalPage(mac, ip string, enabled bool, message, csrfToken string) string {
-	status := "無効"
+type portalCopy struct {
+	title, heading, unresolved, device, current string
+	enabled, disabled, enable, disable, dnsNote string
+	applied, failed, sessionFailed, badRequest  string
+}
+
+var portalLanguages = map[string]portalCopy{
+	"en": {
+		title: "Ad blocking", heading: "Ad blocking for this device",
+		unresolved: "Could not identify the device at %s. Wait a moment and reload.",
+		device:     "Your device:", current: "Current status:",
+		enabled: "Enabled", disabled: "Disabled", enable: "Enable ad blocking", disable: "Disable ad blocking",
+		dnsNote: "Ad blocking does not apply to apps or browsers using DNS over HTTPS or TLS.",
+		applied: "Settings applied.", failed: "Could not apply the settings.",
+		sessionFailed: "Could not verify this session. Reload the page and try again.", badRequest: "Invalid request.",
+	},
+	"ko": {
+		title: "광고 차단", heading: "이 기기의 광고 차단 설정",
+		unresolved: "IP 주소 %s의 기기를 식별할 수 없습니다. 잠시 후 새로고침하세요.",
+		device:     "내 기기:", current: "현재 상태:",
+		enabled: "켜짐", disabled: "꺼짐", enable: "광고 차단 켜기", disable: "광고 차단 끄기",
+		dnsNote: "HTTPS 또는 TLS로 DNS를 사용하는 앱이나 브라우저에는 광고 차단이 적용되지 않습니다.",
+		applied: "설정을 적용했습니다.", failed: "설정을 적용하지 못했습니다.",
+		sessionFailed: "세션을 확인할 수 없습니다. 페이지를 새로고침한 뒤 다시 시도하세요.", badRequest: "잘못된 요청입니다.",
+	},
+	"ja": {
+		title: "広告ブロック", heading: "この端末の広告ブロック設定",
+		unresolved: "IPアドレス %s の端末を特定できませんでした。少し待ってから再読み込みしてください。",
+		device:     "あなたの端末:", current: "現在の状態:",
+		enabled: "有効", disabled: "無効", enable: "広告ブロックを有効にする", disable: "広告ブロックを無効にする",
+		dnsNote: "DNS over HTTPS/TLSを使うアプリやブラウザーには適用されません。",
+		applied: "設定を反映しました。", failed: "設定を反映できませんでした。",
+		sessionFailed: "セッションを確認できません。ページを再読み込みして再試行してください。", badRequest: "無効なリクエストです。",
+	},
+}
+
+func portalLanguage(r *http.Request) string {
+	if lang := r.URL.Query().Get("lang"); portalLanguages[lang].title != "" {
+		return lang
+	}
+	best, priority := "en", 0.0
+	for _, part := range strings.Split(r.Header.Get("Accept-Language"), ",") {
+		tag, params, _ := strings.Cut(part, ";")
+		lang, _, _ := strings.Cut(strings.ToLower(strings.TrimSpace(tag)), "-")
+		if portalLanguages[lang].title == "" {
+			continue
+		}
+		weight := 1.0
+		for _, param := range strings.Split(params, ";") {
+			if value, ok := strings.CutPrefix(strings.TrimSpace(param), "q="); ok {
+				weight, _ = strconv.ParseFloat(value, 64)
+			}
+		}
+		if weight > priority && weight <= 1 {
+			best, priority = lang, weight
+		}
+	}
+	return best
+}
+
+func portalPage(lang, mac, ip string, enabled bool, message, csrfToken string) string {
+	copy := portalLanguages[lang]
+	status := copy.disabled
 	statusColor := "#888"
-	toggleLabel := "広告ブロックを有効にする"
+	toggleLabel := copy.enable
 	nextVal := "1"
 	if enabled {
-		status = "有効"
+		status = copy.enabled
 		statusColor = "#5cb85c"
-		toggleLabel = "広告ブロックを無効にする"
+		toggleLabel = copy.disable
 		nextVal = "0"
 	}
 
-	body := fmt.Sprintf(`<h2>この端末の広告ブロック設定</h2>`)
+	body := fmt.Sprintf(`<nav><a href="/?lang=en">English</a> · <a href="/?lang=ko">한국어</a> · <a href="/?lang=ja">日本語</a></nav><h2>%s</h2>`, copy.heading)
 	if mac == "" {
-		body += fmt.Sprintf(`<p style="color:#c00">この端末(IP: %s)のMACアドレスを特定できませんでした。
-			少し待ってからページを再読み込みしてください。</p>`, ip)
+		body += fmt.Sprintf(`<p style="color:#c00">%s</p>`, html.EscapeString(fmt.Sprintf(copy.unresolved, ip)))
 	} else {
-		body += fmt.Sprintf(`<p>あなたの端末: <code>%s</code></p>`, mac)
-		body += fmt.Sprintf(`<p>現在の状態: <b style="color:%s">%s</b></p>`, statusColor, status)
-		body += fmt.Sprintf(`<form method="post" action="/toggle">
+		body += fmt.Sprintf(`<p>%s <code>%s</code></p>`, copy.device, html.EscapeString(mac))
+		body += fmt.Sprintf(`<p>%s <b style="color:%s">%s</b></p>`, copy.current, statusColor, status)
+		body += fmt.Sprintf(`<form method="post" action="/toggle?lang=%s">
 			<input type="hidden" name="enabled" value="%s">
 			<input type="hidden" name="csrf_token" value="%s">
 			<button type="submit" style="font-size:1.1em;padding:.6em 1.2em;">%s</button>
-		</form>`, nextVal, csrfToken, toggleLabel)
-		body += `<p style="opacity:.7;margin-top:1em">DNS over HTTPS/TLSを使うアプリ・ブラウザには効きません。</p>`
+	</form>`, lang, nextVal, html.EscapeString(csrfToken), toggleLabel)
+		body += fmt.Sprintf(`<p style="opacity:.7;margin-top:1em">%s</p>`, copy.dnsNote)
 	}
 	if message != "" {
 		body += fmt.Sprintf(`<p style="color:#5cb85c">%s</p>`, message)
 	}
 
-	return fmt.Sprintf(`<!doctype html><html><head><meta charset="utf-8">
+	return fmt.Sprintf(`<!doctype html><html lang="%s"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>広告ブロック設定</title>
+<title>%s</title>
 <style>body{font-family:sans-serif;max-width:32em;margin:2em auto;padding:0 1em}
 code{background:#eee;padding:.1em .4em;border-radius:.2em}</style>
-</head><body>%s</body></html>`, body)
+</head><body>%s</body></html>`, lang, copy.title, body)
 }
 
 func portalHandler(w http.ResponseWriter, r *http.Request) {
+	lang := portalLanguage(r)
+	copy := portalLanguages[lang]
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Content-Language", lang)
+	w.Header().Set("Vary", "Accept-Language")
 	if r.URL.Path != "/" && r.URL.Path != "/toggle" {
 		http.NotFound(w, r)
 		return
@@ -131,7 +198,7 @@ func portalHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil || cookie.Value == "" {
 			token, err := portalTokenFn()
 			if err != nil {
-				http.Error(w, "CSRFトークンを生成できません", http.StatusInternalServerError)
+				http.Error(w, copy.sessionFailed, http.StatusInternalServerError)
 				return
 			}
 			cookie = &http.Cookie{
@@ -147,46 +214,47 @@ func portalHandler(w http.ResponseWriter, r *http.Request) {
 		csrfToken := cookie.Value
 		enabled := mac != "" && portalAdblockMACsFn()[mac]
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_, _ = fmt.Fprint(w, portalPage(mac, ip, enabled, "", csrfToken))
+		_, _ = fmt.Fprint(w, portalPage(lang, mac, ip, enabled, "", csrfToken))
 		return
 	}
 
 	csrfCookie, err := r.Cookie(portalCSRFCookie)
 	if err != nil || csrfCookie.Value == "" {
-		http.Error(w, "CSRFトークンがありません", http.StatusForbidden)
+		http.Error(w, copy.sessionFailed, http.StatusForbidden)
 		return
 	}
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "フォームを解析できません", http.StatusBadRequest)
+		http.Error(w, copy.badRequest, http.StatusBadRequest)
 		return
 	}
 	formToken := r.Form.Get("csrf_token")
 	if formToken == "" || len(formToken) != len(csrfCookie.Value) ||
 		subtle.ConstantTimeCompare([]byte(formToken), []byte(csrfCookie.Value)) != 1 {
-		http.Error(w, "CSRFトークンが不正です", http.StatusForbidden)
+		http.Error(w, copy.sessionFailed, http.StatusForbidden)
 		return
 	}
 	if enabledValue := r.Form.Get("enabled"); enabledValue != "0" && enabledValue != "1" {
-		http.Error(w, "enabledは0または1で指定してください", http.StatusBadRequest)
+		http.Error(w, copy.badRequest, http.StatusBadRequest)
 		return
 	}
 
 	if r.Method == http.MethodPost && r.URL.Path == "/toggle" {
 		if mac == "" {
-			http.Error(w, "MACアドレスを特定できません", http.StatusServiceUnavailable)
+			http.Error(w, fmt.Sprintf(copy.unresolved, ip), http.StatusServiceUnavailable)
 			return
 		}
 		res := portalAdblockSetFn(mac, r.Form.Get("enabled"))
 		if e, ok := res["error"]; ok {
-			message = fmt.Sprintf("エラー: %v", e)
+			log.Printf("sbair-portal: applying adblock setting: %v", e)
+			message = copy.failed
 		} else {
-			message = "設定を反映しました。"
+			message = copy.applied
 		}
 	}
 
 	enabled := mac != "" && portalAdblockMACsFn()[mac]
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	_, _ = fmt.Fprint(w, portalPage(mac, ip, enabled, message, csrfCookie.Value))
+	_, _ = fmt.Fprint(w, portalPage(lang, mac, ip, enabled, message, csrfCookie.Value))
 }
 
 func runPortal() int {

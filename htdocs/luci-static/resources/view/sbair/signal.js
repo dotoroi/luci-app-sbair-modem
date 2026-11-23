@@ -10,6 +10,9 @@
 'require dom';
 'require ui';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callOverview    = rpc.declare({ object: 'sbair', method: 'overview' });
 var callResetStart  = rpc.declare({ object: 'sbair', method: 'modem_reset' });
@@ -46,7 +49,7 @@ function imsSection(self) {
 		sbair.row(_("registration status"), on ? _("registered") : _("Not registered"),
 			on ? null : _("In this state, you will not receive SMS.")),
 		sbair.row(_("Available services"), (ims.services && ims.services.length)
-			? ims.services.join(' / ') : null),
+			? ims.services.map(_).join(' / ') : null),
 	];
 	// **生の応答と参考値はデバッグ表示のときだけ。** 参考値は登録状態と
 	// 食い違うことがあり、並べると「どちらが本当か」を迷わせる。
@@ -327,7 +330,7 @@ function render(self) {
 	body.push(sbair.section(_("Line Overview"), [
 		statusRow(self),
 		sbair.table([
-			sbair.row(_("registration status"), data.registration, data.registered ? null : _("Unable to communicate")),
+			sbair.row(_("registration status"), _(data.registration), data.registered ? null : _("Unable to communicate")),
 			sbair.row(_("Registrar"), data.reg_domain),
 			sbair.row(_("business person"), data.operator),
 			sbair.row(_("Connection method"), data.access_tech),
@@ -359,7 +362,7 @@ function render(self) {
 	perAnt(_("SINR (5G each antenna)"), band.nr_sinr, 'dB');
 
 	if (data.signal_note)
-		rows.push(sbair.row(_("main"), data.signal_note));
+		rows.push(sbair.row(_("main"), sbair.errorText(data.signal_note)));
 	// 規格外の余りフィールドは意味を確かめていないので生で出す。
 	if (sbair.isDebug() && data.cesq)
 		rows.push(sbair.row(_("+CESQ (live)"), data.cesq));
@@ -513,7 +516,7 @@ return view.extend({
 		}).catch(function(e) {
 			self.data.imsBusy = false;
 			self.redraw();
-			ui.addNotification(null, E('p', {}, String(e)), 'warning');
+			ui.addNotification(null, E('p', {}, sbair.errorText(e)), 'warning');
 		});
 	},
 

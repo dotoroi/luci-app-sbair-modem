@@ -200,7 +200,7 @@ env $helper_env "$fakebin/uci" -q set sbair.bridge.managed=1
 env $helper_env "$fakebin/uci" -q set sbair.bridge.mode=ap
 capture_client
 if run_helper dhcp-server enable > "$tmp/ap-reject.out"; then exit 1; fi
-grep -q 'AP / Bridge.*有効化できません' "$tmp/ap-reject.out"
+grep -Fq 'The server cannot be enabled in AP mode.' "$tmp/ap-reject.out"
 assert_client_unchanged
 env $helper_env "$fakebin/uci" -q set sbair.bridge.managed=0
 env $helper_env "$fakebin/uci" -q set sbair.bridge.mode=unmanaged
@@ -209,7 +209,7 @@ env $helper_env "$fakebin/uci" -q set sbair.bridge.mode=unmanaged
 env $helper_env "$fakebin/uci" -q set sbair.bridge.pending_id=transaction-1
 before_pending=$(cat "$state")
 if run_helper fota disable > "$tmp/pending-reject.out"; then exit 1; fi
-grep -q 'Safe Apply.*保留中' "$tmp/pending-reject.out"
+grep -Fq 'A Safe Apply connection mode change is pending.' "$tmp/pending-reject.out"
 [ "$(cat "$state")" = "$before_pending" ]
 env $helper_env "$fakebin/uci" -q set sbair.bridge.pending_id=
 
@@ -237,7 +237,7 @@ env $helper_env "$fakebin/uci" -q set fota.provision.enabled=1
 printf 'running\n' > "$proc"
 ln -sf /etc/init.d/kn_fotad "$rcdir/S50kn_fotad"
 TEST_FORCE_RESPAWN=1 env $helper_env "$repo/root/usr/sbin/sbair-maintenance" fota disable > "$tmp/fota-respawn.out"
-grep -q '^warning=.*再起動しました' "$tmp/fota-respawn.out"
+grep -q '^warning=kn_fotad restarted after stopping\.' "$tmp/fota-respawn.out"
 
 env $helper_env "$fakebin/uci" -q set fota.config.enabled=0
 env $helper_env "$fakebin/uci" -q set fota.provision.enabled=0
@@ -292,7 +292,7 @@ function textOf(node) {
   return textOf(node.children || []);
 }
 const context = {
-  _: function(text) { return text; },
+  i18n: { language: 'en', translate: function(text) { return text; } },
   Promise,
   Node: function Node() {},
   E,

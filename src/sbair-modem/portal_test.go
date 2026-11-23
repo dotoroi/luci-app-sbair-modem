@@ -73,6 +73,25 @@ func TestPortalGetSetsCSRFAndValidPostMutates(t *testing.T) {
 	}
 }
 
+func TestPortalLanguageSelection(t *testing.T) {
+	setupPortalTest(t)
+	for _, tc := range []struct{ query, accept, want, title string }{
+		{"", "ja;q=0.2, ko-KR;q=0.8", "ko", "이 기기의 광고 차단 설정"},
+		{"?lang=ja", "ko", "ja", "この端末の広告ブロック設定"},
+		{"?lang=invalid", "ko;q=0", "en", "Ad blocking for this device"},
+	} {
+		request := httptest.NewRequest(http.MethodGet, "/"+tc.query, nil)
+		request.Header.Set("Accept-Language", tc.accept)
+		response := httptest.NewRecorder()
+		portalHandler(response, request)
+		if response.Code != http.StatusOK || response.Header().Get("Content-Language") != tc.want ||
+			!strings.Contains(response.Body.String(), tc.title) ||
+			!strings.Contains(response.Body.String(), `action="/toggle?lang=`+tc.want+`"`) {
+			t.Errorf("%s, %q: expected language %q and localized form, status=%d", tc.query, tc.accept, tc.want, response.Code)
+		}
+	}
+}
+
 func TestPortalRejectsCSRFAndBadEnabledBeforeMutation(t *testing.T) {
 	setupPortalTest(t)
 	_, cookie := portalGet(t)

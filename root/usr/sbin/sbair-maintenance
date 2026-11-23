@@ -132,7 +132,7 @@ managed_ap() {
 
 maintenance_write_allowed() {
 	if [ "$(pending_value)" = 1 ]; then
-		say_error 'Safe Applyの接続モード変更が保留中です。完了またはロールバック後に再試行してください。'
+		say_error 'A Safe Apply connection mode change is pending. Confirm or roll it back before retrying.'
 		return 1
 	fi
 	return 0
@@ -143,11 +143,11 @@ backup_config() {
 	source=$1
 	prefix=$2
 	[ -f "$source" ] || {
-		say_error "バックアップ対象がありません: $source"
+		say_error "Backup source does not exist: $source"
 		return 1
 	}
 	mkdir -p "$BACKUP_DIR" 2>/dev/null || {
-		say_error "バックアップディレクトリを作成できません: $BACKUP_DIR"
+		say_error "Unable to create the backup directory: $BACKUP_DIR"
 		return 1
 	}
 	chmod 700 "$BACKUP_DIR" 2>/dev/null || true
@@ -159,7 +159,7 @@ backup_config() {
 		destination="$BACKUP_DIR/$prefix.$stamp.$$.$n"
 	done
 	cp -p "$source" "$destination" 2>/dev/null || {
-		say_error "設定バックアップに失敗しました: $source"
+		say_error "Unable to back up the configuration: $source"
 		return 1
 	}
 	printf '%s\n' "$destination"
@@ -230,20 +230,20 @@ dhcp_action() {
 	target=$(bool_value "$requested")
 	maintenance_write_allowed || return 1
 	if [ "$target" = 1 ] && managed_ap; then
-		say_error '接続モード「AP / Bridge」がLAN DHCPサーバーを管理しています。APモード中はDHCPサーバーを有効化できません。'
+		say_error 'AP / Bridge mode manages the LAN DHCP server. The server cannot be enabled in AP mode.'
 		return 1
 	fi
 	current=$(uci_get dhcp.lan.ignore)
 	if [ "$target" = 1 ]; then
 		[ "$current" = 0 ] || {
 			backup=$(backup_config "$DHCP_CONFIG" dhcp) || return 1
-			set_uci_value dhcp.lan.ignore 0 || { say_error 'dhcp.lan.ignore=0 を保存できません'; return 1; }
-			commit_uci dhcp || { say_error 'DHCP設定をcommitできません'; return 1; }
-			"$DNSMASQ_INIT" restart >/dev/null 2>&1 || { say_error 'dnsmasqを再起動できません'; return 1; }
+			set_uci_value dhcp.lan.ignore 0 || { say_error 'Unable to save dhcp.lan.ignore=0.'; return 1; }
+			commit_uci dhcp || { say_error 'Unable to commit DHCP settings.'; return 1; }
+			"$DNSMASQ_INIT" restart >/dev/null 2>&1 || { say_error 'Unable to restart dnsmasq.'; return 1; }
 			printf 'result=enabled\nbackup=%s\n' "$backup"
 			udp=$(listener_state udp 67)
 			printf 'verification.uci_ignore=%s\nverification.udp67_listening=%s\n' "$(uci_get dhcp.lan.ignore)" "$udp"
-			[ "$udp" = 1 ] || printf 'warning=DHCPサーバーを有効化しましたが、UDP/67を確認できません。\n'
+			[ "$udp" = 1 ] || printf 'warning=The DHCP server was enabled, but UDP port 67 could not be verified.\n'
 			return 0
 		}
 		printf 'result=already_enabled\nverification.uci_ignore=0\nverification.udp67_listening=%s\n' "$(listener_state udp 67)"
@@ -252,13 +252,13 @@ dhcp_action() {
 
 	[ "$current" = 1 ] || {
 		backup=$(backup_config "$DHCP_CONFIG" dhcp) || return 1
-		set_uci_value dhcp.lan.ignore 1 || { say_error 'dhcp.lan.ignore=1 を保存できません'; return 1; }
-		commit_uci dhcp || { say_error 'DHCP設定をcommitできません'; return 1; }
-		"$DNSMASQ_INIT" restart >/dev/null 2>&1 || { say_error 'dnsmasqを再起動できません'; return 1; }
+		set_uci_value dhcp.lan.ignore 1 || { say_error 'Unable to save dhcp.lan.ignore=1.'; return 1; }
+		commit_uci dhcp || { say_error 'Unable to commit DHCP settings.'; return 1; }
+		"$DNSMASQ_INIT" restart >/dev/null 2>&1 || { say_error 'Unable to restart dnsmasq.'; return 1; }
 		printf 'result=disabled\nbackup=%s\n' "$backup"
 		udp=$(listener_state udp 67)
 		printf 'verification.uci_ignore=%s\nverification.udp67_listening=%s\n' "$(uci_get dhcp.lan.ignore)" "$udp"
-		[ "$udp" = 0 ] || printf 'warning=DHCPサーバーを無効化しましたが、UDP/67がまだ待受中です。\n'
+		[ "$udp" = 0 ] || printf 'warning=The DHCP server was disabled, but UDP port 67 is still listening.\n'
 		return 0
 	}
 	printf 'result=already_disabled\nverification.uci_ignore=1\nverification.udp67_listening=%s\n' "$(listener_state udp 67)"
@@ -279,17 +279,17 @@ fota_action() {
 			return 0
 		fi
 		backup=$(backup_config "$FOTA_CONFIG" fota) || return 1
-		set_uci_value fota.config.enabled 0 || { say_error 'fota.config.enabled=0 を保存できません'; return 1; }
-		set_uci_value fota.provision.enabled 0 || { say_error 'fota.provision.enabled=0 を保存できません'; return 1; }
-		commit_uci fota || { say_error 'FOTA設定をcommitできません'; return 1; }
-		"$FOTA_INIT" stop >/dev/null 2>&1 || { say_error 'kn_fotadを停止できません'; return 1; }
-		"$FOTA_INIT" disable >/dev/null 2>&1 || { say_error 'kn_fotadの自動起動を無効化できません'; return 1; }
+		set_uci_value fota.config.enabled 0 || { say_error 'Unable to save fota.config.enabled=0.'; return 1; }
+		set_uci_value fota.provision.enabled 0 || { say_error 'Unable to save fota.provision.enabled=0.'; return 1; }
+		commit_uci fota || { say_error 'Unable to commit FOTA settings.'; return 1; }
+		"$FOTA_INIT" stop >/dev/null 2>&1 || { say_error 'Unable to stop kn_fotad.'; return 1; }
+		"$FOTA_INIT" disable >/dev/null 2>&1 || { say_error 'Unable to disable kn_fotad autostart.'; return 1; }
 		sleep "$WAIT_SECONDS"
 		respawn_after=$(process_state "$FOTA_PROCESS")
 		printf 'result=disabled\nbackup=%s\nfota.config_enabled=%s\nfota.provision_enabled=%s\nfota.config_respawn=%s\n' \
 			"$backup" "$(uci_get fota.config.enabled)" "$(uci_get fota.provision.enabled)" "$(uci_get fota.config.respawn)"
 		printf 'fota.kn_fotad=%s\nfota.autostart=%s\n' "$respawn_after" "$(autostart_state)"
-		[ "$respawn_after" = stopped ] || printf 'warning=kn_fotadが停止後も再起動しました。respawn設定は変更していません。\n'
+		[ "$respawn_after" = stopped ] || printf 'warning=kn_fotad restarted after stopping. The respawn setting was preserved.\n'
 		return 0
 	fi
 
@@ -298,17 +298,17 @@ fota_action() {
 		return 0
 	fi
 	backup=$(backup_config "$FOTA_CONFIG" fota) || return 1
-	set_uci_value fota.config.enabled 1 || { say_error 'fota.config.enabled=1 を保存できません'; return 1; }
-	set_uci_value fota.provision.enabled 1 || { say_error 'fota.provision.enabled=1 を保存できません'; return 1; }
-	commit_uci fota || { say_error 'FOTA設定をcommitできません'; return 1; }
-	"$FOTA_INIT" enable >/dev/null 2>&1 || { say_error 'kn_fotadの自動起動を有効化できません'; return 1; }
-	"$FOTA_INIT" start >/dev/null 2>&1 || { say_error 'kn_fotadを起動できません'; return 1; }
+	set_uci_value fota.config.enabled 1 || { say_error 'Unable to save fota.config.enabled=1.'; return 1; }
+	set_uci_value fota.provision.enabled 1 || { say_error 'Unable to save fota.provision.enabled=1.'; return 1; }
+	commit_uci fota || { say_error 'Unable to commit FOTA settings.'; return 1; }
+	"$FOTA_INIT" enable >/dev/null 2>&1 || { say_error 'Unable to enable kn_fotad autostart.'; return 1; }
+	"$FOTA_INIT" start >/dev/null 2>&1 || { say_error 'Unable to start kn_fotad.'; return 1; }
 	running=$(process_state "$FOTA_PROCESS")
 	autostart=$(autostart_state)
 	printf 'result=enabled\nbackup=%s\nfota.config_enabled=%s\nfota.provision_enabled=%s\nfota.config_respawn=%s\nfota.kn_fotad=%s\nfota.autostart=%s\n' \
 		"$backup" "$(uci_get fota.config.enabled)" "$(uci_get fota.provision.enabled)" "$(uci_get fota.config.respawn)" "$running" "$autostart"
-	[ "$running" = running ] || printf 'warning=kn_fotadを起動しましたが、稼働中であることを確認できません。\n'
-	[ "$autostart" = enabled ] || printf 'warning=kn_fotadを有効化しましたが、自動起動リンクを確認できません。\n'
+	[ "$running" = running ] || printf 'warning=kn_fotad was started, but its running state could not be verified.\n'
+	[ "$autostart" = enabled ] || printf 'warning=kn_fotad was enabled, but the autostart link could not be verified.\n'
 }
 
 case "${1:-}" in

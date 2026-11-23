@@ -66,6 +66,7 @@ for lang in ja ko; do
 	name="luci-app-sbair-modem.$lang"
 	"$PYTHON3" "$SELF/tools/po2lmo-fallback.py" "$SELF/po/$lang/luci-app-sbair-modem.po" "$STAGE/out/i18n/$name.lmo"
 done
+"$PYTHON3" "$SELF/tools/build-browser-i18n.py" "$STAGE/out/i18n/sbair-i18n.js"
 
 cp "$RELEASE_NOTES" "$STAGE/docs/RELEASE-NOTES-$NOTES_VERSION.md"
 

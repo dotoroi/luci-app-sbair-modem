@@ -10,6 +10,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callOverview = rpc.declare({ object: 'sbair', method: 'overview' });
 

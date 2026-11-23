@@ -3765,3 +3765,213 @@ msgstr "Unable to read cellular WAN counters"
 
 msgid "Uploaded"
 msgstr "Uploaded"
+
+msgid "A Safe Apply connection mode change is pending. Confirm or roll it back before retrying."
+msgstr "A Safe Apply connection mode change is pending. Confirm or roll it back before retrying."
+
+msgid "Backup source does not exist: "
+msgstr "Backup source does not exist: "
+
+msgid "Unable to create the backup directory: "
+msgstr "Unable to create the backup directory: "
+
+msgid "Unable to back up the configuration: "
+msgstr "Unable to back up the configuration: "
+
+msgid "AP / Bridge mode manages the LAN DHCP server. The server cannot be enabled in AP mode."
+msgstr "AP / Bridge mode manages the LAN DHCP server. The server cannot be enabled in AP mode."
+
+msgid "Unable to save dhcp.lan.ignore=0."
+msgstr "Unable to save dhcp.lan.ignore=0."
+
+msgid "Unable to save dhcp.lan.ignore=1."
+msgstr "Unable to save dhcp.lan.ignore=1."
+
+msgid "Unable to commit DHCP settings."
+msgstr "Unable to commit DHCP settings."
+
+msgid "Unable to restart dnsmasq."
+msgstr "Unable to restart dnsmasq."
+
+msgid "The DHCP server was enabled, but UDP port 67 could not be verified."
+msgstr "The DHCP server was enabled, but UDP port 67 could not be verified."
+
+msgid "The DHCP server was disabled, but UDP port 67 is still listening."
+msgstr "The DHCP server was disabled, but UDP port 67 is still listening."
+
+msgid "Unable to save fota.config.enabled=0."
+msgstr "Unable to save fota.config.enabled=0."
+
+msgid "Unable to save fota.config.enabled=1."
+msgstr "Unable to save fota.config.enabled=1."
+
+msgid "Unable to save fota.provision.enabled=0."
+msgstr "Unable to save fota.provision.enabled=0."
+
+msgid "Unable to save fota.provision.enabled=1."
+msgstr "Unable to save fota.provision.enabled=1."
+
+msgid "Unable to commit FOTA settings."
+msgstr "Unable to commit FOTA settings."
+
+msgid "Unable to stop kn_fotad."
+msgstr "Unable to stop kn_fotad."
+
+msgid "Unable to disable kn_fotad autostart."
+msgstr "Unable to disable kn_fotad autostart."
+
+msgid "Unable to enable kn_fotad autostart."
+msgstr "Unable to enable kn_fotad autostart."
+
+msgid "kn_fotad restarted after stopping. The respawn setting was preserved."
+msgstr "kn_fotad restarted after stopping. The respawn setting was preserved."
+
+msgid "Unable to start kn_fotad."
+msgstr "Unable to start kn_fotad."
+
+msgid "kn_fotad was started, but its running state could not be verified."
+msgstr "kn_fotad was started, but its running state could not be verified."
+
+msgid "kn_fotad was enabled, but the autostart link could not be verified."
+msgstr "kn_fotad was enabled, but the autostart link could not be verified."
+
+msgid "Unmanaged: existing settings are preserved until you explicitly apply AP / Bridge or SIM router mode."
+msgstr "Unmanaged: existing settings are preserved until you explicitly apply AP / Bridge or SIM router mode."
+
+msgid "The AP mode DHCP client is disabled for safety. Switch to a static IP, or secure UART recovery before enabling it again."
+msgstr "The AP mode DHCP client is disabled for safety. Switch to a static IP, or secure UART recovery before enabling it again."
+
+msgid "The DHCP server is still enabled."
+msgstr "The DHCP server is still enabled."
+
+msgid "UDP port 67 is listening, but the guard blocks DHCP replies on br-lan."
+msgstr "UDP port 67 is listening, but the guard blocks DHCP replies on br-lan."
+
+msgid "DHCP is listening on UDP port 67, and the br-lan guard could not be verified."
+msgstr "DHCP is listening on UDP port 67, and the br-lan guard could not be verified."
+
+msgid "The DHCP packet guard is disabled."
+msgstr "The DHCP packet guard is disabled."
+
+msgid "The management IP mode does not match network.lan."
+msgstr "The management IP mode does not match network.lan."
+
+msgid "Cellular WAN is still enabled."
+msgstr "Cellular WAN is still enabled."
+
+msgid "A default route exists on the cellular WAN."
+msgstr "A default route exists on the cellular WAN."
+
+msgid "br-lan is down."
+msgstr "br-lan is down."
+
+msgid "Unable to verify br-lan members."
+msgstr "Unable to verify br-lan members."
+
+msgid "The fallback IP could not be assigned safely because of a conflict or unavailable ARP probe."
+msgstr "The fallback IP could not be assigned safely because of a conflict or unavailable ARP probe."
+
+msgid "No management IP address was obtained."
+msgstr "No management IP address was obtained."
+
+msgid "DHCP is disabled in SIM router mode."
+msgstr "DHCP is disabled in SIM router mode."
+
+msgid "The DHCP packet guard is still active in SIM router mode."
+msgstr "The DHCP packet guard is still active in SIM router mode."
+
+msgid "Unable to resolve the static IP. Specify it explicitly or save the stock network.lan.ipaddr first."
+msgstr "Unable to resolve the static IP. Specify it explicitly or save the stock network.lan.ipaddr first."
+
+msgid "Unable to resolve the netmask. Specify it explicitly or save the stock network.lan.netmask first."
+msgstr "Unable to resolve the netmask. Specify it explicitly or save the stock network.lan.netmask first."
+
+msgid "The gateway must be a valid IPv4 address."
+msgstr "The gateway must be a valid IPv4 address."
+
+msgid "The AP mode DHCP client is disabled for safety. Set sbair.bridge.ap_dhcp_enabled=1 explicitly before applying."
+msgstr "The AP mode DHCP client is disabled for safety. Set sbair.bridge.ap_dhcp_enabled=1 explicitly before applying."
+
+msgid "Unable to migrate the AP DHCP settings to a static IP."
+msgstr "Unable to migrate the AP DHCP settings to a static IP."
+
+msgid "Obtain a management IP other than the fallback address before disabling management."
+msgstr "Obtain a management IP other than the fallback address before disabling management."
+
+msgid "Unable to read eSIM profiles: "
+msgstr "Unable to read eSIM profiles: "
+
+msgid "Linux / Unix based"
+msgstr "Linux / Unix based"
+
+msgid "Network device"
+msgstr "Network device"
+
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "Applying the settings briefly disconnects the modem. The previous settings are restored if it does not reconnect."
+msgstr "Applying the settings briefly disconnects the modem. The previous settings are restored if it does not reconnect."
+
+msgid "Voice (MMTEL)"
+msgstr "Voice (MMTEL)"
+
+msgid "Text messaging"
+msgstr "Text messaging"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Enabled. Registration can take 10 to 30 seconds."
+msgstr "Enabled. Registration can take 10 to 30 seconds."
+
+msgid "Disabled."
+msgstr "Disabled."
+
+msgid "Not registered (not searching)"
+msgstr "Not registered (not searching)"
+
+msgid "Registered"
+msgstr "Registered"
+
+msgid "Not registered (searching)"
+msgstr "Not registered (searching)"
+
+msgid "Registration denied"
+msgstr "Registration denied"
+
+msgid "Registered (roaming)"
+msgstr "Registered (roaming)"
+
+msgid "Skipped because the time limit expired: "
+msgstr "Skipped because the time limit expired: "
+
+msgid "r8152 (reference)"
+msgstr "r8152 (reference)"
+
+msgid "Needs verification"
+msgstr "Needs verification"
+
+msgid "USB driver management is read-only."
+msgstr "USB driver management is read-only."
+
+msgid "No driver bundle matches the Air 6 kernel."
+msgstr "No driver bundle matches the Air 6 kernel."
+
+msgid "The device could not be verified as USB Ethernet."
+msgstr "The device could not be verified as USB Ethernet."
+
+msgid "This takes 40 to 60 seconds. The modem disconnects to reload the SIM."
+msgstr "This takes 40 to 60 seconds. The modem disconnects to reload the SIM."
+
+msgid "Unable to connect to the modem: "
+msgstr "Unable to connect to the modem: "
+
+msgid "unknown / unverified"
+msgstr "unknown / unverified"
+
+msgid "not-bound"
+msgstr "not-bound"
+
+msgid "The standard fields reported an unknown value. Extra modem fields contain values, but their units are unverified. See the raw response."
+msgstr "The standard fields reported an unknown value. Extra modem fields contain values, but their units are unverified. See the raw response."

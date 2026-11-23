@@ -50,12 +50,14 @@ for lang in ja ko; do
 	test -s "out/i18n/$name"
 	cmp "out/i18n/$name" "$tmp/rootfs/usr/lib/lua/luci/i18n/$name"
 done
+cmp out/i18n/sbair-i18n.js "$tmp/rootfs/www/luci-static/resources/tools/sbair-i18n.js"
 sh install.sh "$tmp/rootfs"
 printf 'fixture user data\n' > "$tmp/rootfs/etc/sbair/user-data"
 sh tools/uninstall-floop3.sh --check "$tmp/rootfs"
 sh tools/uninstall-floop3.sh "$tmp/rootfs"
 test ! -e "$tmp/rootfs/usr/bin/sbair-modem"
 test ! -e "$tmp/rootfs/www/luci-static/resources/sbair-release.json"
+test ! -e "$tmp/rootfs/www/luci-static/resources/tools/sbair-i18n.js"
 test ! -L "$tmp/rootfs/etc/rc.d/S95sbair-apn"
 test -s "$tmp/rootfs/etc/sbair/user-data"
 echo 'Release bundle install, upgrade and removal checks passed.'

@@ -10,6 +10,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callStatus = rpc.declare({ object: 'sbair', method: 'usb_status' });
 var callNICStatus = rpc.declare({ object: 'sbair', method: 'usb_nic_status' });
@@ -55,11 +58,11 @@ function interfaceRows(interfaces) {
 
 function driverSection(device) {
 	var plan = device.driver_management || {};
-	var disabledReason = valueOrDash(plan.reason);
+	var disabledReason = valueOrDash(_(plan.reason));
 	return sbair.section(_("USB Host Driver Management (Read Only)"), [ sbair.table([
 		sbair.row(_("Judgment target"), plan.device_class_allowed ? _("Known USB Host Ethernet Candidates") : _("Excluded / Not confirmed")),
-		sbair.row(_("Provenance"), valueOrDash(plan.provenance)),
-		sbair.row(_("expected driver"), valueOrDash(plan.expected_driver)),
+		sbair.row(_("Provenance"), valueOrDash(_(plan.provenance))),
+		sbair.row(_("expected driver"), valueOrDash(_(plan.expected_driver))),
 		sbair.row(_('bundle'), plan.bundle_available ? _("Yes") : _("doesn't exist")),
 		sbair.row(_("reason"), disabledReason),
 		E('tr', { 'class': 'tr' }, [

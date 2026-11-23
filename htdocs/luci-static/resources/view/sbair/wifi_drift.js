@@ -10,6 +10,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callStatus = rpc.declare({ object: 'sbair', method: 'wifi_drift_status' });
 var callSet = rpc.declare({ object: 'sbair', method: 'wifi_drift_set', params: [ 'enabled' ] });

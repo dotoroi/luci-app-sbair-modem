@@ -44,7 +44,7 @@ const report = {
 };
 
 const context = {
-  _: function(text) { return text; },
+  i18n: { language: 'en', translate: function(text) { return text; } },
   Promise,
   E,
   rpc: { declare: function(options) { return function() { calls.push(options.method); return Promise.resolve(report); }; } },

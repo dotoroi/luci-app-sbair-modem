@@ -13,6 +13,7 @@ if [[ -n "${AIR6_SSH_OPTS:-}" ]]; then read -r -a SSH_OPTS <<<"$AIR6_SSH_OPTS"; 
 for command in ssh tar sha256sum; do
 	command -v "$command" >/dev/null 2>&1 || { echo "Required host command not found: $command" >&2; exit 1; }
 done
+[[ -s "$SELF/out/i18n/sbair-i18n.js" ]] || { echo 'Missing Floop3 browser catalog; build translations first.' >&2; exit 1; }
 [[ -s "$SELF/out/sbair-modem" ]] || { echo 'Build first: ./build.sh' >&2; exit 1; }
 for lang in ja ko; do
 	[[ -s "$SELF/out/i18n/luci-app-sbair-modem.$lang.lmo" ]] || { echo "Missing $lang catalog; build translations first." >&2; exit 1; }
@@ -20,6 +21,7 @@ done
 BIN_SHA=$(sha256sum "$SELF/out/sbair-modem" | awk '{print $1}')
 JA_SHA=$(sha256sum "$SELF/out/i18n/luci-app-sbair-modem.ja.lmo" | awk '{print $1}')
 KO_SHA=$(sha256sum "$SELF/out/i18n/luci-app-sbair-modem.ko.lmo" | awk '{print $1}')
+BROWSER_SHA=$(sha256sum "$SELF/out/i18n/sbair-i18n.js" | awk '{print $1}')
 
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)
 STAGE="/tmp/floop3-deploy-${STAMP}-$$"
@@ -30,7 +32,8 @@ mkdir -p "$WORK/bundle/out/i18n" "$WORK/bundle/tools"
 cp -R "$SELF/install.sh" "$SELF/build.sh" "$SELF/root" "$SELF/htdocs" "$WORK/bundle/"
 cp "$SELF/tools/check-shell-lf.sh" "$WORK/bundle/tools/"
 cp "$SELF/out/sbair-modem" "$WORK/bundle/out/"
-cp "$SELF/out/i18n/luci-app-sbair-modem.ja.lmo" "$SELF/out/i18n/luci-app-sbair-modem.ko.lmo" "$WORK/bundle/out/i18n/"
+cp "$SELF/out/i18n/luci-app-sbair-modem.ja.lmo" "$SELF/out/i18n/luci-app-sbair-modem.ko.lmo" \
+	"$SELF/out/i18n/sbair-i18n.js" "$WORK/bundle/out/i18n/"
 tar -czf "$WORK/bundle.tar.gz" -C "$WORK/bundle" .
 
 remote() { ssh "${SSH_OPTS[@]}" "$TARGET" "$@"; }
@@ -79,7 +82,7 @@ for path in usr/bin/sbair-modem usr/sbin/sbair-netmode usr/sbin/sbair-maintenanc
 	usr/sbin/sbair-adblock-dnsmasq usr/libexec/rpcd/sbair usr/libexec/sbair usr/share/sbair \
 	usr/share/luci/menu.d/luci-app-sbair-modem.json usr/share/rpcd/acl.d/luci-app-sbair-modem.json \
 	usr/lib/lua/luci/i18n/luci-app-sbair-modem.ja.lmo usr/lib/lua/luci/i18n/luci-app-sbair-modem.ko.lmo \
-	www/luci-static/resources/view/sbair www/luci-static/resources/tools/sbair.js \
+	www/luci-static/resources/view/sbair www/luci-static/resources/tools/sbair.js www/luci-static/resources/tools/sbair-i18n.js \
 	www/luci-static/resources/protocol/ql_datacall.js etc/init.d/sbair-apn etc/init.d/sbair-netfix \
 	etc/init.d/sbair-wifidrift etc/init.d/sbair-adblock etc/init.d/sbair-portal \
 	etc/udhcpc.user.d/sbair-fallback etc/uci-defaults/luci-app-sbair-modem \
@@ -96,10 +99,11 @@ REMOTE_BACKUP
 
 echo "[3/5] Uploading build bundle to $STAGE"
 remote "mkdir -p '$STAGE' && tar -xzf - -C '$STAGE'" <"$WORK/bundle.tar.gz"
-REMOTE_SHA=$(remote "cd '$STAGE' && sha256sum out/sbair-modem out/i18n/luci-app-sbair-modem.ja.lmo out/i18n/luci-app-sbair-modem.ko.lmo")
+REMOTE_SHA=$(remote "cd '$STAGE' && sha256sum out/sbair-modem out/i18n/luci-app-sbair-modem.ja.lmo out/i18n/luci-app-sbair-modem.ko.lmo out/i18n/sbair-i18n.js")
 [[ "$(echo "$REMOTE_SHA" | awk 'NR==1 {print $1}')" = "$BIN_SHA" ]] || { echo 'ERROR: backend SHA256 mismatch after transfer' >&2; exit 1; }
 [[ "$(echo "$REMOTE_SHA" | awk 'NR==2 {print $1}')" = "$JA_SHA" ]] || { echo 'ERROR: Japanese catalog SHA256 mismatch after transfer' >&2; exit 1; }
 [[ "$(echo "$REMOTE_SHA" | awk 'NR==3 {print $1}')" = "$KO_SHA" ]] || { echo 'ERROR: Korean catalog SHA256 mismatch after transfer' >&2; exit 1; }
+[[ "$(echo "$REMOTE_SHA" | awk 'NR==4 {print $1}')" = "$BROWSER_SHA" ]] || { echo 'ERROR: Browser catalog SHA256 mismatch after transfer' >&2; exit 1; }
 echo 'Transfer SHA256 checks passed.'
 
 echo '[4/5] Installing Floop3 (no reboot)'

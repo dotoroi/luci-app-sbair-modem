@@ -10,6 +10,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callStatus    = rpc.declare({ object: 'sbair', method: 'esim_status' });
 var callSimmapSet = rpc.declare({ object: 'sbair', method: 'simmap_set',
@@ -161,7 +164,7 @@ return view.extend({
 
 		// --- SIM マッピング -------------------------------------------------
 		var rows = [
-			sbair.row(_("mapping"), st.label),
+			sbair.row(_("mapping"), sbair.simMappingLabel(st.mapping)),
 			sbair.row(_("card"), CARD[st.card] || st.card),
 			sbair.row(_("SIM status"), st.sim_status),
 			sbair.row(_("phone number"), st.msisdn ? sbair.mask(st.msisdn) : null),
@@ -231,7 +234,7 @@ return view.extend({
 			]) ]),
 			subsection(_("profile"), [
 				st.profiles_error
-					? E('div', { 'class': 'alert-message warning' }, st.profiles_error)
+					? E('div', { 'class': 'alert-message warning' }, sbair.errorText(st.profiles_error))
 					: this.profileTable(st.profiles, running)
 			])
 		]));

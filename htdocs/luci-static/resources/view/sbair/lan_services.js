@@ -10,6 +10,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callStatus = rpc.declare({ object: 'sbair', method: 'maintenance_status' });
 var callDHCPServer = rpc.declare({ object: 'sbair', method: 'dhcp_server_set', params: [ 'enabled' ] });
@@ -109,7 +112,7 @@ return view.extend({
 					return;
 				}
 				if (result && result.warning)
-					ui.addNotification(null, E('p', {}, result.warning), 'warning');
+					ui.addNotification(null, E('p', {}, sbair.errorText(result.warning)), 'warning');
 				return reload();
 			}).catch(function(err) {
 				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');

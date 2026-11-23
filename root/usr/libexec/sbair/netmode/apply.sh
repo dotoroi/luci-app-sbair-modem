@@ -503,7 +503,7 @@ repair_config() {
 	fi
 	if [ "$(get sbair.bridge.management_proto)" = dhcp ] && ! ap_dhcp_allowed; then
 		prepare_ap_static_config || {
-			printf '%s\n' 'result=error' 'error=AP DHCP設定を固定IPへ移行できません'
+			printf '%s\n' 'result=error' 'error=Unable to migrate the AP DHCP settings to a static IP.'
 			return 1
 		}
 	fi
@@ -965,7 +965,7 @@ unmanage() {
 		return 0
 	fi
 	if fallback_active; then
-		printf '%s\n' 'error=管理解除の前にFallbackではない管理IPを確立してください'
+		printf '%s\n' 'error=Obtain a management IP other than the fallback address before disabling management.'
 		return 1
 	fi
 	# Management release changes ownership metadata and package runtime guards

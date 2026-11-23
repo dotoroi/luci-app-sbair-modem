@@ -28,6 +28,9 @@
 'require ui';
 'require dom';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callWifiStatus = rpc.declare({ object: 'sbair', method: 'wifi_status' });
 var callWifiApplyBatch = rpc.declare({

@@ -36,4 +36,5 @@ for lang in ja ko; do
 		"$PO2LMO" "$SELF/po/$lang/luci-app-sbair-modem.po" "$OUT/luci-app-sbair-modem.$lang.lmo"
 	fi
 done
+"$PYTHON3" "$SELF/tools/build-browser-i18n.py" "$OUT/sbair-i18n.js"
 echo "built: $OUT/luci-app-sbair-modem.{ja,ko}.lmo (English uses the source message IDs)"

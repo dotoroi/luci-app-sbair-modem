@@ -41,7 +41,7 @@ const rpc = {
 };
 
 const context = {
-  _: function(text) { return text; },
+  i18n: { language: 'en', translate: function(text) { return text; } },
   Promise,
   Node: function Node() {},
   E,
@@ -54,6 +54,7 @@ const context = {
     table: function(rows) { return E('table', {}, rows); },
     row: function(label, value, extra) { return E('row', { label }, [ value, extra || '' ]); },
     errorBox: function(errors) { return errors && errors.length ? E('error', {}, errors) : ''; },
+    errorText: function(text) { return text; },
     softBrickWarning: function() { return E('warning', {}, 'ソフトブリック UART firstboot'); }
   },
   setTimeout: function() { return 1; },

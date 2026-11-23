@@ -10,6 +10,9 @@
 'require dom';
 'require ui';
 'require tools.sbair as sbair';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 var callSims     = rpc.declare({ object: 'sbair', method: 'sms_sims' });
 var callMessages = rpc.declare({ object: 'sbair', method: 'sms_messages', params: [ 'iccid', 'limit' ] });
@@ -75,7 +78,7 @@ function render(self) {
 	// 保管先まわりの注意。**出さないと気付けない類** — 保管先を変えたのに
 	// 中身を移していないと「SMS が全部消えた」ように見える(実際は置き去り)。
 	if (d.simsNote)
-		body.push(E('div', { 'class': 'alert-message warning' }, d.simsNote));
+		body.push(E('div', { 'class': 'alert-message warning' }, sbair.errorText(d.simsNote)));
 
 	// --- 取り込み -----------------------------------------------------------
 	var st = d.status || {};
@@ -218,7 +221,7 @@ return view.extend({
 		}).catch(function(e) {
 			self.data.loading = false;
 			self.redraw();
-			ui.addNotification(null, E('p', {}, String(e)), 'warning');
+			ui.addNotification(null, E('p', {}, sbair.errorText(e)), 'warning');
 		});
 	},
 
@@ -248,7 +251,7 @@ return view.extend({
 		}).catch(function(e) {
 			self.data.importing = false;
 			self.redraw();
-			ui.addNotification(null, E('p', {}, String(e)), 'warning');
+			ui.addNotification(null, E('p', {}, sbair.errorText(e)), 'warning');
 		});
 	},
 

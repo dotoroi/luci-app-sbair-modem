@@ -108,7 +108,7 @@ func startSimlock(on bool) map[string]any {
 	}
 	out := startJob("simlock", arg)
 	if _, bad := out["error"]; !bad {
-		out["note"] = "40〜60 秒かかります。SIM を読み直すため電波を止めます。"
+		out["note"] = "This takes 40 to 60 seconds. The modem disconnects to reload the SIM."
 	}
 	return out
 }
@@ -217,7 +217,7 @@ func simlockApply(ch *ATChannel, on bool, step func(string)) (string, string, er
 		}
 		// 望む状態になっていない。**そのときだけ**、途中で出た誤りを見せる。
 		if i == 11 && len(notes) > 0 {
-		return "Verify SIM state", "", errors.New(msg + " / " + strings.Join(notes, " / "))
+			return "Verify SIM state", "", errors.New(msg + " / " + strings.Join(notes, " / "))
 		}
 	}
 	return "Verify SIM state", "", errors.New("Unable to verify the SIM state after the change.")

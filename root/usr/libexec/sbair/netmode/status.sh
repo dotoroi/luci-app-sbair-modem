@@ -150,28 +150,28 @@ show_status() {
 	health=ok
 	if [ "$managed" -eq 0 ]; then
 		health=unmanaged
-		add_warning '未管理（既存設定）: AP / BridgeまたはSIMルーターを明示的に適用するまで既存設定を変更しません'
+		add_warning 'Unmanaged: existing settings are preserved until you explicitly apply AP / Bridge or SIM router mode.'
 	elif [ "$configured_mode" = ap ]; then
 		[ "$proto" != static ] || [ -z "$static_resolve_error" ] || { add_warning "$static_resolve_error"; health=warn; }
 		if [ "$proto" = dhcp ] && ! ap_dhcp_allowed; then
-			add_warning 'APモードのDHCPクライアントは安全フラグで無効化されています。非常に高リスクなため、固定IPへ移行するか、UART復旧手段を確保したうえで明示的に再有効化してください'
+			add_warning 'The AP mode DHCP client is disabled for safety. Switch to a static IP, or secure UART recovery before enabling it again.'
 			health=warn
 		fi
-		[ "$configured" -eq 0 ] || { add_warning 'DHCP設定が停止状態ではありません'; health=danger; }
+		[ "$configured" -eq 0 ] || { add_warning 'The DHCP server is still enabled.'; health=danger; }
 		if [ "$udp67" -ne 0 ]; then
 			if [ "$guard" -eq 1 ]; then
-				add_warning 'システム上のUDP/67は待機中ですが、br-lan向け応答はguardで遮断しています'
+				add_warning 'UDP port 67 is listening, but the guard blocks DHCP replies on br-lan.'
 			else
-				add_warning 'UDP/67でDHCPサーバーが待機中で、br-lan向けguardも確認できません'; health=danger
+				add_warning 'DHCP is listening on UDP port 67, and the br-lan guard could not be verified.'; health=danger
 			fi
 		fi
-		[ "$managed" -eq 0 ] || [ "$guard" -eq 1 ] || { add_warning 'DHCP packet guardが有効ではありません'; health=danger; }
-		[ "$(get network.lan.proto)" = "$proto" ] || { add_warning '管理IP方式とnetwork.lanが不一致です'; health=warn; }
-		[ "$(get network.wan.disabled)" = 1 ] || { add_warning 'Cellular WANが無効化されていません'; health=danger; }
-		[ "$route" -eq 0 ] || { add_warning 'Cellular側にデフォルトルートがあります'; health=danger; }
-		bridge_up || { add_warning 'br-lanが停止しています'; health=danger; }
-		[ "$member_count" -gt 0 ] || { add_warning 'br-lanのメンバーを確認できません'; health=warn; }
-		[ "$fallback_conflict_value" -eq 0 ] || { add_warning 'Fallback IPを安全に付与できません（競合またはARP probe未使用）'; health=warn; }
+		[ "$managed" -eq 0 ] || [ "$guard" -eq 1 ] || { add_warning 'The DHCP packet guard is disabled.'; health=danger; }
+		[ "$(get network.lan.proto)" = "$proto" ] || { add_warning 'The management IP mode does not match network.lan.'; health=warn; }
+		[ "$(get network.wan.disabled)" = 1 ] || { add_warning 'Cellular WAN is still enabled.'; health=danger; }
+		[ "$route" -eq 0 ] || { add_warning 'A default route exists on the cellular WAN.'; health=danger; }
+		bridge_up || { add_warning 'br-lan is down.'; health=danger; }
+		[ "$member_count" -gt 0 ] || { add_warning 'Unable to verify br-lan members.'; health=warn; }
+		[ "$fallback_conflict_value" -eq 0 ] || { add_warning 'The fallback IP could not be assigned safely because of a conflict or unavailable ARP probe.'; health=warn; }
 		if [ -z "$address" ] && [ "$fallback_active_value" -eq 0 ]; then
 			local start timeout elapsed
 			start=$(cat "$DHCP_START_FILE" 2>/dev/null || now)
@@ -179,7 +179,7 @@ show_status() {
 			case "$timeout" in ''|*[!0-9]*) timeout=15;; esac
 			elapsed=$(( $(now) - start ))
 			if [ "$elapsed" -ge "$timeout" ] || [ "$proto" = static ]; then
-				add_warning '管理IPを取得できていません'; health=warn
+				add_warning 'No management IP address was obtained.'; health=warn
 			fi
 		fi
 	elif [ "$configured_mode" = ethwan ]; then
@@ -197,8 +197,8 @@ show_status() {
 		[ "$guard" -eq 0 ] || { add_warning 'VLAN WAN 라우터 모드인데 DHCP packet guard가 남아 있습니다'; health=danger; }
 		bridge_up || { add_warning 'br-lan이 중지되어 있습니다'; health=danger; }
 	else
-		[ "$(get dhcp.lan.ignore)" = 1 ] && { add_warning 'SIMルーターモードなのにDHCPが停止しています'; health=danger; }
-		[ "$guard" -eq 0 ] || { add_warning 'SIMルーターモードなのにDHCP packet guardが残っています'; health=danger; }
+		[ "$(get dhcp.lan.ignore)" = 1 ] && { add_warning 'DHCP is disabled in SIM router mode.'; health=danger; }
+		[ "$guard" -eq 0 ] || { add_warning 'The DHCP packet guard is still active in SIM router mode.'; health=danger; }
 	fi
 	cellular_iface=$(get network.wan.device)
 	[ "$(get network.wan.proto)" = ql_datacall ] || cellular_iface=

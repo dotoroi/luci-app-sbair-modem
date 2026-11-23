@@ -5,6 +5,9 @@
 
 'use strict';
 'require baseclass';
+'require tools.sbair-i18n as i18n';
+
+var _ = i18n.translate;
 
 // 識別子は既定で伏せる。IMEI / IMSI / ICCID / EID / Cell ID は
 // 設置場所と契約者の特定に直結するので、画面を撮って貼る前提で既定を選ぶ。
@@ -17,6 +20,12 @@ var debugMode = false;
 
 // Keep dynamic modem details intact while translating the stable message prefix.
 var localizedErrorPrefixes = [
+	{ source: 'Skipped because the time limit expired: ', translated: _('Skipped because the time limit expired: ') },
+	{ source: 'Unable to read eSIM profiles: ', translated: _('Unable to read eSIM profiles: ') },
+	{ source: 'Unable to connect to the modem: ', translated: _('Unable to connect to the modem: ') },
+	{ source: 'Backup source does not exist: ', translated: _('Backup source does not exist: ') },
+	{ source: 'Unable to create the backup directory: ', translated: _('Unable to create the backup directory: ') },
+	{ source: 'Unable to back up the configuration: ', translated: _('Unable to back up the configuration: ') },
 	{ source: 'Unable to disable SIM lock: ', translated: _('Unable to disable SIM lock: ') },
 	{ source: 'SIM lock disabled (', translated: _('SIM lock disabled (') },
 	{ source: 'Saved band settings differ from the requested combination (LTE ', translated: _('Saved band settings differ from the requested combination (LTE ') },
@@ -263,7 +272,7 @@ return baseclass.extend({
 	// 取得できなかった AT を出す。モデムが黙っているのか、こちらが読めて
 	// いないのかを区別できるようにするため。
 	errorText: function(message) {
-		var text = String(message);
+		var text = message && typeof message.message === 'string' ? message.message : String(message);
 		for (var i = 0; i < localizedErrorPrefixes.length; i++) {
 			var item = localizedErrorPrefixes[i];
 			if (text.indexOf(item.source) === 0)

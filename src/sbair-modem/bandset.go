@@ -44,11 +44,11 @@ func bandMaskHex(bands []int, width int) (string, error) {
 	w := make([]uint32, words)
 	for _, b := range bands {
 		if b < 1 {
-		return "", fmt.Errorf("Band number is invalid.")
+			return "", fmt.Errorf("Band number is invalid.")
 		}
 		i := (b - 1) / 32
 		if i >= words {
-		return "", fmt.Errorf("Band is not included in the mask.")
+			return "", fmt.Errorf("Band is not included in the mask.")
 		}
 		w[i] |= 1 << uint((b-1)%32)
 	}
@@ -97,7 +97,7 @@ func parseBandList(s string) ([]int, error) {
 		}
 		n, err := strconv.Atoi(p)
 		if err != nil {
-	return nil, fmt.Errorf("Unable to parse the band number: %q", p)
+			return nil, fmt.Errorf("Unable to parse the band number: %q", p)
 		}
 		if !seen[n] {
 			seen[n] = true
@@ -111,7 +111,7 @@ func parseBandList(s string) ([]int, error) {
 func startBandSet(lte, nr string) map[string]any {
 	out := startJob("band", "set", lte, nr)
 	if _, bad := out["error"]; !bad {
-		out["note"] = "適用すると数秒だけ電波が切れます。戻らなければ自動で元の設定に巻き戻します。"
+		out["note"] = "Applying the settings briefly disconnects the modem. The previous settings are restored if it does not reconnect."
 	}
 	return out
 }
@@ -327,7 +327,7 @@ func ensureBands(ch *ATChannel, slow bool) []string {
 	}
 	cur, err := epbsehFields(ch, "AT+EPBSEH?")
 	if err != nil {
-	return []string{"Unable to read the current band settings: " + err.Error()}
+		return []string{"Unable to read the current band settings: " + err.Error()}
 	}
 	if sameInts(bandMask(cur[2]), wantLTE) && sameInts(bandMask(cur[3]), wantNR) {
 		return nil // もう望みどおり。触らない。

@@ -471,14 +471,14 @@ func netdevUSBKind(deviceClass string, networkCandidate bool, interfaces []netde
 func netdevUSBExpectedDriver(vidpid string) string {
 	switch strings.ToLower(vidpid) {
 	case "0bda:8152", "0bda:8153", "0bda:8156":
-		return "r8152（参照）"
+		return "r8152 (reference)"
 	default:
-		return "要確認"
+		return "Needs verification"
 	}
 }
 
 func netdevUSBDriverPlan(device netdevUSBDevice) netdevUSBDriverManagement {
-	knownEthernet := device.NetworkCandidate && netdevUSBExpectedDriver(device.VIDPID) != "要確認"
+	knownEthernet := device.NetworkCandidate && netdevUSBExpectedDriver(device.VIDPID) != "Needs verification"
 	provenance := "unknown / unverified"
 	if device.Driver == "unbound" {
 		provenance = "not-bound"
@@ -486,11 +486,11 @@ func netdevUSBDriverPlan(device netdevUSBDevice) netdevUSBDriverManagement {
 	// sysfs identifies the bound driver name, not the module's origin. This
 	// read-only path does not verify an app-owned module hash or start hook, so
 	// every bound driver remains unknown / unverified.
-	reason := "USB driver操作は読み取り専用です"
+	reason := "USB driver management is read-only."
 	if device.NetworkCandidate && knownEthernet {
-		reason = "Air 6向けのkernel-matched driver bundleがありません"
+		reason = "No driver bundle matches the Air 6 kernel."
 	} else if device.NetworkCandidate {
-		reason = "USB Ethernetであることを確定できないため操作できません"
+		reason = "The device could not be verified as USB Ethernet."
 	}
 	return netdevUSBDriverManagement{
 		DeviceClassAllowed: knownEthernet,
@@ -616,13 +616,13 @@ func netdevStatus() map[string]any {
 		sort.Strings(managedPorts)
 	}
 	report := map[string]any{
-		"result":          "ok",
-		"kernel":          collectNetdevKernelStatus(),
-		"bridge":          netdevBridgeStatus{Name: bridge, Members: netdevBridgeMembers(root, bridge)},
+		"result":                "ok",
+		"kernel":                collectNetdevKernelStatus(),
+		"bridge":                netdevBridgeStatus{Name: bridge, Members: netdevBridgeMembers(root, bridge)},
 		"managed_usb_lan_ports": managedPorts,
-		"usb_controllers": netdevUSBControllers(netdevUSBRoot()),
-		"usb_devices":     netdevUSBDeviceStatus(netdevUSBRoot()),
-		"network_devices": netdevNetworkDevices(root, bridge),
+		"usb_controllers":       netdevUSBControllers(netdevUSBRoot()),
+		"usb_devices":           netdevUSBDeviceStatus(netdevUSBRoot()),
+		"network_devices":       netdevNetworkDevices(root, bridge),
 	}
 	return report
 }

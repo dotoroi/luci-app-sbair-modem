@@ -625,7 +625,7 @@ if run_netmode apply ap \
 	printf '%s\n' 'inherited static configuration was accepted without an OEM baseline' >&2
 	exit 1
 fi
-grep -q '固定IPを解決できません' "$tmp/netmode-oem-reject.out"
+grep -Fq 'Unable to resolve the static IP.' "$tmp/netmode-oem-reject.out"
 [ -z "$(state_get sbair.bridge.pending_id)" ]
 [ "$(state_get network.lan.ipaddr)" = 192.168.70.11 ]
 
