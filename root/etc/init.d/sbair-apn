@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 soralis0912
 #
-# 起動時に、いま刺さっている SIM の ICCID に対応する APN を network.wan へ流す。
+# 起動時にモデム設定を復元する。バンド再適用の監視が最大120秒かかるため、
+# 初期化処理をバックグラウンドで実行してシステム起動を止めない。
 #
 # **登録が無ければ何もしない。** 空の APN を書き込むと、ベンダの
 # check_auto_apn_prov (SIM から APN を引く仕組み)を潰しかねない。
@@ -18,10 +19,15 @@ boot() {
 		[ -n "$(/usr/bin/sbair-modem at 'AT+CCID' 2>/dev/null)" ] && break
 		sleep 2
 	  done
-	  /usr/bin/sbair-modem apn apply >/dev/null 2>&1
+	  /usr/bin/sbair-modem boot 2>&1 | logger -t sbair-modem-boot
 	) &
 }
 
 start() {
 	/usr/bin/sbair-modem apn apply
+	# The ordinary APN apply path intentionally does not rewrite band masks.
+	# Restore the saved band selection separately after the modem is ready.
+	if [ -x /usr/sbin/air6-band-restore ]; then
+		setsid /usr/sbin/air6-band-restore >/dev/null 2>&1 &
+	fi
 }

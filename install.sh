@@ -20,6 +20,10 @@ ROOT="${1:-}"
 [ -d "$ROOT" ] || { echo "!! $ROOT が無い" >&2; exit 1; }
 [ -f "$SELF/out/sbair-modem" ] || { echo "!! out/sbair-modem が無い。先に ./build.sh" >&2; exit 1; }
 
+# Refuse to deploy shell inputs with CRLF. On this firmware, CRLF can break
+# shebang execution and rpcd method names even when files appear present.
+sh "$SELF/tools/check-shell-lf.sh"
+
 sha256_file() {
 	if command -v sha256sum >/dev/null 2>&1; then
 		sha256sum "$1" | awk '{print $1}'
@@ -197,6 +201,10 @@ rm -f "$ROOT/www/luci-static/resources/view/sbair/maintenance.js"
 put "$SELF/htdocs/luci-static/resources/protocol/ql_datacall.js" \
     "$ROOT/www/luci-static/resources/protocol/ql_datacall.js"                0644
 put "$SELF/root/etc/init.d/sbair-apn"    "$ROOT/etc/init.d/sbair-apn"          0755
+put "$SELF/root/usr/sbin/air6-band-restore" "$ROOT/usr/sbin/air6-band-restore" 0755
+put "$SELF/root/usr/bin/air6-ssh-watchdog" "$ROOT/usr/bin/air6-ssh-watchdog" 0755
+put "$SELF/root/etc/init.d/zzzzz_air6_ssh_watchdog" \
+    "$ROOT/etc/init.d/zzzzz_air6_ssh_watchdog"                                 0755
 put "$SELF/root/etc/init.d/sbair-netfix" "$ROOT/etc/init.d/sbair-netfix"       0755
 put "$SELF/root/etc/init.d/sbair-adblock" "$ROOT/etc/init.d/sbair-adblock"     0755
 put "$SELF/root/etc/init.d/sbair-portal" "$ROOT/etc/init.d/sbair-portal"       0755
@@ -215,6 +223,8 @@ put "$SELF/root/etc/udhcpc.user.d/sbair-fallback" \
 mkdir -p "$ROOT/etc/rc.d"
 ln -sf ../init.d/sbair-apn "$ROOT/etc/rc.d/S95sbair-apn"
 ln -sf ../init.d/sbair-apn "$ROOT/etc/rc.d/K01sbair-apn"
+ln -sf ../init.d/zzzzz_air6_ssh_watchdog "$ROOT/etc/rc.d/S99zzzzz_air6_ssh_watchdog"
+ln -sf ../init.d/zzzzz_air6_ssh_watchdog "$ROOT/etc/rc.d/K01zzzzz_air6_ssh_watchdog"
 ln -sf ../init.d/sbair-netfix "$ROOT/etc/rc.d/S94sbair-netfix"
 ln -sf ../init.d/sbair-netfix "$ROOT/etc/rc.d/K06sbair-netfix"
 ln -sf ../init.d/sbair-wifidrift "$ROOT/etc/rc.d/S93sbair-wifidrift"

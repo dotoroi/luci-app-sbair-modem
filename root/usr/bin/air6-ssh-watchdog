@@ -1,0 +1,94 @@
+#!/bin/sh
+# Restore only the authorized LAN management path. Never open SSH on WAN.
+
+PC_IP="192.168.3.240"
+CHAIN="input_lan_drop_rule"
+DROPBEAR_INIT="/etc/init.d/zzzz_air6_dropbear"
+
+log() {
+	logger -t air6-ssh-watchdog "$*"
+}
+
+lan_ip() {
+	ip -4 -o addr show dev br-lan 2>/dev/null |
+		awk '$4 ~ /^192\.168\.3\./ { split($4, a, "/"); print a[1]; exit }'
+}
+
+valid_ipv4() {
+	case "$1" in
+		192.168.3.[0-9]*) ;;
+		*) return 1 ;;
+	esac
+	case "$1" in
+		*[!0-9.]*|*..*|*.) return 1 ;;
+	esac
+	return 0
+}
+
+ensure_firewall_rule() {
+	local_ip="$1"
+	iptables -nL "$CHAIN" >/dev/null 2>&1 || {
+		log "firewall chain $CHAIN unavailable; leaving rules unchanged"
+		return 1
+	}
+	iptables -C "$CHAIN" -s "$PC_IP/32" -d "$local_ip/32" \
+		-p tcp --dport 22 -j RETURN >/dev/null 2>&1 && return 0
+	iptables -I "$CHAIN" 1 -s "$PC_IP/32" -d "$local_ip/32" \
+		-p tcp --dport 22 -j RETURN || {
+		log "could not restore TCP/22 exception for $PC_IP -> $local_ip"
+		return 1
+	}
+	log "restored TCP/22 exception for $PC_IP -> $local_ip"
+}
+
+ssh_listening() {
+	local_ip="$1"
+	netstat -lnt 2>/dev/null |
+		awk -v endpoint="$local_ip:22" '$4 == endpoint && $6 == "LISTEN" { found=1 } END { exit !found }'
+}
+
+check_once() {
+	local_ip="$(lan_ip)"
+	valid_ipv4 "$local_ip" || {
+		log "no 192.168.3.x address on br-lan; no SSH changes made"
+		return 1
+	}
+
+	ensure_firewall_rule "$local_ip" || return 1
+	if ssh_listening "$local_ip"; then
+		return 0
+	fi
+
+	log "Dropbear is not listening on $local_ip:22; invoking existing LAN-only recovery script"
+	if [ -x "$DROPBEAR_INIT" ]; then
+		"$DROPBEAR_INIT" start || {
+			log "Dropbear recovery script failed"
+			return 1
+		}
+	else
+		log "recovery script $DROPBEAR_INIT is missing"
+		return 1
+	fi
+	ensure_firewall_rule "$local_ip" || return 1
+	ssh_listening "$local_ip" || {
+		log "Dropbear still is not listening on $local_ip:22 after recovery"
+		return 1
+	}
+	log "Dropbear LAN listener restored on $local_ip:22"
+}
+
+case "$1" in
+	--check)
+		check_once
+		;;
+	--loop)
+		while :; do
+			check_once
+			sleep 15
+		done
+		;;
+	*)
+		echo "usage: $0 --check|--loop" >&2
+		exit 2
+		;;
+esac

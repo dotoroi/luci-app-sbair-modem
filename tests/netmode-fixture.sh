@@ -112,6 +112,12 @@ set -eu
 if [ "${2:-}" = --rollback-watch ]; then
 	exit 0
 fi
+# Keep the asynchronous worker from finishing before the competing request has
+# checked the pending transaction. This makes the concurrency assertion stable
+# on both fast Linux runners and slower mounted Windows filesystems.
+if [ "${2:-}" = --apply-worker ] && [ "${NETMODE_HOLD_APPLY_WORKER:-0}" = 1 ]; then
+	sleep 5
+fi
 exec "$@"
 EOF
 chmod 755 "$fake/setsid"
@@ -468,11 +474,22 @@ run_netmode rollback >/dev/null
 [ "$(state_get network.lan.proto)" = static ]
 state_set sbair.bridge.ap_dhcp_enabled 0
 
-# Two different applies started together still produce only one transaction.
-# The loser must observe the cross-process lock and must not mutate UCI.
+# A second apply must not replace an already-pending transaction. Wait for the
+# first request to persist its pending ID before launching the competing one;
+# this keeps the assertion independent of scheduler timing. The live-lock path
+# is tested separately below.
 rm -f "$tmp/apply-one.out" "$tmp/apply-two.out"
-run_netmode apply sim >"$tmp/apply-one.out" 2>&1 & apply_one_pid=$!
-run_netmode apply ap \
+NETMODE_HOLD_APPLY_WORKER=1 run_netmode apply sim >"$tmp/apply-one.out" 2>&1 & apply_one_pid=$!
+tries=0
+pending_id=
+while [ "$tries" -lt 25 ]; do
+	pending_id=$(state_get sbair.bridge.pending_id)
+	[ -n "$pending_id" ] && break
+	sleep 0.1
+	tries=$((tries + 1))
+done
+[ -n "$pending_id" ] || { echo 'first transaction did not become pending' >&2; exit 1; }
+NETMODE_HOLD_APPLY_WORKER=1 run_netmode apply ap \
 	proto=static ipaddr=192.168.3.40 netmask=255.255.255.0 \
 	gateway=192.168.3.1 dns=192.168.3.1 fallback_enabled=1 \
 	fallback_ip=192.168.3.41 fallback_netmask=255.255.255.0 fallback_timeout=15 \
@@ -480,7 +497,11 @@ run_netmode apply ap \
 if wait "$apply_one_pid"; then :; fi
 if wait "$apply_two_pid"; then :; fi
 transaction_count=$(grep -h -c '^transaction=' "$tmp/apply-one.out" "$tmp/apply-two.out" | awk '{total += $1} END {print total + 0}')
-[ "$transaction_count" = 1 ]
+if [ "$transaction_count" != 1 ]; then
+	printf '%s\n' "expected one concurrent transaction, got $transaction_count" >&2
+	cat "$tmp/apply-one.out" "$tmp/apply-two.out" >&2
+	exit 1
+fi
 grep -h -q 'another network-mode transaction\|awaiting confirmation' "$tmp/apply-one.out" "$tmp/apply-two.out"
 pending_id=$(state_get sbair.bridge.pending_id)
 [ -n "$pending_id" ]

@@ -89,12 +89,19 @@ mode_of() {
 [ "$(readlink "$rootfs/etc/rc.d/S91sbair-portal")" = ../init.d/sbair-portal ]
 [ "$(readlink "$rootfs/etc/rc.d/K10sbair-adblock")" = ../init.d/sbair-adblock ]
 [ "$(readlink "$rootfs/etc/rc.d/K09sbair-portal")" = ../init.d/sbair-portal ]
+[ "$(readlink "$rootfs/etc/rc.d/S95sbair-apn")" = ../init.d/sbair-apn ]
+[ "$(readlink "$rootfs/etc/rc.d/S99zzzzz_air6_ssh_watchdog")" = ../init.d/zzzzz_air6_ssh_watchdog ]
+[ "$(readlink "$rootfs/etc/rc.d/K01zzzzz_air6_ssh_watchdog")" = ../init.d/zzzzz_air6_ssh_watchdog ]
+[ -x "$rootfs/usr/sbin/air6-band-restore" ]
+[ -x "$rootfs/usr/bin/air6-ssh-watchdog" ]
+[ -x "$rootfs/etc/init.d/zzzzz_air6_ssh_watchdog" ]
 
-# Keep the boot path at the unforked behavior: only the lightweight APN apply
-# runs during startup, asynchronously.  The heavier modem/SIM/IMS/band boot
-# sequence must never be part of the init start path.
-grep -q '/usr/bin/sbair-modem apn apply' "$repo/root/etc/init.d/sbair-apn"
-! grep -q '/usr/bin/sbair-modem boot' "$repo/root/etc/init.d/sbair-apn"
+# The normal rc.d start path keeps APN apply lightweight, then restores only the
+# saved band masks asynchronously. The separate boot action is not this path.
+start_block=$(sed -n '/^start() {/,/^}/p' "$repo/root/etc/init.d/sbair-apn")
+printf '%s\n' "$start_block" | grep -q '/usr/bin/sbair-modem apn apply'
+printf '%s\n' "$start_block" | grep -q 'air6-band-restore'
+! printf '%s\n' "$start_block" | grep -q '/usr/bin/sbair-modem boot'
 
 # Diagnostic Wi-Fi drift collection is opt-in and the power action must keep
 # regulatory settings untouched.

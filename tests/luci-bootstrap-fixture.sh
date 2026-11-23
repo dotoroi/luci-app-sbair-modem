@@ -11,13 +11,16 @@ sh -n "$bootstrap/check.sh"
 
 awk -F '\t' '
 	$1 ~ /^#/ || NF <= 1 { next }
-	NF != 5 || $2 !~ /^[^\/]+\.ipk$/ || $3 !~ /^https:\/\/downloads\.openwrt\.org\// ||
-	$4 !~ /^[0-9a-fA-F]{64}$/ || $5 == "" { bad=1 }
-	{ rows++ }
+	{
+		gsub(/\r$/, "", $5)
+		if (NF != 5 || $2 !~ /^[^\/]+\.ipk$/ || $3 !~ /^https:\/\/downloads\.openwrt\.org\// ||
+			$4 !~ /^[0-9a-fA-F]{64}$/ || $5 == "") bad=1
+		rows++
+	}
 	END { exit(rows != 34 || bad) }
 ' "$bootstrap/packages.lock"
 
-[ "$(awk -F '\t' '$5 == "special-libnl" { n++ } END { print n + 0 }' "$bootstrap/packages.lock")" = 1 ]
+[ "$(awk -F '\t' '{ gsub(/\r$/, "", $5); if ($5 == "special-libnl") n++ } END { print n + 0 }' "$bootstrap/packages.lock")" = 1 ]
 grep -q 'libnl-tiny.so.1' "$bootstrap/target.sh"
 grep -q 'opkg -f.*--noaction' "$bootstrap/target.sh"
 grep -q 'firewall.sba6_user_include' "$bootstrap/target.sh"

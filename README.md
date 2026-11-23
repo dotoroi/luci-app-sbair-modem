@@ -1,3 +1,8 @@
+[English](README.en.md) | [日本語](README.md) | [한국어](README.ko.md)
+
+[사용자 안내서 / User manuals / ユーザーマニュアル](docs/MANUALS.ja.md)
+[Air 6 라우터 모드](docs/ROUTER-MODE.ja.md)
+
 # luci-app-sbair-modem
 
 **SoftBank Air 6（RG620T-SBK / RUDOLF）専用のLuCIアプリ**です。
@@ -46,6 +51,8 @@ luci-app-sbair-modem/
 ├── root/usr/sbin/sbair-usb-nic        任意のUSB CDC-NCM gadget安全ゲート
 ├── root/usr/sbin/sbair-netfix         15秒周期でvendor設定を補正するデーモン
 ├── root/usr/sbin/sbair-wifidrift      Wi-Fiの差分を監視する軽量ポーリングデーモン
+├── root/usr/sbin/air6-band-restore    保存済みLTE / NRバンドを起動時に復元
+├── root/usr/bin/air6-ssh-watchdog     管理LAN限定のSSH・FW例外復旧ループ
 ├── root/usr/share/sbair/firewall.include AP時のDHCPパケットガード用fw3 include
 ├── root/usr/share/rpcd/acl.d/         ACL
 ├── root/usr/share/luci/menu.d/        メニュー
@@ -53,7 +60,8 @@ luci-app-sbair-modem/
 │   ├── tools/sbair.js                 タブ共通のUIヘルパー
 │   ├── protocol/ql_datacall.js        Network → InterfacesでWANを扱えるようにする
 │   └── view/sbair/*.js                機能領域ごとのLuCI view
-├── root/etc/init.d/sbair-apn          起動時にAPNを設定し、AT+CNMIを再設定する
+├── root/etc/init.d/sbair-apn          APN適用とバンド専用復元の起動経路
+├── root/etc/init.d/zzzzz_air6_ssh_watchdog  管理LAN SSH監視をprocdで起動
 ├── src/sbair-modem/                   バックエンド（Go）
 └── docs/API.md                        ubus APIとLuCI画面（SMS / IMS / バンド / リセット）
 ```
@@ -92,8 +100,22 @@ sbair-modem at [-r] [-t SEC] '<AT>'   ATコマンドを1本送信
 ./install.sh <tree>     # 展開済みrootfsツリーへ導入
 ```
 
+`install.sh /` はファイルと自動起動リンクを配置しますが、稼働中のサービスは
+自動で起動しません。稼働中の実機へ適用した場合は、既存SSH接続を保ったまま
+`/etc/init.d/zzzzz_air6_ssh_watchdog start` を実行し、
+`/usr/bin/air6-ssh-watchdog --check` で1回確認してください。バンド復元は次回起動時に
+開始されます。すぐ実行する場合は `/usr/sbin/air6-band-restore` を呼び出します。
+
+SSH watchdog は**試験LAN専用**です。`br-lan` の `192.168.3.x` と管理PC
+`192.168.3.240` の組み合わせでだけ動き、`input_lan_drop_rule` の TCP/22 例外を
+復旧します。Dropbear listener がなければ既存の `/etc/init.d/zzzz_air6_dropbear`
+を呼びます。WANや別の送信元は許可しません。異なるLAN構成では、導入前に
+`PC_IP`、LANアドレス判定、既存Dropbear復旧スクリプトを確認してください。
+設定・導入・ロールバック条件は [`docs/SSH-WATCHDOG-KO.md`](docs/SSH-WATCHDOG-KO.md)
+を参照してください。
+
 本体のGoバイナリは、CGOを無効にした静的リンクでビルドします。そのため、ビルドホストがglibc環境でも
-OpenWrt（musl）上で実行できます。ビルドにはGo 1.25以上が必要です（OpenWrt 21.02に含まれるgolangは1.18のため不足します）。
+OpenWrt（musl）上で実行できます。ビルドには `go.mod` の指定どおり Go 1.25.5 以上が必要です（OpenWrt 21.02に含まれるgolangは1.18のため不足します）。
 goenvを使う場合は、`export PATH=$HOME/.goenv/bin:$HOME/.goenv/shims:$PATH`を実行してください。
 
 ### LuCI未導入の純正SoftBank Air 6向け（任意）
