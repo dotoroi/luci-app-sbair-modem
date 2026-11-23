@@ -47,7 +47,7 @@ jobs:
           done
 
       - name: Package release bundle
-        run: ./tools/package-release.sh "$GITHUB_REF_NAME" --use-existing-binary
+        run: sh ./tools/package-release.sh "$GITHUB_REF_NAME" --use-existing-binary
 
       - name: Publish release with bundle and checksum
         env:
