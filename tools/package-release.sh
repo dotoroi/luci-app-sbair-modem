@@ -37,9 +37,17 @@ mkdir -p "$STAGE/out"
 cp -R "$SELF/install.sh" "$SELF/root" "$SELF/htdocs" "$STAGE/"
 mkdir -p "$STAGE/tools"
 cp "$SELF/tools/check-shell-lf.sh" "$STAGE/tools/"
+cp "$SELF/tools/uninstall-floop3.sh" "$STAGE/tools/"
 cp "$SELF/out/sbair-modem" "$STAGE/out/"
 cp "$SELF/LICENSE" "$SELF/NOTICE.md" "$STAGE/"
 cp "$SELF/docs/FIRMWARE-COMPATIBILITY-KO.md" "$STAGE/"
+cp "$SELF/docs/INSTALL-NON-CODEX-KO.md" "$SELF/docs/UNINSTALL-FLOOP3-KO.md" "$STAGE/"
+mkdir -p "$STAGE/out/i18n" "$STAGE/extras"
+cp -R "$SELF/extras/luci-bootstrap" "$STAGE/extras/"
+for lang in ja ko; do
+	name="luci-app-sbair-modem.$lang"
+	python3 "$SELF/tools/po2lmo-fallback.py" "$SELF/po/$lang/luci-app-sbair-modem.po" "$STAGE/out/i18n/$name.lmo"
+done
 
 BIN_SHA=$(sha256sum "$STAGE/out/sbair-modem" | awk '{print $1}')
 cat > "$STAGE/release-manifest.json" <<EOF

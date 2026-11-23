@@ -1,0 +1,3503 @@
+msgid ""
+msgstr ""
+
+"Project-Id-Version: luci-app-sbair-modem\n"
+"PO-Revision-Date: 2026-11-13 00:00+0000\n"
+"Last-Translator: Floop3 UI contributors\n"
+"Language-Team: Korean\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid ""
+"\n"
+"Use eth1 as WAN and request DHCP. Use a wired WAN instead of a cellular WAN. "
+"Check the physical jack connected to eth1 and the current LAN DHCP status."
+msgstr "\neth1을 WAN으로 사용하고 DHCP로 주소를 받습니다. 셀룰러 WAN 대신 유선 WAN을 사용합니다. eth1에 연결된 실제 포트와 현재 LAN DHCP 상태를 확인하세요."
+
+msgid " / Gateway "
+msgstr " / 게이트웨이 "
+
+msgid " will be switched. "
+msgstr " 모드로 전환됩니다. "
+
+msgid " will switch to the selected SIM."
+msgstr " 선택한 SIM으로 전환합니다."
+
+msgid "(Cannot be avoided with AT+CMGL specification). In the storage room"
+msgstr "(AT+CMGL 사양상 피할 수 없음). 저장소에서는"
+
+msgid "(Check only about 25 frequently used ports)"
+msgstr "(자주 사용하는 포트 약 25개만 확인)"
+
+msgid "(Not included with SIM)"
+msgstr "(SIM에 없음)"
+
+msgid "(Requested profile only)"
+msgstr "(요청한 프로필만)"
+
+msgid "(Sender unknown)"
+msgstr "(발신자 알 수 없음)"
+
+msgid "(no change)"
+msgstr "(변경 없음)"
+
+msgid "(not read"
+msgstr "(읽지 않음 "
+
+msgid "+ EDMFAPP 6,3 (live)"
+msgstr "+ EDMFAPP 6,3(실시간)"
+
+msgid "+CESQ (live)"
+msgstr "+CESQ(실시간)"
+
+msgid "+CIREG (live)"
+msgstr "+CIREG(실시간)"
+
+msgid "+ECBDINFO (raw)"
+msgstr "+ECBDINFO(원시값)"
+
+msgid "+EPBSEH (live)"
+msgstr "+EPBSEH(실시간)"
+
+msgid ", registration"
+msgstr ", 등록"
+
+msgid "- It will not be overwritten by a second or subsequent capture."
+msgstr "- 두 번째 이후에 가져와도 덮어쓰지 않습니다."
+
+msgid ". Please check the contents and save."
+msgstr ". 내용을 확인한 뒤 저장하세요."
+
+msgid ""
+". The name you give here will be saved to the card and will be displayed in "
+"addition to this screen."
+msgstr "입니다. 여기 입력한 이름은 카드에 저장되고 이 화면에도 표시됩니다."
+
+msgid ". You cannot guess the value and activate it."
+msgstr ". 값을 추측하여 활성화할 수 없습니다."
+
+msgid "/ netmask"
+msgstr "/ 서브넷 마스크"
+
+msgid "5GHz / 160 MHz client → NAS via Air6"
+msgstr "5GHz/160MHz 클라이언트 → Air6 경유 NAS"
+
+msgid "? Continue?"
+msgstr "? 계속할까요?"
+
+msgid "? Nearby devices can join for a limited time. Continue?"
+msgstr "? 주변 장치가 일정 시간 동안 연결할 수 있습니다. 계속할까요?"
+
+msgid "A connection device cannot be acquired (or does not exist yet)."
+msgstr "연결된 기기 정보를 가져올 수 없습니다(아직 연결된 기기가 없을 수도 있습니다)."
+
+msgid ""
+"A regular SIM has been inserted. Profile work is only possible with eUICC "
+"cards."
+msgstr "일반 SIM이 삽입되어 있습니다. 프로필 관리는 eUICC 카드에서만 가능합니다."
+
+msgid "AP / Bridge"
+msgstr "AP/브리지"
+
+msgid "AP/Bridge settings"
+msgstr "AP/브리지 설정"
+
+msgid "AP/Bridge — connects br-lan to the upstream network"
+msgstr "AP/브리지 — br-lan을 상위 네트워크에 연결"
+
+msgid "APN settings will not change."
+msgstr "APN 설정은 변경되지 않습니다."
+
+msgid "Activate with a click"
+msgstr "클릭하여 활성화"
+
+msgid "Activation Code"
+msgstr "활성화 코드"
+
+msgid "Activation profile"
+msgstr "활성화 프로필"
+
+msgid "Add"
+msgstr "추가"
+
+msgid "Add USB LAN port"
+msgstr "USB LAN 포트 추가"
+
+msgid "Add eSIM"
+msgstr "eSIM 추가"
+
+msgid ""
+"Add the interface to br-lan. It uses the same private network and DHCP as "
+"the LAN, and the WAN settings do not change."
+msgstr "인터페이스를 br-lan에 추가합니다. 기존 LAN과 같은 사설 네트워크 및 DHCP를 사용하며 WAN 설정은 변경하지 않습니다."
+
+msgid "Add to LAN"
+msgstr "LAN에 추가"
+
+msgid "Added USB LAN port to br-lan."
+msgstr "USB LAN 포트를 br-lan에 추가했습니다."
+
+msgid "Added barrel to inventory."
+msgstr "건을 저장소에 추가했습니다."
+
+msgid "Advanced settings"
+msgstr "고급 설정"
+
+msgid ""
+"Advertising blocks are managed per device MAC address. Each terminal does "
+"not need to use the management screen."
+msgstr "광고 차단은 기기의 MAC 주소별로 관리됩니다. 각 단말기에서 관리 화면을 사용할 필요는 없습니다."
+
+msgid "After checking the difference, restart Wi-Fi and compare"
+msgstr "차이를 확인한 뒤 Wi-Fi를 재시작하고 비교"
+
+msgid "Already a br-lan member"
+msgstr "이미 br-lan에 속함"
+
+msgid "Already at default power."
+msgstr "이미 기본 출력입니다."
+
+msgid "Already at maximum scale."
+msgstr "이미 최대 단계입니다."
+
+msgid "Applied"
+msgstr "적용됨"
+
+msgid "Applied."
+msgstr "적용했습니다."
+
+msgid "Apply changes"
+msgstr "변경 사항 적용"
+
+msgid "Apply selected band changes"
+msgstr "선택한 밴드 변경 적용"
+
+msgid "Applying:"
+msgstr "적용 중:"
+
+msgid "Architecture"
+msgstr "아키텍처"
+
+msgid "Association count"
+msgstr "연결된 단말 수"
+
+msgid ""
+"At startup and after switching SIMs, the one corresponding to that SIM is "
+"automatically selected."
+msgstr "시작할 때와 SIM을 전환한 뒤 해당 SIM의 설정이 자동 선택됩니다."
+
+msgid "At that time, radio waves are stopped for 40 to 60 seconds."
+msgstr "그때 무선 통신이 40~60초간 중단됩니다."
+
+msgid "Authentication method"
+msgstr "인증 방식"
+
+msgid "Automatic acquisition from upstream router (DHCP)"
+msgstr "상위 라우터에서 자동으로 주소 획득(DHCP)"
+
+msgid "Automatic validation upon startup is also not performed."
+msgstr "시작 시 자동 검증도 수행되지 않습니다."
+
+msgid "Automatically resets upon startup."
+msgstr "시작할 때 자동으로 재설정합니다."
+
+msgid "Automatically rewind to original settings"
+msgstr "자동으로 이전 설정으로 되돌립니다"
+
+msgid "Automatically rewinds if no network connection is reached in time"
+msgstr "시간 내 네트워크 연결에 실패하면 자동으로 이전 상태로 되돌립니다"
+
+msgid "Available after driver binding"
+msgstr "드라이버 바인딩 후 사용 가능"
+
+msgid "Available services"
+msgstr "사용 가능한 서비스"
+
+msgid "Band / IMS"
+msgstr "밴드/IMS"
+
+msgid "Band Steering"
+msgstr "밴드 스티어링"
+
+msgid "Band connecting"
+msgstr "연결된 밴드"
+
+msgid "Band steering"
+msgstr "밴드 스티어링"
+
+msgid "Bandwidth"
+msgstr "대역폭"
+
+msgid "Bandwidth cannot be changed for legacy Wi-Fi protocols."
+msgstr "기존 Wi-Fi 규격에서는 대역폭을 변경할 수 없습니다."
+
+msgid "Baud rate: 115200"
+msgstr "전송 속도: 115200"
+
+msgid "Beacon / Tx power"
+msgstr "비콘 / 송신 출력"
+
+msgid "Because the card is reset (REFRESH)"
+msgstr "카드가 재설정(REFRESH)되므로"
+
+msgid ""
+"Because the wireless driver (mt_wifi) of this aircraft does not support the "
+"Network → Wireless screen of the OpenWrt standard,"
+msgstr "이 장치의 무선 드라이버(mt_wifi)는 OpenWrt 기본 ‘네트워크 → 무선’ 화면을 지원하지 않으므로"
+
+msgid ""
+"Before using AP / Bridge mode, check EasyMesh in the stock web UI if needed."
+msgstr "AP/브리지 모드를 사용하기 전에 필요하면 순정 웹 UI에서 EasyMesh 설정을 확인하세요."
+
+msgid ""
+"Blank inherits the stock settings. Required items for which a stock setting "
+"cannot be obtained will be rejected upon application."
+msgstr "빈칸은 순정 설정을 상속합니다. 순정 설정을 가져올 수 없는 필수 항목이 있으면 적용이 거부됩니다."
+
+msgid "Body information"
+msgstr "장치 본체 정보"
+
+msgid "Bridge"
+msgstr "브리지"
+
+msgid "Bridge members"
+msgstr "브리지 구성원"
+
+msgid "Built-in eSIM"
+msgstr "내장 eSIM"
+
+msgid "Bundle"
+msgstr "번들"
+
+msgid "Cable: Regular Micro-USB cable"
+msgstr "케이블: 일반 Micro-USB 케이블"
+
+msgid "Can't get temperature."
+msgstr "온도를 가져올 수 없습니다."
+
+msgid "Cancel pending changes and revert to previous settings?"
+msgstr "대기 중인 변경을 취소하고 이전 설정으로 되돌릴까요?"
+
+msgid "Cancel selection"
+msgstr "선택 취소"
+
+msgid ""
+"Candidate USB Host network device not detected (All USB Host devices can be "
+"checked in “Main Unit > USB Device”)"
+msgstr "USB 호스트의 네트워크 장치 후보를 찾지 못했습니다(모든 USB 호스트 장치는 ‘본체 > USB 장치’에서 확인할 수 있습니다)."
+
+msgid ""
+"Candidate v1 is a live-validated binary from upstream, but the source/binary "
+"correspondence is treated as B2 provenance and is not recommended for new "
+"uses."
+msgstr "후보 v1은 업스트림에서 실기기 검증된 바이너리지만, 소스와 바이너리 대응 관계는 B2 출처 수준으로 취급되어 신규 사용을 권장하지 않습니다."
+
+msgid "Cannot be calculated in existing settings."
+msgstr "기존 설정으로는 계산할 수 없습니다."
+
+msgid "Cell ID"
+msgstr "셀 ID"
+
+msgid "Cellular"
+msgstr "모바일 회선"
+
+msgid "Cellular WAN"
+msgstr "셀룰러 WAN"
+
+msgid "Change USB UDC/ConfigFS. Do you have an independent management path?"
+msgstr "USB UDC/ConfigFS를 변경합니다. 독립된 관리 경로를 확보했습니까?"
+
+msgid ""
+"Change and save band steering. Turning it off also turns off MLO. A device "
+"reboot may be required. Continue?"
+msgstr "밴드 스티어링을 변경하고 저장합니다. 끄면 MLO도 꺼집니다. 장치 재부팅이 필요할 수 있습니다. 계속할까요?"
+
+msgid "Change the band you want to activate as follows:"
+msgstr "활성화할 밴드를 다음과 같이 변경합니다:"
+
+msgid ""
+"Change the ownership state of USB UDC/ConfigFS and make Air6 act as a USB "
+"CDC-NCM gadget."
+msgstr "USB UDC/ConfigFS의 소유 상태를 변경하여 Air 6을 USB CDC-NCM 가젯으로 동작시킵니다."
+
+msgid "Changes that do not apply"
+msgstr "미적용 변경 사항 "
+
+msgid "Changing band steering setting..."
+msgstr "밴드 스티어링 설정 변경 중..."
+
+msgid ""
+"Changing this may alter SSID settings. Check saved settings and actual "
+"broadcasts in Wi-Fi diagnostics."
+msgstr "이 설정을 변경하면 SSID 설정이 달라질 수 있습니다. 저장된 설정과 실제 송출 상태를 Wi-Fi 진단에서 확인하세요."
+
+msgid "Channel"
+msgstr "채널"
+
+msgid "Check manually within seconds."
+msgstr "초 이내에 설정을 확인하세요."
+
+msgid "Check the 6GHz factor"
+msgstr "6GHz 관련 요소 확인"
+
+msgid "Check the saved state first. If needed:"
+msgstr "먼저 저장된 상태를 확인하세요. 필요한 경우:"
+
+msgid "Check these settings"
+msgstr "다음 설정을 확인하세요"
+
+msgid ""
+"Clear it from storage and also clear the modem's storage area. It cannot be "
+"cancelled."
+msgstr "보관함과 모뎀의 저장 공간에서 모두 삭제합니다. 취소할 수 없습니다."
+
+msgid "Client isolation"
+msgstr "클라이언트 격리"
+
+msgid "Communication between main SSID bands"
+msgstr "기본 SSID 대역 간 통신"
+
+msgid "Communication between main and guest SSIDs"
+msgstr "기본 SSID와 게스트 SSID 간 통신"
+
+msgid "Communication is lost (AT+CFUN=0 → 1)"
+msgstr "통신이 끊깁니다(AT+CFUN=0 → 1)"
+
+msgid "Communication settings"
+msgstr "통신 설정"
+
+msgid ""
+"Communication standard/channel/bandwidth (UCI setting value. Check actual "
+"operation with “Wi-Fi > Diagnosis”)"
+msgstr "통신 규격/채널/대역폭(UCI 설정값. 실제 동작은 ‘Wi-Fi > 진단’에서 확인)"
+
+msgid "Compare settings"
+msgstr "설정 비교"
+
+msgid "Comparison results"
+msgstr "비교 결과"
+
+msgid "Competitive / non-granted"
+msgstr "경합/미할당"
+
+msgid "Confirmation required"
+msgstr "확인 필요"
+
+msgid "Connection device ("
+msgstr "연결된 기기 ("
+
+msgid "Connection method"
+msgstr "연결 방식"
+
+msgid ""
+"Connects Wi-Fi 7 capable clients across multiple bands. Older WPA clients "
+"may fail to connect; stock firmware changes security settings when this is "
+"enabled."
+msgstr "여러 주파수 대역에 걸쳐 Wi-Fi 7 지원 단말을 연결합니다. 기존 WPA 단말은 연결하지 못할 수 있으며 순정 펌웨어는 활성화 시 보안 설정을 변경합니다."
+
+msgid "Continue?"
+msgstr "계속할까요?"
+
+msgid "Conversion: Pin socket (female) → USB-A female"
+msgstr "변환: 핀 소켓(암) → USB-A 포트(암)"
+
+msgid "Corresponding but invalid"
+msgstr "지원하지만 비활성"
+
+msgid "Could not read Wi-Fi batch change data."
+msgstr "Wi-Fi 일괄 변경 데이터를 읽을 수 없습니다."
+
+msgid "Could not remove wireless power settings."
+msgstr "무선 출력 설정을 제거할 수 없습니다."
+
+msgid "Could not write wireless power settings."
+msgstr "무선 출력 설정을 저장할 수 없습니다."
+
+msgid "Could not write wireless settings."
+msgstr "무선 설정을 저장할 수 없습니다."
+
+msgid "Current DHCP scope (observation)"
+msgstr "현재 DHCP 할당 범위(관측값)"
+
+msgid "Current PIN: "
+msgstr "현재 PIN: "
+
+msgid "Current SIM"
+msgstr "현재 SIM"
+
+msgid "Current WAN"
+msgstr "현재 WAN"
+
+msgid "Current status:"
+msgstr "현재 상태:"
+
+msgid "Currently detached (settings retained)"
+msgstr "현재 분리됨(설정은 유지)"
+
+msgid "DHCP / Fixed"
+msgstr "DHCP/고정"
+
+msgid ""
+"DHCP clients in AP mode are disabled with the safe flag. Applies only to "
+"static IP."
+msgstr "AP 모드의 DHCP 클라이언트는 안전 플래그로 비활성화됩니다. 고정 IP만 적용할 수 있습니다."
+
+msgid "DHCP lease time (observed)"
+msgstr "DHCP 임대 시간(관측값)"
+
+msgid "DHCP packet guard"
+msgstr "DHCP 패킷 보호"
+
+msgid "DHCP/route status was checked and corrected."
+msgstr "DHCP/경로 상태를 확인하고 보정했습니다."
+
+msgid "Date and time of last change"
+msgstr "마지막 변경 일시"
+
+msgid "Default (uncontrolled) — accept current settings"
+msgstr "기본값(제어하지 않음) — 현재 설정 유지"
+
+msgid "Default power saved; Wi-Fi restart started."
+msgstr "기본 출력을 저장하고 Wi-Fi 재시작을 시작했습니다."
+
+msgid "Delete"
+msgstr "삭제"
+
+msgid "Delete everything on this SIM"
+msgstr "이 SIM의 메시지 모두 삭제"
+
+msgid "Delete message"
+msgstr "메시지 삭제"
+
+msgid "Delete the following messages from both your library and your modem:"
+msgstr "다음 메시지를 보관함과 모뎀에서 삭제합니다:"
+
+msgid "Deleted."
+msgstr "삭제했습니다."
+
+msgid "Deletion cannot be undone. To re-enter the same profile,"
+msgstr "삭제는 취소할 수 없습니다. 같은 프로필을 다시 등록하려면"
+
+msgid ""
+"Depending on how the data call fails, the modem side session is blocked."
+msgstr "데이터 통화 실패 유형에 따라 모뎀 측 세션이 차단될 수 있습니다. "
+
+msgid "Detected /"
+msgstr "감지됨/"
+
+msgid "Device reboot"
+msgstr "장치 재부팅"
+
+msgid "Diagnostic log (recent)"
+msgstr "진단 로그(최근)"
+
+msgid "Differences from Known-Good ("
+msgstr "정상 상태와의 차이("
+
+msgid ""
+"Different keys reduce the number of remaining attempts. Once you use it up "
+"you can't go back"
+msgstr "키를 잘못 입력하면 남은 시도 횟수가 줄어듭니다. 횟수를 소진하면 되돌릴 수 없습니다."
+
+msgid "Disable (Enable)"
+msgstr "비활성화(활성화)"
+
+msgid "Disable (limited rollback)"
+msgstr "제한적 롤백으로 비활성화"
+
+msgid ""
+"Disable DHCP for LAN clients? Devices relying on Air 6 may be unable to "
+"renew their IP addresses. Continue?"
+msgstr "LAN 클라이언트용 DHCP를 비활성화할까요? Air 6에 의존하는 기기는 IP 주소를 갱신하지 못할 수 있습니다. 계속할까요?"
+
+msgid "Disable DHCP server"
+msgstr "DHCP 서버 비활성화"
+
+msgid "Disable IMS"
+msgstr "IMS 비활성화"
+
+msgid "Disable OTA/FOTA automatic updates"
+msgstr "OTA/FOTA 자동 업데이트 비활성화"
+
+msgid ""
+"Disable OTA/FOTA automatic updates. Set fota.config.enabled and "
+"fota.provision.enabled to 0, stop kn_fotad and disable autostart. Do you "
+"want to continue?"
+msgstr "OTA/FOTA 자동 업데이트를 비활성화합니다. fota.config.enabled와 fota.provision.enabled를 0으로 설정하고 kn_fotad를 중지한 뒤 자동 시작을 끕니다. 계속할까요?"
+
+msgid "Disable ad blocking with a click"
+msgstr "클릭하여 광고 차단 해제"
+
+msgid "Disable with a click"
+msgstr "클릭하여 비활성화"
+
+msgid "Disabled"
+msgstr "비활성화됨"
+
+msgid "Disables all 2.4/5/6 GHz SSIDs. Wired LAN and SSH remain available."
+msgstr "2.4/5/6GHz의 모든 SSID를 비활성화합니다. 유선 LAN과 SSH는 계속 사용할 수 있습니다."
+
+msgid "Disconnect the USB host and obtain a means of physical recovery."
+msgstr "USB 호스트를 분리하고 물리적 복구 수단 확보"
+
+msgid ""
+"Disconnect the USB host device before operating it. LAN/WAN, br-lan, DHCP, "
+"Wi-Fi, and firewall do not change automatically."
+msgstr "작업 전에 USB 호스트 장치를 분리하세요. LAN/WAN, br-lan, DHCP, Wi-Fi, 방화벽 설정은 자동 변경되지 않습니다."
+
+msgid "Display identifier (Cell ID)"
+msgstr "표시 식별자(Cell ID)"
+
+msgid "Display identifier (EID/ICCID)"
+msgstr "표시 식별자(EID/ICCID)"
+
+msgid "Display identifier (IMEI)"
+msgstr "단말기 식별자(IMEI)"
+
+msgid ""
+"Displays all USB devices/interfaces including hub, storage, serial, vendor-"
+"specific, and unknown as USB Host (device connected to Air 6)."
+msgstr "허브, 저장 장치, 직렬 장치, 제조사 전용 및 알 수 없는 장치를 포함한 모든 USB 장치/인터페이스를 USB 호스트(Air 6에 연결된 장치)로 표시합니다."
+
+msgid ""
+"Do not assume the USB side as the management path, but secure a recovery "
+"method such as another LAN or Wi-Fi management path and UART."
+msgstr "USB를 관리 경로로 간주하지 말고, 별도 LAN·Wi-Fi 관리 경로와 UART 등 복구 수단을 확보하세요."
+
+msgid ""
+"Do not change these settings unless you have a means of recovery such as "
+"UART. Additionally, Safe Apply's automatic rollback feature does not "
+"guarantee recovery from all configuration failures."
+msgstr "UART 등 복구 수단이 없다면 이 설정을 변경하지 마세요. 또한 Safe Apply의 자동 롤백 기능으로 모든 설정 오류에서 복구할 수 있는 것은 아닙니다."
+
+msgid ""
+"Do you want to disable USB Gadget and delete the dedicated ConfigFS topology?"
+msgstr "USB 가젯을 비활성화하고 전용 ConfigFS 구성을 삭제할까요?"
+
+msgid "Driver SHA256"
+msgstr "드라이버 SHA256"
+
+msgid "Driver vermagic"
+msgstr "드라이버 vermagic"
+
+msgid ""
+"Drop the radio waves, raise them again (AT+CFUN=0 → 1), and spread out the "
+"WAN again."
+msgstr "무선 기능을 잠시 끈 뒤 다시 켜고(AT+CFUN=0 → 1), WAN 연결을 다시 시작합니다."
+
+msgid ""
+"EasyMesh may automatically re-enable DHCP. This feature does not change "
+"EasyMesh settings."
+msgstr "EasyMesh가 DHCP를 자동으로 다시 활성화할 수 있습니다. 이 기능은 EasyMesh 설정을 변경하지 않습니다."
+
+msgid "Edit it yourself here."
+msgstr "이 화면에서 직접 수정하세요."
+
+msgid "Enable"
+msgstr "활성화"
+
+msgid "Enable (Disable)"
+msgstr "활성화(비활성화)"
+
+msgid ""
+"Enable DHCP for LAN clients? It may conflict with another DHCP server on the "
+"same LAN. Continue?"
+msgstr "LAN 클라이언트용 DHCP를 활성화할까요? 같은 LAN의 다른 DHCP 서버와 충돌할 수 있습니다. 계속할까요?"
+
+msgid "Enable DHCP server"
+msgstr "DHCP 서버 활성화"
+
+msgid "Enable IMS"
+msgstr "IMS 활성화"
+
+msgid "Enable OTA/FOTA automatic updates"
+msgstr "OTA/FOTA 자동 업데이트 활성화"
+
+msgid ""
+"Enable OTA/FOTA automatic updates and start kn_fotad. Do you want to "
+"continue?"
+msgstr "OTA/FOTA 자동 업데이트를 활성화하고 kn_fotad를 시작합니다. 계속할까요?"
+
+msgid "Enable ad blocking with a click"
+msgstr "클릭하여 광고 차단 활성화"
+
+msgid "Enable filter"
+msgstr "필터 활성화"
+
+msgid ""
+"Enable the MAC allowlist. Devices not in the list will be blocked. Continue?"
+msgstr "MAC 허용 목록을 활성화합니다. 목록에 없는 장치는 차단됩니다. 계속할까요?"
+
+msgid "Enabled"
+msgstr "활성화됨"
+
+msgid ""
+"Enabling MLO requires band steering to be enabled. Older clients may lose "
+"access. Continue?"
+msgstr "MLO를 활성화하려면 밴드 스티어링이 켜져 있어야 합니다. 기존 단말의 연결이 끊길 수 있습니다. 계속할까요?"
+
+msgid "Enter your activation code."
+msgstr "활성화 코드를 입력하세요."
+
+msgid "Ethernet link rate / duplex"
+msgstr "이더넷 링크 속도/듀플렉스"
+
+msgid ""
+"Ethernet link rate and USB bus speed are reported link/bus speeds, not "
+"application effective speeds. No iperf3 measurements are performed on this "
+"screen."
+msgstr "이더넷 링크 속도와 USB 버스 속도는 링크/버스의 보고 속도이며, 애플리케이션의 실효 속도가 아닙니다. 이 화면에서는 iperf3 측정을 실행하지 않습니다."
+
+msgid ""
+"Even if the connection method is NR5G, 5G NSA connects to the LTE anchor and "
+"then adds 5G."
+msgstr "연결 방식이 NR5G라도 5G NSA는 LTE 앵커에 먼저 연결한 뒤 5G를 추가합니다."
+
+msgid ""
+"Even when invalidated, fota.config.respawn does not change. Wait 10 seconds "
+"and make sure you restart kn_fotad."
+msgstr "비활성화해도 fota.config.respawn은 변경되지 않습니다. 10초 뒤 kn_fotad의 재시작 여부를 확인하세요."
+
+msgid "Example: 1-1024,8080"
+msgstr "예: 1-1024,8080"
+
+msgid "Example: au"
+msgstr "예: au"
+
+msgid "Example: au.au-net.ne.jp"
+msgstr "예: au.au-net.ne.jp"
+
+msgid "Excluded / Not confirmed"
+msgstr "제외됨 / 미확인"
+
+msgid "Existing settings (unmanaged)"
+msgstr "기존 설정(관리되지 않음)"
+
+msgid ""
+"Explicitly run knsh wlan restart and compare runtimes. Wi-Fi will be "
+"temporarily disconnected. Do you want to continue?"
+msgstr "knsh wlan restart를 명시적으로 실행하고 실행 상태를 비교합니다. Wi-Fi 연결이 일시적으로 끊깁니다. 계속할까요?"
+
+msgid "FOTA body"
+msgstr "FOTA 본체"
+
+msgid "Failed."
+msgstr "실패했습니다."
+
+msgid "Fallback"
+msgstr "대체 연결"
+
+msgid "Fallback IP"
+msgstr "대체 IP"
+
+msgid "Fallback Netmask"
+msgstr "대체 서브넷 마스크"
+
+msgid "Fast roaming (802.11r)"
+msgstr "빠른 로밍(802.11r)"
+
+msgid ""
+"Fast roaming for networks with multiple access points. It has little benefit "
+"with a single AP and applies to all SSIDs."
+msgstr "여러 액세스 포인트로 구성된 네트워크에서 빠른 로밍을 지원합니다. AP 하나만 있으면 효과가 작으며 모든 SSID에 적용됩니다."
+
+msgid ""
+"First check which physical jack is connected to eth1 on your device. If you "
+"connect a higher-level network to the LAN jack, DHCP servers may compete "
+"with each other. This mode replaces modem WAN and does not tie you into a "
+"dual WAN with cellular."
+msgstr "먼저 기기에서 eth1에 연결된 실제 포트를 확인하세요. 상위 네트워크를 LAN 포트에 연결하면 DHCP 서버끼리 충돌할 수 있습니다. 이 모드는 모뎀 WAN을 유선 WAN으로 대체하며 셀룰러와 듀얼 WAN을 구성하지 않습니다."
+
+msgid ""
+"For now, measurements on the 5G side are empty, so there's no shortage yet."
+msgstr "현재 5G 측 측정값이 비어 있어 아직 상태를 판단할 수 없습니다."
+
+msgid "Frequency (primary / center)"
+msgstr "주파수(주/중심)"
+
+msgid "Gateway"
+msgstr "게이트웨이"
+
+msgid "Gateway: "
+msgstr "게이트웨이: "
+
+msgid "Generate new PIN"
+msgstr "새 PIN 생성"
+
+msgid "Generic SIM (not eUICC)"
+msgstr "일반 SIM(eUICC 아님)"
+
+msgid "Genuine Settings: Static IP"
+msgstr "순정 설정: 고정 IP"
+
+msgid "Get the gist"
+msgstr "주의"
+
+msgid "Granted only in case of DHCP failure. Conflict check in ARP probe"
+msgstr "DHCP 획득 실패 시에만 사용합니다. ARP 프로브로 충돌을 검사합니다."
+
+msgid "HTMode"
+msgstr "HT 모드"
+
+msgid "Here's what you can't erase on the modem side:"
+msgstr "모뎀 쪽에서 삭제할 수 없는 항목:"
+
+msgid ""
+"Historical TCP P1 iperf3 actual measurements (2026-09-21, 10 seconds each). "
+"It does not indicate the current speed. Wi-Fi value is 5GHz / 160MHz "
+"(channel 56) Client → Air6 → NAS transmission."
+msgstr "과거 iperf3 TCP P1 실측 결과(2026-09-21, 각각 10초). 현재 속도를 의미하지 않습니다. Wi-Fi 값은 5GHz/160MHz(채널 56) 클라이언트 → Air6 → NAS 전송 기준입니다."
+
+msgid "Historical throughput references"
+msgstr "이전 처리량 측정 참고값"
+
+msgid ""
+"Hit AT+ESMLCK directly. After switching, the radio waves stop once to read "
+"the SIM again."
+msgstr "AT+ESMLCK 명령을 직접 실행합니다. 전환 후 SIM을 다시 읽기 위해 무선 통신이 한 번 중단됩니다."
+
+msgid "I didn't get the ad blocking status."
+msgstr "광고 차단 상태를 가져오지 못했습니다."
+
+msgid "I read from SIM:"
+msgstr "SIM에서 읽어 왔습니다:"
+
+msgid "I removed the USB LAN port."
+msgstr "USB LAN 포트를 제거했습니다."
+
+msgid "I requested amputation. It may take some time to reconnect."
+msgstr "연결 해제를 요청했습니다. 다시 연결되기까지 시간이 걸릴 수 있습니다."
+
+msgid ""
+"I saved the settings and started the Wi-Fi reboot. It disconnects for a few "
+"seconds and reconnects."
+msgstr "설정을 저장하고 Wi-Fi 재시작을 시작했습니다. 몇 초간 연결이 끊겼다가 복구됩니다."
+
+msgid ""
+"I understand that this is an experimental feature that changes USB UDC/"
+"ConfigFS."
+msgstr "USB UDC/ConfigFS를 변경하는 실험적 기능임을 이해했습니다."
+
+msgid "I'm holding B right now"
+msgstr "현재 사용 중인 B"
+
+msgid "IP address"
+msgstr "IP 주소"
+
+msgid ""
+"If it is not registered, not a single message will arrive. Not valid as "
+"shipped."
+msgstr "망에 등록되지 않으면 메시지가 전혀 도착하지 않습니다. 출하 기본값으로는 사용할 수 없습니다."
+
+msgid ""
+"If left blank, only about 25 frequently used ports will be used next time "
+"(up to a maximum of 4096 ports)."
+msgstr "비워 두면 다음에도 자주 사용하는 포트 약 25개만 검사합니다(최대 4096개 포트)."
+
+msgid ""
+"If left blank, the factory settings will be inherited. If there is no "
+"setting on the factory side, it will not be set."
+msgstr "빈칸이면 공장 출하 설정을 상속합니다. 순정 설정에 값이 없으면 지정하지 않습니다."
+
+msgid "If left blank, the netmask of the factory settings will be inherited."
+msgstr "빈칸이면 공장 출하 설정의 서브넷 마스크를 상속합니다."
+
+msgid "If left blank, the specified name will be deleted."
+msgstr "비워 두면 지정된 이름이 삭제됩니다."
+
+msgid "If left blank, the static IP of the factory settings will be inherited."
+msgstr "빈칸이면 공장 출하 설정의 고정 IP를 상속합니다."
+
+msgid "If network access is lost, UART recovery may be required."
+msgstr "네트워크에 접속할 수 없게 되면 UART를 통한 복구가 필요할 수 있습니다."
+
+msgid ""
+"If the conversion destination does not have a valid profile, it will be out "
+"of service."
+msgstr "전환 대상에 유효한 프로필이 없다면 서비스 불가 상태가 됩니다."
+
+msgid ""
+"If you cannot move to another band, it will be out of range, but in that "
+"case it will be automatically restored."
+msgstr "다른 밴드로 이동할 수 없으면 서비스 지역을 벗어나게 되지만, 이 경우 자동으로 복원됩니다."
+
+msgid ""
+"If you cannot secure a recovery method such as UART, do not select or apply "
+"DHCP. Safe Apply's automatic rollback feature does not guarantee recovery "
+"from all configuration failures."
+msgstr "UART 등의 복구 수단을 확보할 수 없다면 DHCP를 선택하거나 적용하지 마세요. Safe Apply의 자동 롤백 기능으로 모든 설정 오류를 복구할 수 있는 것은 아닙니다."
+
+msgid ""
+"If you do not confirm within 120 seconds, we will roll back to your previous "
+"network settings."
+msgstr "120초 이내에 확인하지 않으면 이전 네트워크 설정으로 되돌립니다."
+
+msgid "If you do not connect to the network in time"
+msgstr "시간 내에 네트워크에 연결되지 않으면 "
+
+msgid ""
+"If you open , you can turn on/off only your own terminal without logging in."
+msgstr " 주소에 접속하면 로그인 없이 자신의 단말기에 대해서만 기능을 켜고 끌 수 있습니다."
+
+msgid ""
+"If you switch connection modes or change settings, all network connections "
+"may be lost and a soft brick state may occur."
+msgstr "연결 모드를 전환하거나 설정을 변경하면 모든 네트워크 연결이 끊기고 소프트 브릭 상태가 될 수 있습니다."
+
+msgid ""
+"If you switch or change Wi-Fi or network settings, you may lose all network "
+"connections and end up in a soft brick state."
+msgstr "Wi-Fi 또는 네트워크 설정을 전환하거나 변경하면 모든 네트워크 연결이 끊기고 소프트 브릭 상태가 될 수 있습니다."
+
+msgid "Import from modem"
+msgstr "모뎀에서 가져오기"
+
+msgid ""
+"In AP mode, DHCP, RA, DHCPv6, and NDP on Air 6 are stopped. It does not "
+"block IPv6 coming from upstream."
+msgstr "AP 모드에서는 Air 6의 DHCP, RA, DHCPv6, NDP가 중지됩니다. 상위 네트워크에서 들어오는 IPv6는 차단하지 않습니다."
+
+msgid "In AP mode, it is not used for routing. The modem itself does not stop."
+msgstr "AP 모드에서는 라우팅에 사용하지 않습니다. 모뎀 자체가 중지되는 것은 아닙니다."
+
+msgid ""
+"In addition, we have confirmed that in the case of soft bricking, recovery "
+"is possible in the following environments."
+msgstr "또한 소프트 브릭이 발생하더라도 아래 환경에서 복구할 수 있음을 확인했습니다."
+
+msgid "In modem:"
+msgstr "모뎀 내:"
+
+msgid "In this state, you will not receive SMS."
+msgstr "이 상태에서는 SMS를 수신할 수 없습니다."
+
+msgid "Inheritance of stock settings"
+msgstr "순정 설정 상속"
+
+msgid "Installation is complete."
+msgstr "설치가 완료되었습니다."
+
+msgid "Installing:"
+msgstr "설치 중:"
+
+msgid "Interface/Link"
+msgstr "인터페이스/링크"
+
+msgid "Introduce/Disable"
+msgstr "도입/비활성화"
+
+msgid "Introduced but failed verification"
+msgstr "도입되었지만 검증 실패"
+
+msgid "Invalid Wi-Fi batch change data."
+msgstr "Wi-Fi 일괄 변경 데이터가 올바르지 않습니다."
+
+msgid "Invalid channel for the selected Wi-Fi band."
+msgstr "선택한 Wi-Fi 대역에 사용할 수 없는 채널입니다."
+
+msgid "Invalid network interface name."
+msgstr "네트워크 인터페이스 이름이 올바르지 않습니다."
+
+msgid "It cannot be cancelled."
+msgstr "취소할 수 없습니다."
+
+msgid "It takes 20 to 30 seconds for communication with SM-DP+ to end."
+msgstr "SM-DP+와의 통신이 완료되기까지 20~30초가 걸립니다."
+
+msgid "It takes 30 to 60 seconds and AT does not respond."
+msgstr "30~60초가 걸리며 AT 명령에도 응답하지 않습니다."
+
+msgid "It takes 30 to 60 seconds. Meanwhile AT is not responding."
+msgstr "30~60초가 걸리며 그동안 AT 명령에 응답하지 않습니다. "
+
+msgid "It takes 30~60 seconds"
+msgstr "30~60초가 걸립니다"
+
+msgid "It takes 40-60 seconds"
+msgstr "40~60초가 걸립니다"
+
+msgid "It takes a few seconds for reflection to occur."
+msgstr "변경 사항이 반영되기까지 몇 초가 걸립니다."
+
+msgid "It will remain in the same unread state as when first captured."
+msgstr "처음 가져올 당시의 읽지 않음 상태가 유지됩니다."
+
+msgid "Items that cannot be obtained"
+msgstr "가져올 수 없는 항목"
+
+msgid "Judgment target"
+msgstr "판정 대상"
+
+msgid ""
+"Just run knsh save. Wi-Fi restart does not work. Do you want to continue?"
+msgstr "knsh save만 실행하고 Wi-Fi는 재시작하지 않습니다. 계속할까요?"
+
+msgid "Keep current br-lan, private address, DHCP"
+msgstr "현재 br-lan, 사설 IP 주소, DHCP 유지"
+
+msgid "Kernel"
+msgstr "커널"
+
+msgid "Known USB Host Ethernet Candidates"
+msgstr "알려진 USB 호스트 이더넷 후보"
+
+msgid "Known-good profile"
+msgstr "정상 상태 프로필"
+
+msgid "LAN DHCP server"
+msgstr "LAN DHCP 서버"
+
+msgid "LAN service"
+msgstr "LAN 서비스"
+
+msgid "LAN settings"
+msgstr "LAN 설정"
+
+msgid ""
+"LAN settings are retained even if the adapter is disconnected. When you "
+"reconnect, you will be connected to the same LAN bridge."
+msgstr "어댑터를 분리해도 LAN 설정은 유지됩니다. 다시 연결하면 동일한 LAN 브리지에 연결됩니다."
+
+msgid "Last conversion failed ("
+msgstr "마지막 전환 실패 ("
+
+msgid "Last correction/count"
+msgstr "마지막 보정/횟수"
+
+msgid "Last installation failed ("
+msgstr "마지막 설치 실패("
+
+msgid "Layers/Items Changed"
+msgstr "변경된 계층/항목"
+
+msgid ""
+"Legacy Wi-Fi protocols do not support bandwidth changes. Change the Wi-Fi "
+"protocol first."
+msgstr "기존 Wi-Fi 규격에서는 대역폭 변경을 지원하지 않습니다. 먼저 Wi-Fi 규격을 변경하세요."
+
+msgid "License"
+msgstr "라이선스"
+
+msgid "Line Overview"
+msgstr "회선 개요"
+
+msgid "Link broken"
+msgstr "링크 끊김"
+
+msgid "Loaded USB modules"
+msgstr "로드된 USB 모듈"
+
+msgid "Loading..."
+msgstr "불러오는 중..."
+
+msgid "Locking"
+msgstr "잠금"
+
+msgid "MAC address"
+msgstr "MAC 주소"
+
+msgid "MAC filter (allowlist)"
+msgstr "MAC 필터(허용 목록)"
+
+msgid "MLO"
+msgstr "MLO"
+
+msgid "Main SSID access to wired LAN"
+msgstr "기본 SSID에서 유선 LAN 접근"
+
+msgid "Manage IP addresses assigned by Air 6 to LAN clients."
+msgstr "Air 6에서 LAN 클라이언트에 할당하는 IP 주소를 관리합니다."
+
+msgid ""
+"Manage automatic body updates with genuine kn_fotad. It does not block "
+"servers, change binaries, or change respawn settings."
+msgstr "정품 kn_fotad를 사용해 본체의 자동 업데이트를 관리합니다. 서버 차단, 바이너리 변경, respawn 설정 변경은 하지 않습니다."
+
+msgid "Managed by"
+msgstr "관리 주체"
+
+msgid "Management IP"
+msgstr "관리 IP"
+
+msgid "Management IP method"
+msgstr "관리 IP 할당 방식"
+
+msgid ""
+"Management of sbair has been cancelled. Network settings have not changed."
+msgstr "sbair 관리가 해제되었습니다. 네트워크 설정은 변경되지 않았습니다."
+
+msgid "Management path"
+msgstr "관리 경로"
+
+msgid "Manual"
+msgstr "수동"
+
+msgid "Manufacturer/Product"
+msgstr "제조사/제품"
+
+msgid "Maximum scale saved; Wi-Fi restart started."
+msgstr "최대 단계로 저장하고 Wi-Fi 재시작을 시작했습니다."
+
+msgid "Mesh mode"
+msgstr "메시 모드"
+
+msgid "Mode selection and detailed settings (currently:"
+msgstr "모드 선택 및 세부 설정(현재:"
+
+msgid "Modem not reporting"
+msgstr "모뎀이 보고하지 않음"
+
+msgid "Modem reset"
+msgstr "모뎀 초기화"
+
+msgid "Modem settings"
+msgstr "모뎀 설정"
+
+msgid "Monitor only (default)"
+msgstr "모니터링만 수행(기본값)"
+
+msgid "Monitoring"
+msgstr "모니터링 중"
+
+msgid ""
+"Moving on to rebooting. However, if you reset the settings, the SIM lock "
+"will return to default shipping."
+msgstr "이어서 재부팅합니다. 단, 설정을 초기화하면 SIM 잠금이 출하 기본 상태로 돌아갑니다. "
+
+msgid "Multi-Link Operation (MLO)"
+msgstr "멀티 링크 동작(MLO)"
+
+msgid "Multiply SIM lock again. Non-SoftBank SIMs cannot be used."
+msgstr "SIM을 다시 잠급니다. SoftBank 외 SIM은 사용할 수 없게 됩니다."
+
+msgid "Name (optional)"
+msgstr "이름(선택 사항)"
+
+msgid "Need to check driver status"
+msgstr "드라이버 상태 확인 필요"
+
+msgid "Netmask:"
+msgstr "서브넷 마스크:"
+
+msgid "Network devices"
+msgstr "네트워크 장치"
+
+msgid "Network diagnostics were not obtained."
+msgstr "네트워크 진단 정보를 가져오지 못했습니다."
+
+msgid "Network mode (AP / Bridge)"
+msgstr "네트워크 모드(AP/브리지)"
+
+msgid "No MAC addresses registered."
+msgstr "등록된 MAC 주소가 없습니다."
+
+msgid "No bundle has been introduced that satisfies fixed SHA256/vermagic."
+msgstr "고정 SHA256/vermagic 조건을 만족하는 번들이 도입되지 않았습니다."
+
+msgid "No encryption"
+msgstr "암호화 없음"
+
+msgid "No number ("
+msgstr "번호 없음("
+
+msgid "No open ports found."
+msgstr "열린 포트를 찾지 못했습니다."
+
+msgid "Non-target / unknown"
+msgstr "대상 아님/알 수 없음"
+
+msgid "Normal state not recorded"
+msgstr "정상 상태가 기록되지 않음"
+
+msgid "Not analyzed (monitors only hash/mtime/size)"
+msgstr "분석하지 않음(해시/수정 시각/크기만 감시)"
+
+msgid "Not applied"
+msgstr "적용되지 않음"
+
+msgid "Not detected"
+msgstr "감지되지 않음"
+
+msgid "Not detected ("
+msgstr "감지되지 않음("
+
+msgid "Not introduced"
+msgstr "도입되지 않음"
+
+msgid "Not received"
+msgstr "받지 못함"
+
+msgid "Not registered"
+msgstr "등록되지 않음"
+
+msgid ""
+"Not registered on the network. Below are the measurements of cells that can "
+"be received:"
+msgstr "네트워크에 등록되지 않았습니다. 아래 값은 수신 가능한 셀의 측정 결과입니다:"
+
+msgid "Not set"
+msgstr "설정되지 않음"
+
+msgid "OTA/FOTA automatic renewal"
+msgstr "OTA/FOTA 자동 업데이트"
+
+msgid "OWE(Enhanced Open)"
+msgstr "OWE(향상된 개방형 보안)"
+
+msgid "Obtain DHCP automatically"
+msgstr "DHCP로 자동 획득"
+
+msgid ""
+"Obtained the difference before and after knsh save. Wi-Fi restart is not "
+"performed."
+msgstr "knsh save 실행 전후의 차이를 수집했습니다. Wi-Fi 재시작은 수행하지 않았습니다."
+
+msgid "Off"
+msgstr "꺼짐"
+
+msgid "On"
+msgstr "켜짐"
+
+msgid ""
+"Only disables sbair management while maintaining current network settings.\n"
+"\n"
+"Even with this transition, there is a risk of losing the management path and "
+"soft bricking it, requiring a UART for recovery. Do you want to continue?"
+msgstr "현재 네트워크 설정을 유지하면서 sbair 관리 기능만 비활성화합니다. \n\n이 전환만으로도 관리 경로가 끊겨 UART 복구가 필요한 소프트 브릭 상태가 될 수 있습니다. 계속할까요?"
+
+msgid ""
+"Only enabled devices in this list can connect. If you enable the filter with "
+"an empty list, no device will be able to connect."
+msgstr "목록에서 활성화된 장치만 연결할 수 있습니다. 목록이 비어 있을 때 필터를 켜면 어떤 장치도 연결할 수 없습니다."
+
+msgid ""
+"Only the app management bundle on the USB Host side is subject to "
+"manipulation. It is invalid because bundle is not currently provided."
+msgstr "USB 호스트 측 앱 관리 번들만 관리 대상으로 합니다. 현재 번들이 제공되지 않아 이 기능은 비활성화되어 있습니다."
+
+msgid "Only when changed"
+msgstr "변경된 경우에만"
+
+msgid "Other bridge members:"
+msgstr "다른 브리지 구성원:"
+
+msgid "Other tabs are also temporarily unreadable."
+msgstr "다른 탭도 일시적으로 정보를 읽을 수 없습니다."
+
+msgid "Parent address/default path"
+msgstr "상위 주소/기본 경로"
+
+msgid ""
+"Pending wireless changes exist. Save or discard them before changing "
+"settings."
+msgstr "적용되지 않은 무선 변경 사항이 있습니다. 다른 설정을 변경하기 전에 저장하거나 취소하세요."
+
+msgid "Physical slot (uSIM)"
+msgstr "물리 SIM 슬롯(uSIM)"
+
+msgid "Please check all three items below before enabling."
+msgstr "활성화하기 전에 아래 세 항목을 모두 확인하세요."
+
+msgid "Preflight"
+msgstr "사전 점검"
+
+msgid "Preflight NG"
+msgstr "사전 점검 실패"
+
+msgid "Preflight OK"
+msgstr "사전 점검 통과"
+
+msgid "Preview of applying static IP"
+msgstr "고정 IP 적용 미리보기"
+
+msgid "Primary (uncontrolled) / unmanaged"
+msgstr "기본 모드(제어하지 않음)/관리되지 않음"
+
+msgid "Profile for "
+msgstr "프로필: "
+
+msgid "Protocol"
+msgstr "프로토콜"
+
+msgid "Provenance"
+msgstr "출처 정보"
+
+msgid "Provisioning"
+msgstr "초기 프로비저닝"
+
+msgid ""
+"Push-button (PBC) mode temporarily allows anyone nearby to join the Wi-Fi "
+"network."
+msgstr "버튼 방식(PBC)을 사용하면 주변 누구나 일시적으로 Wi-Fi 네트워크에 연결할 수 있습니다."
+
+msgid "RSRP (5G each antenna)"
+msgstr "RSRP(5G 안테나별)"
+
+msgid "RSRP (LTE each antenna)"
+msgstr "RSRP(LTE 안테나별)"
+
+msgid "RTL8156 raw LAN — Air6 → NAS"
+msgstr "RTL8156 유선 LAN — Air6 → NAS"
+
+msgid "RTL8156 raw LAN — NAS → Air6"
+msgstr "RTL8156 유선 LAN — NAS → Air6"
+
+msgid "Radio / AP interface"
+msgstr "무선부 / AP 인터페이스"
+
+msgid ""
+"Radio waves will be lost for a few seconds (a rescan will be performed)."
+msgstr "무선 연결이 몇 초간 끊깁니다(재검색 진행)."
+
+msgid "Reading from SIM"
+msgstr "SIM에서 읽는 중"
+
+msgid "Reboot device"
+msgstr "장치 재부팅"
+
+msgid ""
+"Reboot requested. Check the device address and reopen this page in about two "
+"minutes."
+msgstr "재부팅을 요청했습니다. 약 2분 뒤 장치 주소를 확인하고 이 페이지를 다시 여세요."
+
+msgid ""
+"Reboot the device? Wi-Fi and LAN connections will drop and the WAN address "
+"may change. This button does not save pending settings. Continue?"
+msgstr "장치를 재부팅할까요? Wi-Fi와 LAN 연결이 끊기고 WAN 주소가 바뀔 수 있습니다. 이 버튼으로는 대기 중인 설정이 저장되지 않습니다. 계속할까요?"
+
+msgid "Rebooting will return it to the physical slot side."
+msgstr "재부팅하면 물리 SIM 슬롯으로 돌아갑니다."
+
+msgid "Recent changes / Known-good"
+msgstr "최근 변경 / 정상 상태"
+
+msgid "Record the present as normal"
+msgstr "현재 상태를 정상으로 기록"
+
+msgid ""
+"Recovery may not be possible even if you press the reset button, in which "
+"case recovery via UART connection is required."
+msgstr "리셋 버튼을 눌러도 복구되지 않을 수 있으며, 이 경우 UART 연결을 통한 복구가 필요합니다."
+
+msgid "Reference value. May be inconsistent with registration status"
+msgstr "참고값입니다. 망 등록 상태와 일치하지 않을 수 있습니다."
+
+msgid "Registrar"
+msgstr "등록 도메인"
+
+msgid "Registration and SMS over IMS may remain."
+msgstr "IMS 등록과 IMS를 통한 SMS가 유지될 수 있습니다."
+
+msgid ""
+"Registration takes 10 to 30 seconds, but even if it is invalidated in the "
+"registered state,"
+msgstr "등록에는 10~30초가 걸리며, 이미 등록된 상태에서 비활성화하더라도 "
+
+msgid "Manufacturer"
+msgstr "제조사"
+
+msgid "Model"
+msgstr "모델"
+
+msgid "Floop3 version"
+msgstr "Floop3 버전"
+
+msgid "Build metadata unavailable"
+msgstr "빌드 정보 없음"
+
+msgid "Build commit"
+msgstr "빌드 커밋"
+
+msgid "Reload"
+msgstr "새로고침"
+
+msgid "Reload (unapplied changes will be discarded)"
+msgstr "새로고침(미적용 변경 폐기)"
+
+msgid "Remove ."
+msgstr " 밴드를 제거합니다."
+
+msgid ""
+"Remove all storage from the storage and also free up storage space on the "
+"modem."
+msgstr "보관함의 모든 메시지를 지우고 모뎀 저장 공간도 비웁니다."
+
+msgid "Remove from LAN"
+msgstr "LAN에서 제거"
+
+msgid ""
+"Remove the interface from br-lan. Communication for connected LAN clients "
+"may be lost."
+msgstr "인터페이스를 br-lan에서 제거합니다. 연결된 LAN 클라이언트의 통신이 끊길 수 있습니다."
+
+msgid "Requested bandwidth is not supported by the current Wi-Fi protocol."
+msgstr "현재 Wi-Fi 규격에서 요청한 대역폭을 지원하지 않습니다."
+
+msgid ""
+"Required to connect with a SIM from another company. It only moves when you "
+"hang it,"
+msgstr "다른 통신사의 SIM으로 연결하려면 필요합니다. 적용한 경우에만 실행됩니다."
+
+msgid ""
+"Requires a compatible SoftBank mesh node. Stock firmware may re-enable "
+"radios, change security modes, and reveal SSIDs when mesh is enabled."
+msgstr "호환되는 SoftBank 메시 노드가 필요합니다. 순정 펌웨어는 메시 활성화 시 무선부를 다시 켜거나, 암호화 방식을 변경하거나, 숨긴 SSID를 공개할 수 있습니다."
+
+msgid "Reset 2.4 GHz WPS"
+msgstr "2.4GHz WPS 초기화"
+
+msgid "Reset 5 GHz WPS"
+msgstr "5GHz WPS 초기화"
+
+msgid "Reset WPS state for "
+msgstr "WPS 상태 초기화: "
+
+msgid "Resetting:"
+msgstr "초기화 중:"
+
+msgid ""
+"Restore SBA6D firmware default wireless power? Country/region settings and "
+"regulatory table will not change. Continue?"
+msgstr "SBA6D 펌웨어의 기본 무선 출력을 복원할까요? 국가/지역 설정과 규제 테이블은 변경되지 않습니다. 계속할까요?"
+
+msgid "Restore default power"
+msgstr "기본 출력 복원"
+
+msgid ""
+"Restore saved WAN interface settings when switching to modem router mode"
+msgstr "모뎀 라우터 모드로 전환할 때 저장된 WAN 인터페이스 설정 복원"
+
+msgid ""
+"Retaining your current network settings. AP/Bridge will not change until "
+"explicitly applied."
+msgstr "현재 네트워크 설정을 유지합니다. AP/브리지는 명시적으로 적용하기 전까지 변경되지 않습니다."
+
+msgid "Retrieving from modem..."
+msgstr "모뎀에서 가져오는 중..."
+
+msgid "Revert to previous combination"
+msgstr "이전 밴드 조합으로 되돌리기"
+
+msgid "Reviewed Activation profile is missing or invalid."
+msgstr "검토·승인된 활성화 프로필이 없거나 유효하지 않습니다."
+
+msgid "Rollback required"
+msgstr "롤백 필요"
+
+msgid "Runtime"
+msgstr "실행 상태"
+
+msgid "Runtime difference"
+msgstr "실행 상태 차이"
+
+msgid "Runtime only changed?"
+msgstr "실행 상태만 변경 여부"
+
+msgid "SIM / eSIM"
+msgstr "SIM / eSIM"
+
+msgid "SIM Mapping"
+msgstr "SIM 매핑"
+
+msgid "SIM applicable LAN"
+msgstr "SIM 적용 LAN"
+
+msgid "SIM lock"
+msgstr "SIM 잠금"
+
+msgid "SIM lock operation indication (danger)"
+msgstr "SIM 잠금 작업 안내(위험)"
+
+msgid "SIM status"
+msgstr "SIM 상태"
+
+msgid "SIM/Phone Number:"
+msgstr "SIM/전화번호:"
+
+msgid "SINR (5G each antenna)"
+msgstr "SINR(5G 안테나별)"
+
+msgid "SINR (LTE each antenna)"
+msgstr "SINR(LTE 안테나별)"
+
+msgid "SMS"
+msgstr "SMS"
+
+msgid "SMS is delivered via IMS."
+msgstr "SMS가 IMS를 통해 전달됩니다."
+
+msgid ""
+"SMS is delivered via IMS. If it is unregistered, not a single message will "
+"arrive."
+msgstr "SMS는 IMS를 통해 수신됩니다. IMS가 등록되지 않으면 메시지가 도착하지 않을 수 있습니다."
+
+msgid "Safe Apply pending"
+msgstr "Safe Apply 확인 대기"
+
+msgid "Safe knsh save difference test"
+msgstr "안전한 knsh save 차이 테스트"
+
+msgid "Save and Apply"
+msgstr "저장 및 적용"
+
+msgid "Saved."
+msgstr "저장했습니다."
+
+msgid ""
+"Saves and reflects network settings. The USB adapter may lose link or "
+"briefly reconnect to the network."
+msgstr "네트워크 설정을 저장하고 적용합니다. USB 어댑터의 링크가 끊기거나 잠시 다시 연결될 수 있습니다."
+
+msgid "Scan in a specified range"
+msgstr "지정한 범위 스캔"
+
+msgid "Secure independent management path for LAN or Wi-Fi"
+msgstr "LAN 또는 Wi-Fi의 독립적인 관리 경로 확보"
+
+msgid "Select all corresponding bands"
+msgstr "지원하는 모든 밴드 선택"
+
+msgid ""
+"Selecting and applying will only turn off sbair management, keeping your "
+"current network settings."
+msgstr "선택하여 적용하면 현재 네트워크 설정을 유지한 채 sbair의 관리 기능만 해제됩니다."
+
+msgid "Send pending channel changes with wifi_apply_batch."
+msgstr "대기 중인 채널 변경은 wifi_apply_batch로 적용하세요."
+
+msgid "Set firmware maximum power"
+msgstr "펌웨어 최대 출력 설정"
+
+msgid ""
+"Set wireless power to the firmware maximum scale? Country/region settings "
+"will not change. Continue?"
+msgstr "무선 출력을 펌웨어 최대 단계로 설정할까요? 국가/지역 설정은 변경되지 않습니다. 계속할까요?"
+
+msgid "Setting details (UCI/Vendor persistent/Runtime)"
+msgstr "설정 세부 정보(UCI/제조사 영구 설정/실행 상태)"
+
+msgid "Settings could not be saved."
+msgstr "설정을 저장할 수 없습니다."
+
+msgid "Settings request failed: "
+msgstr "설정 요청 실패: "
+
+msgid ""
+"Settings saved. After reboot, check actual Wi-Fi broadcasts in diagnostics. "
+"Runtime broadcasts have not yet been verified."
+msgstr "설정이 저장되었습니다. 재부팅 후 진단에서 실제 Wi-Fi 송출 상태를 확인하세요. 현재 송출 상태는 아직 검증되지 않았습니다."
+
+msgid "Show debug (show raw response from AT)"
+msgstr "디버그 표시(AT 원시 응답 보기)"
+
+msgid "Since it is out of scope, you will not be able to register with IMS."
+msgstr "지원 범위를 벗어나므로 IMS에 등록할 수 없습니다."
+
+msgid ""
+"Since this screen and SSH are on the LAN side, operation continues even if "
+"the bands are separated and communication is not possible."
+msgstr "이 화면과 SSH는 LAN 측에서 동작하므로 밴드 연결이 끊겨 외부 통신을 할 수 없더라도 조작을 계속할 수 있습니다."
+
+msgid "SoftBank Air"
+msgstr "SoftBank Air"
+
+msgid "SoftBank Mesh"
+msgstr "SoftBank 메시"
+
+msgid "Start 2.4 GHz PBC"
+msgstr "2.4GHz PBC 시작"
+
+msgid "Start 5 GHz PBC"
+msgstr "5GHz PBC 시작"
+
+msgid "Start WPS push-button setup on "
+msgstr "WPS 버튼 연결 시작: "
+
+msgid ""
+"Started applying. Check the status of the actual machine and automatically "
+"check if there are no problems."
+msgstr "적용을 시작했습니다. 실제 기기 상태를 확인하고 문제가 없으면 변경 사항을 확정하세요."
+
+msgid "Static IP (DHCP client disabled with safe flag)"
+msgstr "고정 IP(안전 플래그로 DHCP 클라이언트 비활성화)"
+
+msgid "Static IP settings to be applied"
+msgstr "적용할 고정 IP 설정"
+
+msgid "Static IP:"
+msgstr "고정 IP:"
+
+msgid "Status"
+msgstr "상태"
+
+msgid "Status unknown"
+msgstr "상태 알 수 없음"
+
+msgid ""
+"Stock constraint: turn on band steering first; MLO is locked while it is off."
+msgstr "순정 제약: 밴드 스티어링을 먼저 켜야 하며 꺼져 있으면 MLO가 잠깁니다."
+
+msgid "Stop propagation (AT+CFUN=4). communication is lost"
+msgstr "무선 통신을 중단합니다(AT+CFUN=4). 연결이 끊깁니다."
+
+msgid "Stop propagation once (AT+CFUN=0 → 1). communication is lost"
+msgstr "무선 통신을 한 번 중단합니다(AT+CFUN=0 → 1). 연결이 끊깁니다."
+
+msgid "Storage for:"
+msgstr "저장 대상:"
+
+msgid "Stored on another SIM"
+msgstr "다른 SIM에 저장됨"
+
+msgid "Support level"
+msgstr "지원 수준"
+
+msgid "Switch SIM Mapping"
+msgstr "SIM 매핑 전환"
+
+msgid "Target SIM"
+msgstr "대상 SIM"
+
+msgid "Temperature (AT+QTEMP)"
+msgstr "온도(AT+QTEMP)"
+
+msgid ""
+"Temporarily disconnect your device from Wi-Fi. If you know the password, you "
+"will be reconnected immediately. Are you okay?"
+msgstr "기기를 Wi-Fi에서 일시적으로 연결 해제합니다. 암호를 알고 있으면 곧바로 다시 연결할 수 있습니다. 계속할까요?"
+
+msgid "Temporary connection (Wi-Fi only, not a permanent block)"
+msgstr "임시 연결 해제(Wi-Fi만 해당, 영구 차단 아님)"
+
+msgid "The SIM cannot be read and cannot be set up."
+msgstr "SIM을 읽을 수 없어 설정할 수 없습니다."
+
+msgid "The band with , ● attached is the band you are currently holding."
+msgstr " 상태입니다. ● 표시가 붙은 밴드는 현재 연결 중인 밴드입니다."
+
+msgid ""
+"The built-in eSIM doesn't have an ISD-R, so you can't manipulate the profile "
+"there."
+msgstr "내장 eSIM에는 ISD-R이 없어 여기서는 프로필을 관리할 수 없습니다."
+
+msgid "The conversion is complete."
+msgstr "전환이 완료되었습니다."
+
+msgid "The destination is /etc/config/sbair and remains for each ICCID."
+msgstr "설정은 /etc/config/sbair에 ICCID별로 저장됩니다."
+
+msgid "The device rejected the Wi-Fi channel command."
+msgstr "장치에서 Wi-Fi 채널 명령을 거부했습니다."
+
+msgid "The name of the business operator is"
+msgstr "통신사 이름은"
+
+msgid "The number of modems was updated every 30 seconds."
+msgstr "모뎀의 메시지 수는 30초마다 갱신됩니다."
+
+msgid "The quality of the line during the connection is not good."
+msgstr " 연결 중 회선 품질이 좋지 않습니다."
+
+msgid "The read-only preflight did not complete or failed."
+msgstr "읽기 전용 사전 점검이 완료되지 않았거나 실패했습니다."
+
+msgid "The second did not arrive. There is not enough text."
+msgstr "번째 메시지가 도착하지 않아 본문이 불완전합니다."
+
+msgid "The selected Wi-Fi protocol is not available on this band."
+msgstr "선택한 Wi-Fi 규격은 이 대역에서 사용할 수 없습니다."
+
+msgid "The selected bandwidth is not available on this band."
+msgstr "선택한 대역폭은 이 대역에서 사용할 수 없습니다."
+
+msgid ""
+"The selected interface is not verified as a connected USB host Ethernet "
+"device."
+msgstr "선택한 인터페이스가 연결된 USB 호스트 이더넷 장치로 확인되지 않았습니다."
+
+msgid "The settings have been confirmed."
+msgstr "설정 변경이 확인되었습니다."
+
+msgid ""
+"The settings on the modem side will return to the factory default upon "
+"reboot, but the selected combination will be saved."
+msgstr "모뎀 측 설정은 재부팅 시 공장 기본값으로 돌아가지만 선택한 밴드 조합은 저장됩니다. "
+
+msgid "The storage area for this aircraft is"
+msgstr "이 장치의 저장 위치: "
+
+msgid "The storage is still empty. Click “Import from Modem.”"
+msgstr "저장소가 비어 있습니다. '모뎀에서 가져오기'를 누르세요."
+
+msgid ""
+"The string \"LPA:1$...\" passed to the operator. The content of the QR code "
+"is also this."
+msgstr "통신사가 제공한 \"LPA:1$...\" 형식의 문자열입니다. QR 코드에도 같은 내용이 들어 있습니다."
+
+msgid ""
+"The upper address is received via DHCP from the dedicated Ethernet interface "
+"eth1. LAN/Wi-Fi maintains current private addresses and DHCP ranges, and "
+"uses existing LAN→WAN NAT/firewall policies."
+msgstr "전용 이더넷 인터페이스 eth1을 통해 상위 네트워크의 주소를 DHCP로 받습니다. LAN/Wi-Fi는 현재 사설 IP 주소와 DHCP 범위를 유지하고, 기존 LAN→WAN NAT/방화벽 정책을 사용합니다."
+
+msgid "There are differences in settings"
+msgstr "설정에 차이가 있습니다"
+
+msgid ""
+"There are no changes that do not apply. SSID edits and channel/bandwidth/"
+"communication specification changes will not be reflected on the actual "
+"device until you press “Apply Changes” here."
+msgstr "아직 적용되지 않은 변경 사항이 있습니다. SSID 수정과 채널/대역폭/통신 규격 변경은 여기서 ‘변경 사항 적용’을 눌러야 실제 장치에 반영됩니다."
+
+msgid "There are no messages for this SIM."
+msgstr "이 SIM에는 메시지가 없습니다."
+
+msgid ""
+"There are other unsaved changes to your wireless settings. Please check the "
+"existing changes and save or cancel them."
+msgstr "저장되지 않은 다른 무선 설정 변경이 있습니다. 변경 내용을 확인한 뒤 저장하거나 취소하세요."
+
+msgid "There is no eUICC."
+msgstr "E UICC가 없습니다."
+
+msgid "There is no profile."
+msgstr "프로필이 없습니다."
+
+msgid "There is."
+msgstr "개 있습니다."
+
+msgid "Third-party SIMs cannot be used."
+msgstr "다른 통신사의 SIM을 사용할 수 없습니다."
+
+msgid ""
+"This does not affect the DHCP client setting Air 6 uses to obtain its "
+"management IP from the upstream router."
+msgstr "상위 라우터에서 관리용 IP를 받기 위해 Air 6가 사용하는 DHCP 클라이언트 설정에는 영향을 주지 않습니다."
+
+msgid ""
+"This is missing when the APN is correct but the connection doesn't work."
+msgstr "APN이 올바른데도 연결되지 않는 경우 이 작업이 필요할 수 있습니다."
+
+msgid "This screen and SSH are on the LAN side so they don't drop out."
+msgstr "이 화면과 SSH는 LAN에서 동작하므로 연결이 끊기지 않습니다."
+
+msgid ""
+"This setting controls the LAN DHCP server that assigns IP addresses to LAN "
+"devices."
+msgstr "이 설정은 LAN 장치에 IP 주소를 할당하는 LAN DHCP 서버를 제어합니다."
+
+msgid "This will turn off all Wi-Fi radios. Wired LAN is unaffected. Continue?"
+msgstr "모든 Wi-Fi 무선부를 끕니다. 유선 LAN에는 영향을 주지 않습니다. 계속할까요?"
+
+msgid "Time of change after startup"
+msgstr "시작 후 변경 시간"
+
+msgid "Transitioning:"
+msgstr "전환 중:"
+
+msgid "Transitioning…"
+msgstr "전환 중…"
+
+msgid ""
+"Transitions reorganize networks. The AP/Bridge switches to the set "
+"management IP."
+msgstr "모드를 전환하면 네트워크 구성이 재정리됩니다. AP/브리지는 지정한 관리 IP로 전환됩니다."
+
+msgid "Troubleshooting"
+msgstr "문제 해결"
+
+msgid "Turn off the radio waves to read the SIM again. It takes 40-60 seconds."
+msgstr "SIM을 다시 읽기 위해 무선 통신을 껐다 켭니다. 40~60초가 걸립니다."
+
+msgid ""
+"Turn the modem's radio waves down once and then up again to turn the WAN "
+"back on."
+msgstr "모뎀의 무선 기능을 껐다가 다시 켜서 WAN 연결을 재시작합니다."
+
+msgid ""
+"Turning mesh off unpairs mesh nodes. Pair them again if you enable it later. "
+"Stock firmware may also disable WPS under its existing WPS/filter "
+"conditions. Continue?"
+msgstr "메시를 끄면 메시 노드의 페어링이 해제됩니다. 다시 켤 때 재연결해야 합니다. 순정 펌웨어는 기존 WPS/필터 조건에 따라 WPS도 끌 수 있습니다. 계속할까요?"
+
+msgid ""
+"Turning mesh on may change radio, encryption, and SSID visibility settings. "
+"A compatible SoftBank mesh node is required. Continue?"
+msgstr "메시를 켜면 무선부, 암호화 및 SSID 표시 설정이 변경될 수 있습니다. 호환 SoftBank 메시 노드가 필요합니다. 계속할까요?"
+
+msgid "UART: FT232RL (Voltage: 1.8V)"
+msgstr "UART: FT232RL (전압: 1.8V)"
+
+msgid "UCI hash changed?"
+msgstr "UCI 해시 변경 여부"
+
+msgid "UCI settings"
+msgstr "UCI 설정"
+
+msgid ""
+"UCI settings, vendor persistence, and actual operation (runtime) are "
+"displayed as separate layers. The actual value of each vendor persistent "
+"band is not interpreted, but only hash/mtime/size is monitored. Even if the "
+"channel/bandwidth of AUTO changes to ACS, it is not judged as drift."
+msgstr "UCI 설정, 제조사 영구 설정 및 실제 실행 상태를 별도 계층으로 표시합니다. 제조사 영구 설정의 대역별 실제 값은 해석하지 않고 해시/수정 시각/크기만 감시합니다. AUTO의 채널/대역폭이 ACS에 의해 바뀌어도 설정 드리프트로 판단하지 않습니다."
+
+msgid "UCI/vendor detection"
+msgstr "UCI/제조사 설정 감지"
+
+msgid "UDC binding"
+msgstr "UDC 바인딩"
+
+msgid "UDC state / speed"
+msgstr "UDC 상태 / 속도"
+
+msgid "USB Gadget（CDC-NCM NIC）"
+msgstr "USB 가젯(CDC-NCM NIC)"
+
+msgid "USB Host Driver Management (Read Only)"
+msgstr "USB 호스트 드라이버 관리(읽기 전용)"
+
+msgid ""
+"USB Host Ethernet driver introduction and bridge/WAN/LAN assignment are "
+"separate functions and will not be changed on this screen. USB Gadget "
+"features are covered in other sections below."
+msgstr "USB 호스트 이더넷 드라이버 도입과 브리지/WAN/LAN 할당은 별도 기능이며 이 화면에서는 변경되지 않습니다. USB 가젯 기능은 아래의 다른 섹션에서 다룹니다."
+
+msgid "USB Host buses / root hubs"
+msgstr "USB 호스트 버스 / 루트 허브"
+
+msgid "USB Host network candidates"
+msgstr "USB 호스트 네트워크 후보"
+
+msgid "USB LAN interface"
+msgstr "USB LAN 인터페이스"
+
+msgid "USB LAN port configured"
+msgstr "USB LAN 포트 설정됨"
+
+msgid "USB LAN port removal"
+msgstr "USB LAN 포트 제거"
+
+msgid "USB bus / root hub"
+msgstr "USB 버스 / 루트 허브"
+
+msgid "USB bus not detected"
+msgstr "USB 버스를 감지하지 못했습니다"
+
+msgid "USB device"
+msgstr "USB 장치"
+
+msgid "USB device not detected"
+msgstr "USB 장치를 감지하지 못했습니다"
+
+msgid ""
+"USB host Ethernet is automatically detected and displayed. This screen does "
+"not automatically connect to the network, and only connects the USB "
+"interface to br-lan when the user confirms and presses “Add to LAN”."
+msgstr "USB 호스트 이더넷 장치를 자동으로 감지하여 표시합니다. 이 화면에서 네트워크에 자동으로 연결하지 않으며, 사용자가 확인하고 ‘LAN에 추가’를 누른 경우에만 USB 인터페이스를 br-lan에 연결합니다."
+
+msgid "USB interface not detected"
+msgstr "USB 인터페이스를 감지하지 못했습니다"
+
+msgid "USB speed"
+msgstr "USB 속도"
+
+msgid "Unable to communicate"
+msgstr "통신할 수 없음"
+
+msgid "Unable to get Wi-Fi interface."
+msgstr "Wi-Fi 인터페이스를 가져올 수 없습니다."
+
+msgid "Unable to read from SIM."
+msgstr "SIM에서 읽을 수 없습니다."
+
+msgid "Unknown ("
+msgstr "알 수 없음 ("
+
+msgid "Unlock SIM. You can use a third-party SIM."
+msgstr "SIM 잠금을 해제합니다. 다른 통신사의 SIM을 사용할 수 있습니다."
+
+msgid "Unmanaged (existing setting)"
+msgstr "관리되지 않음(기존 설정)"
+
+msgid "Unmanaged (keep existing settings)"
+msgstr "관리되지 않음(기존 설정 유지)"
+
+msgid "Unresolved (no original settings)"
+msgstr "확인 불가(기존 설정 없음)"
+
+msgid "Update Management"
+msgstr "업데이트 관리"
+
+msgid "Upstream revision"
+msgstr "업스트림 리비전"
+
+msgid "Use IMS"
+msgstr "IMS 사용"
+
+msgid "Use fallback when DHCP acquisition is not possible"
+msgstr "DHCP 주소를 받지 못할 때 대체 설정 사용"
+
+msgid "Vendor persistent"
+msgstr "제조사 영구 설정"
+
+msgid "Vendor persistent changed?"
+msgstr "제조사 영구 설정 변경 여부"
+
+msgid "Vendor persistent metadata"
+msgstr "제조사 영구 설정 메타데이터"
+
+msgid ""
+"Vendor persistent not detected. It does not parse the content; it only "
+"monitors the metadata of existing files."
+msgstr "제조사 영구 설정을 감지하지 못했습니다. 내용을 분석하지 않고 기존 파일의 메타데이터만 감시합니다."
+
+msgid "View diagnostic log"
+msgstr "진단 로그 보기"
+
+msgid "View phone number and caller ID"
+msgstr "전화번호 및 발신자 ID 보기"
+
+msgid "WAN address"
+msgstr "WAN 주소"
+
+msgid "WAN interface"
+msgstr "WAN 인터페이스"
+
+msgid "WPA/WPA2 (mixed)"
+msgstr "WPA/WPA2(혼합)"
+
+msgid "WPA2/WPA3 (mixed)"
+msgstr "WPA2/WPA3(혼합)"
+
+msgid "Wait for confirmation Change network"
+msgstr "네트워크 변경 확인 대기"
+
+msgid ""
+"We have confirmed that it is possible to return to the factory default state "
+"by executing the following command from the shell while connected to UART."
+msgstr "UART로 연결한 상태에서 셸에서 다음 명령을 실행하면 공장 초기 상태로 복구할 수 있음을 확인했습니다."
+
+msgid ""
+"What we cover here is setting up a DHCP client where the Air 6 itself "
+"obtains a management IP from the upstream router. Failure to switch or apply "
+"will result in loss of all network connectivity and may require UART "
+"recovery by soft bricking."
+msgstr "여기서는 Air 6가 상위 라우터에서 관리 IP를 받도록 DHCP 클라이언트를 설정합니다. 전환 또는 적용에 실패하면 모든 네트워크 연결이 끊기고 소프트 브릭 상태가 되어 UART 복구가 필요할 수 있습니다."
+
+msgid "When applied, radio waves will be interrupted for only a few seconds."
+msgstr "적용하면 무선 연결이 몇 초간 끊깁니다."
+
+msgid ""
+"When off, clients on the main SSID (SSID1) cannot communicate with guest "
+"SSID (SSID2) clients. This is guest network isolation."
+msgstr "끄면 기본 SSID(SSID1)의 단말과 게스트 SSID(SSID2)의 단말이 서로 통신할 수 없습니다. 게스트 네트워크 격리 기능입니다."
+
+msgid ""
+"When off, clients on the main SSID (SSID1) cannot reach wired LAN devices. "
+"This applies only to SSID1; guest SSID2 is unaffected. This app separately "
+"maintains wired access for SSID2."
+msgstr "끄면 기본 SSID(SSID1) 단말에서 유선 LAN 장치에 접근하지 못합니다. SSID1에만 적용되며 게스트 SSID2에는 영향이 없습니다. 이 앱은 SSID2의 유선 접근을 별도로 관리합니다."
+
+msgid ""
+"When off, main SSIDs on 2.4, 5, and 6 GHz cannot communicate with each other."
+msgstr "끄면 2.4/5/6GHz 기본 SSID 간 통신이 차단됩니다."
+
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+msgid "Wi-Fi 7 / Mesh"
+msgstr "Wi-Fi 7 / 메시"
+
+msgid "Wi-Fi band is empty or duplicated."
+msgstr "Wi-Fi 대역이 비어 있거나 중복되었습니다."
+
+msgid ""
+"Wi-Fi changes apply differently by setting. Restarting Wi-Fi or the device "
+"does not guarantee that band steering SSID changes are saved and active."
+msgstr "Wi-Fi 변경 사항의 적용 방식은 설정마다 다릅니다. Wi-Fi나 기기를 재시작해도 밴드 스티어링의 SSID 변경이 저장되고 활성화된다고 보장할 수 없습니다."
+
+msgid "Wi-Fi channel update failed; UCI settings were saved."
+msgstr "Wi-Fi 채널 갱신에 실패했지만 UCI 설정은 저장되었습니다."
+
+msgid "Wi-Fi interface is empty or duplicated."
+msgstr "Wi-Fi 인터페이스가 비어 있거나 중복되었습니다."
+
+msgid "Wi-Fi overall"
+msgstr "Wi-Fi 전체"
+
+msgid "Wi-Fi radio"
+msgstr "Wi-Fi 무선부"
+
+msgid "Wi-Fi restart Running diagnostics..."
+msgstr "Wi-Fi 재시작 진단 실행 중..."
+
+msgid "Wi-Fi restart failed."
+msgstr "Wi-Fi 재시작에 실패했습니다."
+
+msgid ""
+"Wi-Fi settings will not be changed on this screen. Also maintain the vendor "
+"alias 172.16.255.254 (network.lan1)."
+msgstr "이 화면에서는 Wi-Fi 설정을 변경하지 않습니다. 또한 벤더 별칭 172.16.255.254(network.lan1)를 유지합니다."
+
+msgid "Wired WAN"
+msgstr "유선 WAN"
+
+msgid "Wired WAN (eth1)"
+msgstr "유선 WAN(eth1)"
+
+msgid "Wired WAN router"
+msgstr "유선 WAN 라우터"
+
+msgid "Wired WAN router mode"
+msgstr "유선 WAN 라우터 모드"
+
+msgid ""
+"Wired WAN router — Receive DHCP on eth1, provide private DHCP to LAN/Wi-Fi"
+msgstr "유선 WAN 라우터 — eth1에서 DHCP를 받고 LAN/Wi-Fi에는 별도 DHCP 제공"
+
+msgid "Wireless device information could not be retrieved."
+msgstr "무선 장치 정보를 가져올 수 없습니다."
+
+msgid "Wireless device not found for the selected band."
+msgstr "선택한 대역의 무선 장치를 찾을 수 없습니다."
+
+msgid "Wireless device not found."
+msgstr "무선 장치를 찾을 수 없습니다."
+
+msgid "Wireless power"
+msgstr "무선 출력"
+
+msgid ""
+"Wireless power can be set to the maximum scale (100) supported by this SBA6D "
+"firmware. This is not a dBm value and does not change the country/region or "
+"regulatory table."
+msgstr "무선 출력을 SBA6D 펌웨어가 지원하는 최대 단계(100)로 설정할 수 있습니다. dBm 값이 아니며 국가/지역 또는 규제 테이블은 변경하지 않습니다."
+
+msgid "Wiring: GND = black, RX = green, TX = white"
+msgstr "배선: GND = 검정, RX = 초록, TX = 흰색"
+
+msgid "Would you like to record the current Wi-Fi status as Known-good?"
+msgstr "현재 Wi-Fi 상태를 정상 상태로 기록할까요?"
+
+msgid "Yes"
+msgstr "예"
+
+msgid "You are done."
+msgstr "완료되었습니다."
+
+msgid "You can select by pressing the number. The thin number is"
+msgstr "숫자를 눌러 선택할 수 있습니다. 흐리게 표시된 숫자는 "
+
+msgid "You have saved your note."
+msgstr "메모를 저장했습니다."
+
+msgid "You have to ask for it. SM-DP+ passes IMEI."
+msgstr "요청해야 합니다. SM-DP+에 IMEI가 전달됩니다."
+
+msgid "You will need to reissue the activation code."
+msgstr "활성화 코드를 재발급받아야 합니다."
+
+msgid "acquisition failure"
+msgstr "정보 가져오기 실패"
+
+msgid "activate"
+msgstr "활성화"
+
+msgid "active"
+msgstr "활성"
+
+msgid "ad block"
+msgstr "광고 차단"
+
+msgid "antenna"
+msgstr "안테나 "
+
+msgid "apply"
+msgstr "적용"
+
+msgid "auto start"
+msgstr "자동 시작"
+
+msgid "automatic"
+msgstr "자동"
+
+msgid "band"
+msgstr "밴드"
+
+msgid "banner"
+msgstr "배너"
+
+msgid "bcdUSB / device class"
+msgstr "bcdUSB / 장치 클래스"
+
+msgid "big)"
+msgstr "개)"
+
+msgid "book"
+msgstr "개"
+
+msgid "br-lan connected"
+msgstr "br-lan에 연결됨"
+
+msgid "business person"
+msgstr "통신사"
+
+msgid "by another name"
+msgstr "다른 이름으로"
+
+msgid "cable"
+msgstr "유선"
+
+msgid "cancellation"
+msgstr "취소"
+
+msgid "candle"
+msgstr "초"
+
+msgid "capture"
+msgstr "가져오기"
+
+msgid "card"
+msgstr "카드"
+
+msgid "carrier"
+msgstr "반송파"
+
+msgid "case"
+msgstr "개"
+
+msgid "case)"
+msgstr "건)"
+
+msgid "change band"
+msgstr "밴드 변경"
+
+msgid "check port)"
+msgstr "포트 확인)"
+
+msgid "clear"
+msgstr "초기화"
+
+msgid "cleared"
+msgstr "해제됨"
+
+msgid "close"
+msgstr "닫기"
+
+msgid "communication standards"
+msgstr "무선 통신 규격"
+
+msgid "condition correction"
+msgstr "상태 보정"
+
+msgid "connection"
+msgstr "연결"
+
+msgid "connection device"
+msgstr "연결 장치"
+
+msgid "connection mode"
+msgstr "연결 모드"
+
+msgid "container"
+msgstr "저장소"
+
+msgid "conversion"
+msgstr "변경"
+
+msgid "current status"
+msgstr "현재 상태"
+
+msgid "danger"
+msgstr "위험"
+
+msgid "deactivate"
+msgstr "비활성"
+
+msgid "default path"
+msgstr "기본 경로"
+
+msgid "default settings"
+msgstr "기본 설정"
+
+msgid "delete"
+msgstr "삭제"
+
+msgid "delete all"
+msgstr "모두 삭제"
+
+msgid "destruction"
+msgstr "삭제"
+
+msgid "detailed operation"
+msgstr "상세 작업"
+
+msgid "diagnosis"
+msgstr "진단"
+
+msgid "division"
+msgstr "분할"
+
+msgid "do."
+msgstr "합니다."
+
+msgid "doesn't exist"
+msgstr "없음"
+
+msgid "eUICC information"
+msgstr "eUICC 정보"
+
+msgid "effectiveness"
+msgstr "활성"
+
+msgid "eliminate"
+msgstr "제거"
+
+msgid "emphysema"
+msgstr "모델"
+
+msgid "encryption method"
+msgstr "암호화 방식"
+
+msgid "entity"
+msgstr "본체"
+
+msgid "expected driver"
+msgstr "예상 드라이버"
+
+msgid "express designation"
+msgstr "명시적 지정"
+
+msgid "failure"
+msgstr "실패"
+
+msgid "firmware"
+msgstr "펌웨어"
+
+msgid "from modem"
+msgstr "모뎀에서 "
+
+msgid "functioning"
+msgstr "동작 중"
+
+msgid "green onion"
+msgstr "개"
+
+msgid "has been applied. The remaining"
+msgstr " 모드가 적용되었습니다. 남은 시간: "
+
+msgid "hidden and disabled must be 0 or 1."
+msgstr "hidden과 disabled 값은 0 또는 1이어야 합니다."
+
+msgid "high temperature"
+msgstr "고온"
+
+msgid "injustice"
+msgstr "유효하지 않음"
+
+msgid "installation"
+msgstr "설치"
+
+msgid "item"
+msgstr "항목"
+
+msgid "link connection"
+msgstr "링크 연결됨"
+
+msgid "list of differences"
+msgstr "차이 목록"
+
+msgid "main"
+msgstr "참고"
+
+msgid "management status"
+msgstr "관리 상태"
+
+msgid "mapping"
+msgstr "매핑"
+
+msgid "mode"
+msgstr "모드"
+
+msgid "modem"
+msgstr "모뎀"
+
+msgid "modem reset"
+msgstr "모뎀 초기화"
+
+msgid "monitoring"
+msgstr "모니터링"
+
+msgid "movement"
+msgstr "전환 중"
+
+msgid "name"
+msgstr "이름"
+
+msgid "netdev not created"
+msgstr "netdev가 생성되지 않음"
+
+msgid "netifd may not go up even if you retry."
+msgstr "다시 시도해도 netifd가 연결을 올리지 못할 수 있습니다."
+
+msgid "netmask"
+msgstr "서브넷 마스크"
+
+msgid "network"
+msgstr "네트워크"
+
+msgid "network device not detected"
+msgstr "네트워크 장치를 감지하지 못함"
+
+msgid "normal"
+msgstr "정상"
+
+msgid "not managed"
+msgstr "관리되지 않음"
+
+msgid "operating mode"
+msgstr "동작 모드"
+
+msgid "overall status"
+msgstr "전체 상태"
+
+msgid "password"
+msgstr "비밀번호"
+
+msgid "phone number"
+msgstr "전화번호"
+
+msgid "port"
+msgstr "포트"
+
+msgid "port scan"
+msgstr "포트 스캔"
+
+msgid "problem solving"
+msgstr "문제 해결"
+
+msgid "profile"
+msgstr "프로필"
+
+msgid "profile name"
+msgstr "프로필 이름"
+
+msgid "read the barrel"
+msgstr "건을 읽어 "
+
+msgid "reason"
+msgstr "사유"
+
+msgid "received message"
+msgstr "수신 메시지"
+
+msgid "redial"
+msgstr "재연결"
+
+msgid "reference"
+msgstr "참조"
+
+msgid "registered"
+msgstr "등록됨"
+
+msgid "registration status"
+msgstr "망 등록 상태"
+
+msgid "reload"
+msgstr "새로고침"
+
+msgid "reset"
+msgstr "초기화"
+
+msgid "reset the lock"
+msgstr "다시 잠그기"
+
+msgid "respawn settings"
+msgstr "respawn 설정"
+
+msgid "restart diagnosis"
+msgstr "재시작 진단"
+
+msgid "return"
+msgstr "돌아가기"
+
+msgid "rollback"
+msgstr "롤백"
+
+msgid "save"
+msgstr "저장"
+
+msgid "save only"
+msgstr "저장만"
+
+msgid ""
+"sbair does not auto-calibrate network, DHCP, or Wi-Fi. To change it, select "
+"AP/Bridge and apply it explicitly."
+msgstr "sbair는 네트워크, DHCP 또는 Wi-Fi 설정을 자동 조정하지 않습니다. 변경하려면 AP/브리지를 선택하고 명시적으로 적용하세요."
+
+msgid "sensor"
+msgstr "센서"
+
+msgid "service"
+msgstr "서비스"
+
+msgid "setting"
+msgstr "설정"
+
+msgid "situation"
+msgstr "상태"
+
+msgid "spread"
+msgstr "신호"
+
+msgid "static IP"
+msgstr "고정 IP"
+
+msgid "stealth"
+msgstr "SSID 숨김"
+
+msgid "stop"
+msgstr "중지"
+
+msgid "success"
+msgstr "성공"
+
+msgid "switch to"
+msgstr "전환 대상:"
+
+msgid "temperature"
+msgstr "온도"
+
+msgid "terminal"
+msgstr "단말기"
+
+msgid "to unlock sim"
+msgstr "SIM 잠금 해제"
+
+msgid "treason"
+msgstr "변경"
+
+msgid "unknown"
+msgstr "알 수 없음"
+
+msgid "unlocked"
+msgstr "잠금 해제됨"
+
+msgid "unmanage"
+msgstr "관리 해제"
+
+msgid "unread"
+msgstr "읽지 않음"
+
+msgid "user name"
+msgstr "사용자 이름"
+
+msgid "verification code"
+msgstr "확인 코드"
+
+msgid "wait for apply"
+msgstr "적용 대기"
+
+msgid "waiting"
+msgstr "대기 시간"
+
+msgid "warning"
+msgstr "경고"
+
+msgid ""
+"— It disappears from storage and doesn't come back when you retrieve it."
+msgstr "— 보관함에서는 사라지며 다시 가져와도 복원되지 않습니다."
+
+msgid "— It takes 30 to 60 seconds."
+msgstr "— 30~60초가 걸립니다."
+
+msgid "—try the rest"
+msgstr "— 남은 시도 횟수"
+
+msgid ""
+"※The settings and environment, including LuCI, will also be initialized, so "
+"please perform this operation as a last resort."
+msgstr "※LuCI를 포함한 설정과 환경이 모두 초기화되므로 이 작업은 최후의 수단으로만 실행하세요."
+
+msgid "⚠ Capturing will change unread to read on modem side"
+msgstr "⚠ 가져오면 모뎀에서 읽지 않은 메시지가 읽음으로 바뀝니다"
+
+msgid ""
+"⚠ Downloads are often one-time, and if they fail, they are reissued to the "
+"business operator."
+msgstr "⚠ 다운로드는 대부분 1회만 가능합니다. 실패하면 통신사에 재발급을"
+
+msgid "⚠ Experimental high-risk features"
+msgstr "⚠ 실험적인 고위험 기능"
+
+msgid "⚠ Setting up a DHCP client is very high risk"
+msgstr "⚠ DHCP 클라이언트 설정은 매우 위험합니다"
+
+msgid "⚠ Stop propagation during transition (AT+CFUN=4)."
+msgstr "⚠ 전환 중 무선 송신을 중지합니다(AT+CFUN=4)."
+
+msgid "⚠ There is a risk of soft bricks"
+msgstr "⚠ 소프트 브릭 위험이 있습니다"
+
+msgid ""
+"⚠ This switch is the modem's VoLTE flag. If you activate it without "
+"registering"
+msgstr "⚠ 이 스위치는 모뎀의 VoLTE 플래그입니다. IMS에 등록되지 않은 상태에서 활성화하면 주의가 필요합니다. "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:17
+msgid "Cellular data call (ql_datacall)"
+msgstr "셀룰러 데이터 연결(ql_datacall)"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:49
+msgid "APN"
+msgstr "APN"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:50
+msgid ""
+"Changes made here are temporary. The vendor knsh service overwrites this "
+"value from /etc/config/lte on reboot. Use the APN setting under SIM in the "
+"SoftBank Air menu to keep it persistent."
+msgstr "여기서 바꾼 APN은 임시 설정입니다. 재부팅하면 제조사 knsh 서비스가 /etc/config/lte 값으로 덮어씁니다. 유지하려면 SoftBank Air 메뉴의 SIM 항목에서 APN을 설정하세요."
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:51
+msgid "Example: uno.au-net.ne.jp"
+msgstr "예: uno.au-net.ne.jp"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:55
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:61
+msgid "Username"
+msgstr "사용자 이름"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:66
+msgid "Password"
+msgstr "비밀번호"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:72
+msgid "IP address type"
+msgstr "IP 주소 유형"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:86
+msgid "Configure APN automatically from SIM"
+msgstr "SIM에서 APN 자동 설정"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:87
+msgid ""
+"Enabling this may cause the vendor routine to wait indefinitely for a SIM "
+"response and prevent the WAN from coming up. Leave it disabled when entering "
+"the APN manually."
+msgstr "이 옵션을 켜면 제조사 코드가 SIM 응답을 무한정 기다려 WAN이 올라오지 않을 수 있습니다. APN을 직접 입력한다면 끈 상태로 두세요."
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:92
+msgid "Radio access technology"
+msgstr "무선 접속 방식"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:93
+msgid "Automatic (NR + LTE + UMTS)"
+msgstr "자동(NR + LTE + UMTS)"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:94
+msgid "4G / 5G only"
+msgstr "4G / 5G만 사용"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:97
+msgid "PLMN override"
+msgstr "PLMN 지정"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:100
+msgid "MTU"
+msgstr "MTU"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:105
+msgid "Allow data while roaming"
+msgstr "로밍 중 데이터 사용 허용"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:110
+msgid "Retry count"
+msgstr "재시도 횟수"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/protocol/ql_datacall.js:116
+msgid "PDU timeout (seconds)"
+msgstr "PDU 시간 초과(초)"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/wifi.js:110
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/wifi.js:191
+msgid "Type"
+msgstr "종류"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/wifi.js:256
+msgid "Discard"
+msgstr "변경 취소"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:2
+msgid "Basic settings"
+msgstr "기본 설정"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:3
+msgid "Diagnostics"
+msgstr "진단"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:4
+msgid "Connected devices"
+msgstr "연결 기기"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:5
+msgid "Network"
+msgstr "네트워크"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:6
+msgid "Connection mode"
+msgstr "연결 모드"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:7
+msgid "LAN services"
+msgstr "LAN 서비스"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:8
+msgid "Device"
+msgstr "본체"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:9
+msgid "Device information"
+msgstr "본체 정보"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:10
+msgid "USB devices"
+msgstr "USB 장치"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/out/menu-titles.js:11
+msgid "Update management"
+msgstr "업데이트 관리"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/lan_services.js:23
+msgid "Enabled / running"
+msgstr "사용 / 실행 중"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/view/sbair/lan_services.js:25
+msgid "Disabled / stopped"
+msgstr "사용 안 함 / 중지"
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:1
+msgid ""
+"172.16.255.254 is reserved as a vendor alias and cannot be used as the "
+"fallback IP."
+msgstr "172.16.255.254는 제조사 별칭 주소로 예약되어 있어 대체 IP로 사용할 수 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:2
+msgid "A WPS PIN is required."
+msgstr "WPS PIN을 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:3
+msgid "A job is already running."
+msgstr "이미 작업이 실행 중입니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:4
+msgid "APN is required."
+msgstr "APN을 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:6
+msgid ""
+"Cannot scan an IP address that is not in the current br-lan client list."
+msgstr "현재 br-lan 접속 기기 목록에 없는 IP는 스캔할 수 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:7
+msgid "Cannot scan because the connected-device list is unavailable."
+msgstr "접속 기기 목록을 확인할 수 없어 스캔할 수 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:8
+msgid "Could not parse the port selection. Example: 1-1024,8080."
+msgstr "포트 입력을 해석할 수 없습니다. 예: 1-1024,8080"
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:13
+msgid "Enter the activation code."
+msgstr "활성화 코드를 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:14
+msgid "Fallback IP must be a valid IPv4 address."
+msgstr "대체 IP에 유효한 IPv4 주소를 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:15
+msgid "Fallback netmask must be a valid IPv4 netmask."
+msgstr "대체 넷마스크에 유효한 IPv4 값을 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:16
+msgid "Fallback wait time must be between 5 and 3600 seconds."
+msgstr "대체 대기 시간은 5~3600초로 설정해야 합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:17
+msgid "Gateway must be a valid IPv4 address."
+msgstr "게이트웨이에 유효한 IPv4 주소를 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:18
+msgid "ICCID is required."
+msgstr "ICCID를 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:23
+msgid "MLO command failed; configuration may be partially changed"
+msgstr "MLO 명령에 실패해 설정이 일부만 변경되었을 수 있습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:24
+msgid "MLO read-back failed; configuration may be partially changed"
+msgstr "MLO 상태 재조회에 실패해 설정이 일부만 변경되었을 수 있습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:25
+msgid "Management IP method must be DHCP or static."
+msgstr "관리 IP 방식은 DHCP 또는 고정 IP여야 합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:26
+msgid "Message hash is required."
+msgstr "메시지 해시를 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:27
+msgid "Message was not found in the archive."
+msgstr "보관함에서 메시지를 찾을 수 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:28
+msgid ""
+"Netmask must be blank or a valid IPv4 netmask (blank inherits the stock "
+"setting)."
+msgstr "넷마스크는 비워 두거나 유효한 IPv4 값을 입력하세요(비우면 순정 설정을 따릅니다)."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:29
+msgid "No card is present in the physical SIM slot."
+msgstr "물리 SIM 슬롯에 카드가 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:30
+msgid "No eUICC is available. The built-in eSIM mapping has no ISD-R."
+msgstr "eUICC가 없습니다. 내장 eSIM 매핑에는 ISD-R이 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:33
+msgid "SIM mapping must be 1 (physical slot) or 2 (built-in eSIM)."
+msgstr "SIM 매핑은 1(물리 슬롯) 또는 2(내장 eSIM)여야 합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:35
+msgid ""
+"Static IP must be blank or a valid IPv4 address (blank inherits the stock "
+"setting)."
+msgstr "고정 IP는 비워 두거나 유효한 IPv4 주소를 입력하세요(비우면 순정 설정을 따릅니다)."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:36
+msgid "Storage returned no response."
+msgstr "저장 영역에서 응답이 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:37
+msgid "The SIM did not return an APN."
+msgstr "SIM에서 APN을 받지 못했습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:38
+msgid ""
+"The built-in eSIM has no ISD-R. Switch to an eUICC card in the physical slot "
+"to use eUICC functions."
+msgstr "내장 eSIM에는 ISD-R이 없습니다. eUICC 기능을 쓰려면 물리 슬롯의 eUICC 카드로 전환하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:39
+msgid ""
+"The connected-device scan timed out. The LAN may be busy; try again shortly."
+msgstr "접속 기기 목록 조회 시간이 초과되었습니다. LAN이 혼잡할 수 있으니 잠시 후 다시 시도하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:41
+msgid "The modem rejected the request: "
+msgstr "모뎀이 요청을 거부했습니다: "
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:42
+msgid "The physical-slot card is a regular SIM, not an eUICC."
+msgstr "물리 슬롯의 카드는 eUICC가 아닌 일반 SIM입니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:43
+msgid ""
+"The physical-slot card is a regular SIM, not an eUICC. No known ISD-R AID "
+"could be opened."
+msgstr "물리 슬롯의 카드는 eUICC가 아닌 일반 SIM입니다. 알려진 ISD-R AID를 열지 못했습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:47
+msgid "UCI commit failed; configuration may be partially saved"
+msgstr "UCI 커밋에 실패해 설정이 일부만 저장되었을 수 있습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:48
+msgid "USB NIC enable requires explicit acknowledgement"
+msgstr "USB NIC를 켜려면 명시적으로 확인해야 합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:49
+msgid "Unable to read the SIM ICCID."
+msgstr "SIM ICCID를 읽을 수 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:50
+msgid "Unable to read the SIM."
+msgstr "SIM을 읽을 수 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:51
+msgid "WPS is supported only on the 2.4 GHz and 5 GHz bands."
+msgstr "WPS는 2.4GHz 및 5GHz 대역만 지원합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:57
+msgid "band steering command failed; configuration may be partially changed"
+msgstr "밴드 스티어링 명령에 실패해 설정이 일부만 변경되었을 수 있습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:58
+msgid "band steering read-back failed; configuration may be partially changed"
+msgstr "밴드 스티어링 상태 재조회에 실패해 설정이 일부만 변경되었을 수 있습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:59
+msgid "cannot read MLO status"
+msgstr "MLO 상태를 읽을 수 없습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:60
+msgid "channel is required"
+msgstr "채널을 입력하세요."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:61
+msgid "channel must be a decimal value from 0 to 233"
+msgstr "채널은 0에서 233 사이의 10진수여야 합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:62
+msgid "enabled must be 0 or 1"
+msgstr "enabled는 0 또는 1이어야 합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:64
+msgid "knsh save failed after UCI commit"
+msgstr "UCI 커밋 후 knsh save에 실패했습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:65
+msgid "mac is required"
+msgstr "MAC 주소가 필요합니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:66
+msgid "mesh command failed; configuration may be partially changed"
+msgstr "메시 명령에 실패해 설정이 일부만 변경되었을 수 있습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:67
+msgid "mesh is off but stock WPS cleanup failed"
+msgstr "메시는 꺼졌지만 순정 WPS 설정 정리에 실패했습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:68
+msgid ""
+"stock constraint: MLO can only be enabled while band steering is enabled"
+msgstr "순정 제약: 밴드 스티어링이 켜져 있을 때만 MLO를 켤 수 있습니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:69
+msgid "unrecognized MLO status"
+msgstr "인식할 수 없는 MLO 상태입니다."
+
+#: /tmp/tmp.NU2nDm6Elv/backend-errors.js:70
+msgid "usage: sbair-modem netmode arp-probe <interface> <IPv4>"
+msgstr "사용법: sbair-modem netmode arp-probe <interface> <IPv4>"
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:21
+msgid "Unable to open the eUICC: "
+msgstr "eUICC를 열 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:22
+msgid "Unable to create config file: "
+msgstr "설정 파일을 만들 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:23
+msgid "Unable to apply firewall rules: "
+msgstr "방화벽 규칙을 적용할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:24
+msgid "Unable to inspect the hosts parent directory: "
+msgstr "hosts 상위 디렉터리를 확인할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:25
+msgid "Unable to write the hosts file: "
+msgstr "hosts 파일을 쓸 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:26
+msgid "Unable to remove ad-block DNAT rules: "
+msgstr "광고 차단 DNAT 규칙을 제거할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:27
+msgid "Unable to write UCI settings: "
+msgstr "UCI 설정을 쓸 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:28
+msgid "Unable to read APN from the SIM: "
+msgstr "SIM에서 APN을 읽을 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:29
+msgid "Unable to parse the modem response: "
+msgstr "모뎀 응답을 해석할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:30
+msgid "Band response is too short: "
+msgstr "밴드 응답이 너무 짧습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:31
+msgid "Unable to parse the band number: "
+msgstr "밴드 번호를 해석할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:32
+msgid "Unable to read EID: "
+msgstr "EID를 읽을 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:33
+msgid "Unable to read the eSIM profile: "
+msgstr "eSIM 프로필을 읽을 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:34
+msgid "Invalid ICCID: "
+msgstr "ICCID가 잘못되었습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:35
+msgid "eSIM operation failed: "
+msgstr "eSIM 작업에 실패했습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:36
+msgid "Unable to query the modem: "
+msgstr "모뎀에 질의할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:37
+msgid "Unable to change the setting: "
+msgstr "설정을 변경할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:38
+msgid "Unable to safely prepare the job directory: "
+msgstr "작업 디렉터리를 안전하게 준비할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:39
+msgid "Unable to start the job: "
+msgstr "작업을 시작할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:40
+msgid "Unable to determine the executable path: "
+msgstr "실행 파일 경로를 확인할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:41
+msgid "Unable to save job status: "
+msgstr "작업 상태를 저장할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:42
+msgid "Unable to start the worker: "
+msgstr "작업자를 시작할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:43
+msgid "Invalid DHCP pool start address: "
+msgstr "DHCP 범위 시작 주소가 잘못되었습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:44
+msgid "Invalid DHCP pool end address: "
+msgstr "DHCP 범위 끝 주소가 잘못되었습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:45
+msgid "Router IP is invalid: "
+msgstr "라우터 IP가 잘못되었습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:46
+msgid "Unable to inspect the SIM LAN DHCP range: "
+msgstr "SIM LAN DHCP 범위를 확인할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:47
+msgid "PDU is not valid hexadecimal data: "
+msgstr "PDU가 올바른 16진 데이터가 아닙니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:48
+msgid "Unable to get the br-lan IPv4 network: "
+msgstr "br-lan IPv4 네트워크를 가져올 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:49
+msgid "Scan rejected because the connected-device list could not be verified: "
+msgstr "접속 기기 목록을 확인할 수 없어 스캔을 거부했습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:50
+msgid "AT+ESIMMAP? response is missing +ESIMMAP: "
+msgstr "AT+ESIMMAP? 응답에 +ESIMMAP가 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:51
+msgid "Unable to enable PDU mode: "
+msgstr "PDU 모드를 켤 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:52
+msgid "Unable to read SMS: "
+msgstr "SMS를 읽을 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:53
+msgid "Unable to read the SMS storage: "
+msgstr "SMS 저장 영역을 읽을 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:54
+msgid "Unable to secure the SMS database parent directory: "
+msgstr "SMS 데이터베이스 상위 디렉터리를 보호할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:55
+msgid "Unable to securely open the SMS database: "
+msgstr "SMS 데이터베이스를 안전하게 열 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:56
+msgid "Unable to inspect SQLite sidecar: "
+msgstr "SQLite 사이드카 파일을 확인할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:57
+msgid "Unable to secure SQLite sidecar permissions: "
+msgstr "SQLite 사이드카 파일 권한을 보호할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:58
+msgid "Unable to open the SMS database: "
+msgstr "SMS 데이터베이스를 열 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:59
+msgid "Unable to save the message: "
+msgstr "메시지를 저장할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:60
+msgid "Unable to read from the SMS database: "
+msgstr "SMS 데이터베이스에서 읽을 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:61
+msgid "Unable to delete the message: "
+msgstr "메시지를 삭제할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:20
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:98
+msgid "Unable to disable SIM lock: "
+msgstr "SIM 잠금을 해제할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:21
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:67
+msgid "SIM lock disabled ("
+msgstr "SIM 잠금을 해제했습니다 ("
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:22
+msgid "Saved band settings differ from the requested combination (LTE "
+msgstr "저장된 밴드 설정이 요청과 다릅니다 (LTE "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:23
+msgid "Unable to read the current band settings: "
+msgstr "현재 밴드 설정을 읽을 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:24
+msgid "Unable to prepare band settings: "
+msgstr "밴드 설정을 준비할 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:25
+msgid "Unable to write band settings: "
+msgstr "밴드 설정을 쓸 수 없습니다: "
+
+#: /mnt/c/Users/SMART/Documents/Codex/air6-stock-mod/external/Floop3-luci-app-sbair-modem-ko/htdocs/luci-static/resources/tools/sbair.js:26
+msgid "Reapplied band settings (LTE "
+msgstr "밴드 설정을 다시 적용했습니다 (LTE "
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:1
+msgid " WAN was not started in AP mode."
+msgstr " AP 모드에서는 WAN을 시작하지 않았습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:2
+msgid "/bin/usim"
+msgstr "/bin/usim"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:7
+msgid "AT+CFUN=0"
+msgstr "AT+CFUN=0"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:8
+msgid "AT+CFUN=1"
+msgstr "AT+CFUN=1"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:9
+msgid "AT+CFUN=4"
+msgstr "AT+CFUN=4"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:10
+msgid "AT+EPBSEH="
+msgstr "AT+EPBSEH="
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:11
+msgid "AT+EPBSEH=?"
+msgstr "AT+EPBSEH=?"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:12
+msgid "AT+EPBSEH?"
+msgstr "AT+EPBSEH?"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:13
+msgid "AT+ESIMMAP=2"
+msgstr "AT+ESIMMAP=2"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:14
+msgid "Activation code"
+msgstr "활성화 코드"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:18
+msgid "Check WAN status"
+msgstr "WAN 상태 확인"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:19
+msgid "Complete"
+msgstr "완료"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:20
+msgid "Connect"
+msgstr "연결"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:21
+msgid "Contact SM-DP+"
+msgstr "SM-DP+ 연결"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:27
+msgid "Disable SIM lock (AT+ESMLCK)"
+msgstr "SIM 잠금 해제 중 (AT+ESMLCK)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:28
+msgid "Disable radio (AT+CFUN=0)"
+msgstr "무선 중지 중 (AT+CFUN=0)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:29
+msgid "Disable radio (AT+CFUN=4)"
+msgstr "무선 중지 중 (AT+CFUN=4)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:30
+msgid "Download"
+msgstr "다운로드"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:31
+msgid "Enable SIM lock (AT+ESMLCK)"
+msgstr "SIM 잠금 설정 중 (AT+ESMLCK)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:38
+msgid "IMEI"
+msgstr "IMEI"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:39
+msgid "IMS enabled. Registration may take 10–30 seconds."
+msgstr "IMS를 켰습니다. 등록까지 10~30초 걸릴 수 있습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:40
+msgid "Input"
+msgstr "입력"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:53
+msgid "Open eUICC"
+msgstr "eUICC 열기"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:54
+msgid "PDU is truncated."
+msgstr "PDU 데이터가 중간에 잘렸습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:56
+msgid "Profile added. Activate it from the profile list."
+msgstr "프로필을 추가했습니다. 목록에서 활성화하세요."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:57
+msgid "Read IMEI"
+msgstr "IMEI 읽기"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:58
+msgid "Read current settings"
+msgstr "현재 설정 읽기"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:59
+msgid "Recovery verification"
+msgstr "복구 확인"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:60
+msgid "Registration"
+msgstr "네트워크 등록"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:61
+msgid "Reload SIM (AT+CFUN=0)"
+msgstr "SIM 다시 읽기 (AT+CFUN=0)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:63
+msgid "Response is not an SMS-DELIVER PDU."
+msgstr "SMS-DELIVER PDU 응답이 아닙니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:64
+msgid "Restore radio (AT+CFUN=1)"
+msgstr "무선 복구 중 (AT+CFUN=1)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:65
+msgid "Restore the previous settings"
+msgstr "이전 설정 복원"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:66
+msgid "Rollback"
+msgstr "롤백"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:68
+msgid "SIM lock is enabled. Disable it from the SIM page."
+msgstr "SIM 잠금이 켜져 있습니다. SIM 페이지에서 해제하세요."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:70
+msgid ""
+"Select at least one LTE band. 5G is added after LTE connects, so 5G will not "
+"connect if no LTE band is selected."
+msgstr "LTE 대역을 하나 이상 선택하세요. 5G는 LTE 연결 후 추가되므로 LTE 대역을 선택하지 않으면 5G도 연결되지 않습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:72
+msgid "Start"
+msgstr "시작"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:74
+msgid "Stop WAN"
+msgstr "WAN 중지"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:76
+msgid "Switch to built-in eSIM (AT+ESIMMAP=2)"
+msgstr "내장 eSIM으로 전환 (AT+ESIMMAP=2)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:77
+msgid "Switch to physical slot (/bin/usim)"
+msgstr "물리 슬롯으로 전환 (/bin/usim)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:82
+msgid "The modem did not respond after switching. Check it over serial."
+msgstr "전환 후 모뎀이 응답하지 않습니다. 시리얼 연결로 확인하세요."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:84
+msgid ""
+"The modem was reset and WAN was re-established. Connection may take 10–30 "
+"seconds."
+msgstr "모뎀을 재설정하고 WAN 연결을 다시 시작했습니다. 연결까지 10~30초가 걸릴 수 있습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:85
+msgid "The modem was reset. WAN was not started in AP mode."
+msgstr "모뎀을 재설정했습니다. AP 모드에서는 WAN을 시작하지 않았습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:86
+msgid ""
+"The network did not connect with the selected bands, so the previous "
+"settings were restored."
+msgstr "선택한 대역으로 연결하지 못해 이전 설정을 복원했습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:89
+msgid ""
+"The radio is back, but network registration did not complete in time. WAN "
+"was not started in AP mode."
+msgstr "무선 기능은 복구되었지만 제한 시간 내에 망 등록을 마치지 못했습니다. AP 모드에서는 WAN을 시작하지 않았습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:90
+msgid "The radio is back, but the network did not connect in time. WAN is up."
+msgstr ""
+"무선은 복구됐지만 시간 내에 네트워크에 연결되지 않았습니다. WAN은 올라와 있습"
+"니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:95
+msgid "UDH is missing."
+msgstr "UDH가 없습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:96
+msgid "UDH is truncated."
+msgstr "UDH 데이터가 중간에 잘렸습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:101
+msgid "Unable to restore the previous settings: "
+msgstr "이전 설정을 복원할 수 없습니다: "
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:102
+msgid "Verify SIM state"
+msgstr "SIM 상태 확인"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:103
+msgid "Verify recovery"
+msgstr "복구 확인"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:104
+msgid ""
+"WAN was not started in AP mode. Modem AT and SMS functions remain available."
+msgstr "AP 모드에서는 WAN을 시작하지 않았습니다. 모뎀 AT 및 SMS 기능은 계속 사용할 수 있습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:105
+msgid "WAN was restarted. Connection may take 10–30 seconds."
+msgstr "WAN을 다시 시작했습니다. 연결까지 10~30초 걸릴 수 있습니다."
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:107
+msgid "Wait for modem reinitialization (25 seconds)"
+msgstr "모뎀 재초기화 대기 (25초)"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:108
+msgid "Wait for network registration"
+msgstr "네트워크 등록 대기"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:114
+msgid "Write band settings"
+msgstr "밴드 설정 쓰기"
+
+#: /tmp/tmp.hLGG04Xu59/backend-errors.js:122
+msgid "ifup wan"
+msgstr "ifup wan"
+
+msgid "Floop3 wired WAN router (eth1)"
+msgstr "Floop3 유선 WAN 라우터 (eth1)"
+
+msgid "Air 6 Ethernet WAN (VLAN 3)"
+msgstr "Air 6 이더넷 WAN (VLAN 3)"
+
+msgid "Ethernet WAN (eth0.3)"
+msgstr "이더넷 WAN (eth0.3)"
+
+msgid "Ethernet WAN address/default path"
+msgstr "이더넷 WAN 주소/기본 경로"
+
+msgid "Ethernet WAN"
+msgstr "이더넷 WAN"
+
+msgid "default route active"
+msgstr "기본 경로 사용 중"
+
+msgid "not the default route"
+msgstr "기본 경로가 아님"
+
+msgid "Air 6 VLAN 3 WAN mode"
+msgstr "Air 6 VLAN 3 WAN 모드"
+
+msgid "This project mode creates switch0 VLAN 3 instead of trying to reuse eth0.1. The recorded topology moves external switch port 1 out of VLAN 1 and adds it untagged to VLAN 3, with CPU port 5 tagged; this creates eth0.3."
+msgstr "이 프로젝트 모드는 eth0.1을 재사용하지 않고 switch0에 VLAN 3을 만듭니다. 기록된 구성은 외부 스위치 포트 1을 VLAN 1에서 빼서 VLAN 3에 untagged로 넣고 CPU 포트 5를 tagged로 연결해 eth0.3을 만듭니다."
+
+msgid "A separate network.ethernetwan DHCP client uses eth0.3. The existing cellular network.wan on ccmni remains configured, unlike Floop3 ethwan, which repoints network.wan to eth1 and replaces cellular as the upstream."
+msgstr "별도 network.ethernetwan DHCP 클라이언트가 eth0.3을 사용합니다. ccmni를 사용하는 기존 셀룰러 network.wan은 유지됩니다. network.wan을 eth1로 바꿔 셀룰러 업링크를 대체하는 Floop3 ethwan과 다릅니다."
+
+msgid "LAN br-lan, private addressing, and its DHCP server remain in place. Ethernet WAN is added to the existing WAN firewall/NAT zone; incoming WAN traffic remains subject to that zone's input policy."
+msgstr "LAN br-lan, 사설 주소, DHCP 서버는 유지됩니다. 이더넷 WAN을 기존 WAN 방화벽/NAT zone에 추가하며, 외부에서 들어오는 연결은 해당 zone의 입력 정책을 따릅니다."
+
+msgid "This follows the saved device record for switch port 1 and VID 3. It does not infer another physical jack mapping. Safe Apply rolls the UCI state back after 120 seconds unless confirmed; it cannot guarantee recovery from a switch configuration failure, so keep UART available."
+msgstr "저장된 장비 기록의 스위치 포트 1과 VID 3 구성을 사용하며, 다른 물리 잭의 포트 번호는 추측하지 않습니다. 120초 안에 확정하지 않으면 UCI를 롤백하지만 스위치 설정 실패까지 복구를 보장하지는 않으므로 UART 연결을 유지하세요."
+
+msgid "Floop3 ethwan — DHCP on eth1; uses network.wan and replaces cellular uplink"
+msgstr "Floop3 ethwan — eth1에서 DHCP를 받고 network.wan을 사용해 셀룰러 업링크를 대체"
+
+msgid "Our VLAN WAN — create eth0.3 (VID 3), keep cellular wan"
+msgstr "자체 VLAN WAN — eth0.3 (VID 3) 생성, 셀룰러 wan 유지"
+
+msgid "Move recorded switch port 1 from VLAN 1 to VLAN 3, create eth0.3, and run DHCP on a separate ethernetwan interface. Cellular network.wan remains unchanged."
+msgstr "기록된 스위치 포트 1을 VLAN 1에서 VLAN 3으로 옮겨 eth0.3을 만들고 별도 ethernetwan 인터페이스에서 DHCP를 실행합니다. 셀룰러 network.wan은 바꾸지 않습니다."
+
+msgid "Stock cellular router (SIM / ccmni)"
+msgstr "순정 셀룰러 라우터 (SIM / ccmni)"
+
+msgid "restore SIM/ccmni router profile"
+msgstr "SIM/ccmni 라우터 프로필 복원"
+
+msgid "Restore the sbair-managed stock cellular router profile: keep the SIM/ccmni WAN and private LAN with DHCP. This applies the saved SIM profile, or the documented factory LAN defaults if no managed profile exists."
+msgstr "sbair가 관리하는 순정 셀룰러 라우터 구성을 복원합니다. SIM/ccmni WAN과 사설 LAN DHCP를 유지하며, 저장된 SIM 프로필이 없으면 문서화된 기본 LAN 설정을 적용합니다."
+
+msgid "This restores the stock cellular-uplink configuration; it does not enable Ethernet WAN or modify modem firmware."
+msgstr "순정 셀룰러 업링크 구성을 복원합니다. Ethernet WAN을 켜거나 모뎀 펌웨어를 수정하지 않습니다."
+
+msgid "Both Ethernet and cellular interfaces may advertise a default route. This mode preserves the cellular interface but does not configure route preference or automatic failover; verify the active default route before confirming."
+msgstr "이더넷과 셀룰러 인터페이스가 모두 기본 경로를 제공할 수 있습니다. 이 모드는 셀룰러 인터페이스를 유지하지만 경로 우선순위나 자동 장애 조치를 설정하지 않으므로, 확정 전에 실제 기본 경로를 확인하세요."
+
+msgid "\nEnsure recorded switch port 1 is untagged in VLAN 3 and absent from VLAN 1, create eth0.3, and run DHCP on a separate ethernetwan interface. Cellular network.wan remains unchanged."
+msgstr "\n기록된 스위치 포트 1이 VLAN 1에는 없고 VLAN 3에는 untagged로 있도록 확인한 뒤 eth0.3을 만들고 별도 ethernetwan 인터페이스에서 DHCP를 실행합니다. 셀룰러 network.wan은 그대로 둡니다."
+
+msgid "5G NR"
+msgstr "5G NR"
+
+msgid "DNS"
+msgstr "DNS"
+
+msgid "EID"
+msgstr "EID"
+
+msgid "ICCID"
+msgstr "ICCID"
+
+msgid "ISD-R AID"
+msgstr "ISD-R AID"
+
+msgid "LAN DHCP"
+msgstr "LAN DHCP"
+
+msgid "LAN/Wi-Fi"
+msgstr "LAN/Wi-Fi"
+
+msgid "LTE"
+msgstr "LTE"
+
+msgid "MAC / MTU"
+msgstr "MAC / MTU"
+
+msgid "RSRP"
+msgstr "RSRP"
+
+msgid "RSRQ"
+msgstr "RSRQ"
+
+msgid "RSSI"
+msgstr "RSSI"
+
+msgid "SGP.22"
+msgstr "SGP.22"
+
+msgid "SSID"
+msgstr "SSID"
+
+msgid "TAC"
+msgstr "TAC"
+
+msgid "UDC"
+msgstr "UDC"
+
+msgid "VID:PID"
+msgstr "VID:PID"
+
+msgid "WPS"
+msgstr "WPS"
+
+msgid "block device"
+msgstr "블록 장치"
+
+msgid "bundle"
+msgstr "번들"
+
+msgid "class / subclass / protocol"
+msgstr "클래스 / 하위 클래스 / 프로토콜"
+
+msgid "driver"
+msgstr "드라이버"
+
+msgid "driver / bus"
+msgstr "드라이버 / 버스"
+
+msgid "eSIM"
+msgstr "eSIM"
+
+msgid "interface"
+msgstr "인터페이스"
+
+msgid "layer"
+msgstr "계층"
+
+msgid "master"
+msgstr "상위 인터페이스"
+
+msgid "modalias"
+msgstr "모듈 별칭(modalias)"
+
+msgid "mtime"
+msgstr "수정 시각(mtime)"
+
+msgid "netdev"
+msgstr "네트워크 장치(netdev)"
+
+msgid "network candidate"
+msgstr "네트워크 장치 후보"
+
+msgid "new"
+msgstr "변경 후"
+
+msgid "old"
+msgstr "변경 전"
+
+msgid "parent / sysfs"
+msgstr "상위 장치 / sysfs"
+
+msgid "path"
+msgstr "경로"
+
+msgid "reported speed"
+msgstr "보고된 속도"
+
+msgid "role"
+msgstr "역할"
+
+msgid "sha256"
+msgstr "SHA-256"
+
+msgid "size"
+msgstr "크기"
+
+msgid "state / carrier"
+msgstr "상태 / 링크 감지"
+
+msgid "usb0"
+msgstr "usb0"
+
+msgid "yes"
+msgstr "예"
+
+msgid "no"
+msgstr "아니요"
+
+msgid " / carrier "
+msgstr " / 링크 감지 "
+
+msgid "IMS"
+msgstr "IMS"
+
+msgid "eUICC"
+msgstr "eUICC"
+
+msgid "Data usage limit"
+msgstr "데이터 사용량 제한"
+
+msgid "Counts cellular WAN receive plus transmit bytes. The counter is kept across reboots and resets at the start of each calendar month."
+msgstr "셀룰러 WAN의 다운로드와 업로드 바이트를 합산합니다. 누계는 재부팅 후에도 유지되며 매월 초 초기화됩니다."
+
+msgid "This is a device-side estimate, not carrier billing data. Hardware flow offload or modem-side accounting can make the totals differ."
+msgstr "기기에서 계산한 추정치이며 통신사 과금 데이터가 아닙니다. 하드웨어 플로우 오프로딩이나 모뎀 측 집계로 값이 다를 수 있습니다."
+
+msgid "At the limit, Floop3 blocks routed and router-originated traffic on the cellular WAN. This is approximate: up to one sampling interval may pass before the block is applied."
+msgstr "한도에 도달하면 Floop3가 셀룰러 WAN을 통과하거나 공유기에서 시작된 트래픽을 차단합니다. 최대 한 번의 수집 간격 동안 한도를 넘길 수 있습니다."
+
+msgid "Monitoring and blocking are currently off. Enable them to start a new monthly measurement period."
+msgstr "현재 사용량 감시와 차단이 꺼져 있습니다. 켜면 새 월간 측정을 시작합니다."
+
+msgid "This month"
+msgstr "이번 달"
+
+msgid "Cellular interface"
+msgstr "셀룰러 인터페이스"
+
+msgid "Downloaded"
+msgstr "다운로드"
+
+msgid "Uploaded"
+msgstr "업로드"
+
+msgid "Combined usage"
+msgstr "합산 사용량"
+
+msgid "Limit / remaining"
+msgstr "한도 / 잔여량"
+
+msgid "Limit enforcement"
+msgstr "한도 차단 상태"
+
+msgid "Blocked"
+msgstr "차단 중"
+
+msgid "Firewall rule error"
+msgstr "방화벽 규칙 오류"
+
+msgid "Not blocked"
+msgstr "차단되지 않음"
+
+msgid "Last sample"
+msgstr "마지막 수집 시각"
+
+msgid "Sampling interval"
+msgstr "수집 간격"
+
+msgid "Monthly limit (MB)"
+msgstr "월간 한도 (MB)"
+
+msgid "2500 MB = 2.5 GB (decimal). The limit counts upload and download together."
+msgstr "2500 MB = 2.5 GB (십진 단위)입니다. 업로드와 다운로드를 합산합니다."
+
+msgid "Save limit and disable"
+msgstr "한도 저장 후 끄기"
+
+msgid "Save limit and enable"
+msgstr "한도 저장 후 켜기"
+
+msgid "Monthly cap reached. Cellular WAN traffic is blocked until next month or until you disable the cap."
+msgstr "월간 한도에 도달해 셀룰러 WAN 트래픽을 차단했습니다. 다음 달 또는 한도 기능을 끌 때까지 차단됩니다."
+
+msgid "Enter a limit from 100 to 1,000,000 MB."
+msgstr "100~1,000,000 MB 사이의 한도를 입력하세요."
+
+msgid "Cellular data cap"
+msgstr "셀룰러 데이터 한도"
+
+msgid "Limit must be between 100 MB and 1,000,000 MB."
+msgstr "한도는 100 MB에서 1,000,000 MB 사이여야 합니다."
+
+msgid "Sampling error"
+msgstr "수집 오류"
+
+msgid "Unable to read cellular WAN counters"
+msgstr "셀룰러 WAN 카운터를 읽을 수 없음"
+
+msgid "None"
+msgstr "없음"

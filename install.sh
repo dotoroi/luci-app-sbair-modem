@@ -15,15 +15,30 @@
 set -eu
 SELF=$(cd "$(dirname "$0")" && pwd)
 ROOT="${1:-}"
+CHECK_ONLY=0
+if [ "$ROOT" = "--check" ]; then
+	CHECK_ONLY=1
+	ROOT=/
+fi
 
-[ -n "$ROOT" ] || { echo "使い方: $0 <rootfs ツリー | />" >&2; exit 2; }
+[ -n "$ROOT" ] || { echo "Usage: $0 <rootfs tree | / | --check>" >&2; exit 2; }
 [ -d "$ROOT" ] || { echo "!! $ROOT が無い" >&2; exit 1; }
 [ -f "$SELF/out/sbair-modem" ] || { echo "!! out/sbair-modem が無い。先に ./build.sh" >&2; exit 1; }
 
 preflight_live_air6() {
 	[ "$(id -u)" = 0 ] || { echo '!! 実機への導入にはrootが必要です' >&2; return 1; }
+	[ -x /www/cgi-bin/luci ] && [ -x /etc/init.d/rpcd ] &&
+		command -v ubus >/dev/null && command -v uci >/dev/null || {
+		echo '!! LuCI, rpcd, ubus and uci are required before installation.' >&2
+		return 1
+	}
+	pending_firewall=$(uci changes firewall) || return 1
+	[ -z "$pending_firewall" ] || {
+		echo '!! Review pending firewall UCI changes before installation.' >&2
+		return 1
+	}
 	[ -r /etc/openwrt_release ] || { echo '!! OpenWrt release metadata is missing' >&2; return 1; }
-	value() { awk -F"'" -v key="$1" '$1 == key { print $2; exit }' /etc/openwrt_release; }
+	value() { awk -F"'" -v key="$1" '$1 == (key "=") { print $2; exit }' /etc/openwrt_release; }
 	release=$(value DISTRIB_RELEASE)
 	revision=$(value DISTRIB_REVISION)
 	target=$(value DISTRIB_TARGET)
@@ -139,6 +154,7 @@ check_netmode_ownership() {
 			echo "既存の sbair-netmode: ${kind}（更新します）"
 			;;
 		KNOWN_PRE_FORK_LEGACY)
+			[ "$CHECK_ONLY" = 0 ] || return 0
 			backup_dir="$ROOT/root/sbair-backups/netmode-legacy"
 			backup="$backup_dir/sbair-netmode"
 			mkdir -p "$backup_dir"
@@ -167,6 +183,10 @@ check_netmode_ownership() {
 # Check before creating directories or copying any file. This makes an
 # ordinary install fail closed when another package owns the network controller.
 check_netmode_ownership
+if [ "$CHECK_ONLY" = 1 ]; then
+	echo 'Preflight passed. No files were installed.'
+	exit 0
+fi
 
 mkdir -p "$ROOT/usr/bin" \
          "$ROOT/usr/sbin" \
@@ -186,7 +206,24 @@ mkdir -p "$ROOT/usr/bin" \
 put() {   # put <src> <dst> <mode>
 	cp "$1" "$2"
 	chmod "$3" "$2"
+	case "${2#"$ROOT"/}" in
+		etc/sbair/*) ;;
+		*) printf '%s\n' "${2#"$ROOT"/}" >> "$receipt" ;;
+	esac
 }
+
+receipt=$(mktemp)
+trap 'rm -f "$receipt"' EXIT
+if [ -f "$SELF/release-manifest.json" ]; then
+	put "$SELF/release-manifest.json" "$ROOT/www/luci-static/resources/sbair-release.json" 0644
+fi
+if [ -d "$SELF/out/i18n" ]; then
+	mkdir -p "$ROOT/usr/lib/lua/luci/i18n"
+	for lang in ja ko; do
+		name="luci-app-sbair-modem.$lang.lmo"
+		put "$SELF/out/i18n/$name" "$ROOT/usr/lib/lua/luci/i18n/$name" 0644
+	done
+fi
 
 put "$SELF/out/sbair-modem"             "$ROOT/usr/bin/sbair-modem"          0755
 put "$SELF/root/usr/sbin/sbair-netmode" "$ROOT/usr/sbin/sbair-netmode"       0755
@@ -270,6 +307,11 @@ ln -sf ../init.d/sbair-adblock "$ROOT/etc/rc.d/S90sbair-adblock"
 ln -sf ../init.d/sbair-adblock "$ROOT/etc/rc.d/K10sbair-adblock"
 ln -sf ../init.d/sbair-portal "$ROOT/etc/rc.d/S91sbair-portal"
 ln -sf ../init.d/sbair-portal "$ROOT/etc/rc.d/K09sbair-portal"
+for entry in S95sbair-apn K01sbair-apn S99zzzzz_air6_ssh_watchdog K01zzzzz_air6_ssh_watchdog \
+	S94sbair-netfix K06sbair-netfix S93sbair-wifidrift K07sbair-wifidrift \
+	S90sbair-adblock K10sbair-adblock S91sbair-portal K09sbair-portal; do
+	printf 'etc/rc.d/%s\n' "$entry" >> "$receipt"
+done
 chmod 0700 "$ROOT/etc/sbair"
 
 # sysupgrade で持ち越す物の登録。
@@ -291,6 +333,7 @@ cat > "$ROOT/lib/upgrade/keep.d/luci-app-sbair-modem" <<'EOF'
 /root/sbair-backups/netmode-legacy/
 EOF
 chmod 0644 "$ROOT/lib/upgrade/keep.d/luci-app-sbair-modem"
+printf '%s\n' lib/upgrade/keep.d/luci-app-sbair-modem >> "$receipt"
 
 echo "配置した: $ROOT"
 
@@ -332,3 +375,5 @@ if [ "$ROOT" = "/" ]; then
 	echo "rpcd を再起動し、LuCI のキャッシュを消した"
 	echo "確認: ubus call sbair overview"
 fi
+sort -u "$receipt" > "$ROOT/usr/share/sbair/install-paths"
+chmod 0644 "$ROOT/usr/share/sbair/install-paths"

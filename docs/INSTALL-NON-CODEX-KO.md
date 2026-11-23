@@ -41,7 +41,7 @@ sha256sum -c SHA256SUMS
 
 ```sh
 cd ..
-scp floop3-<버전>-air6-linux-arm64.tar.gz root@<AIR6_LAN_IP>:/tmp/
+scp -O floop3-<버전>-air6-linux-arm64.tar.gz root@<AIR6_LAN_IP>:/tmp/
 ssh root@<AIR6_LAN_IP>
 ```
 
@@ -51,11 +51,12 @@ ssh root@<AIR6_LAN_IP>
 cd /tmp
 tar -xzf floop3-<버전>-air6-linux-arm64.tar.gz
 cd floop3-<버전>-air6-linux-arm64
-sha256sum -c SHA256SUMS
-sh ./install.sh /
+sha256sum -c SHA256SUMS && sh ./install.sh --check && sh ./install.sh /
 ```
 
-설치기는 SBA6D 식별값, 정확한 OpenWrt revision/target/architecture, 허용 KNOS 버전, overlay 여유 공간을 검사합니다. 맞지 않으면 파일 배치 전에 중단합니다. 설치 중 rpcd가 재시작되며 공유기는 재부팅되지 않습니다.
+v0.1.1부터 번들에 Floop3용 한국어·일본어 카탈로그, 제거 도구 및 LuCI bootstrap이 들어 있습니다. LuCI가 없으면 동봉된 `extras/luci-bootstrap/README.ko.md`의 사전 검사부터 진행합니다. 호스트에서 OpenWrt 패키지를 내려받는 단계가 필요합니다.
+
+설치기는 SBA6D 식별값, OpenWrt와 KNOS 버전, LuCI 의존성, 미적용 방화벽 변경 및 overlay 여유 공간을 검사합니다. 설치 중 rpcd가 재시작됩니다. Floop3의 기기 정보에서 설치된 릴리스 버전과 빌드 커밋을 확인할 수 있습니다. 제거할 때는 동봉된 `UNINSTALL-FLOOP3-KO.md`를 따릅니다.
 
 ## 소스에서 빌드하고 설치
 
