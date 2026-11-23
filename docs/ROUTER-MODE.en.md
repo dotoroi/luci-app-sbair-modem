@@ -69,7 +69,7 @@ To return to cellular routing, choose **Stock cellular router (SIM / ccmni)** in
 This JavaScript error can occur when the browser mixes an older cached `tools/sbair.js` with a newer `netmode.js`. It does not indicate that WAN settings or the connection mode were changed. Do not click **Apply changes** to dismiss it.
 
 1. In desktop Chrome, press `Ctrl+Shift+R` for a hard reload. On mobile, close and reopen the LuCI tab, or check in a private tab first.
-2. If it persists, clear the site cache for the router address `192.168.3.1` and sign in again.
+2. If it persists, clear the site cache for the router's LuCI address and sign in again.
 3. If it still recurs, reinstall the complete release bundle and reload the page. Do not copy only `netmode.js`.
 
 The current view falls back to displaying the original error if the shared error helper is unavailable. If the error continues, report the LuCI release version, source commit, and browser console message.
