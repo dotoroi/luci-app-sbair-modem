@@ -44,6 +44,16 @@ function displayModeLabel(mode) {
 	return modeLabel[mode] || mode;
 }
 
+// Keep the connection-mode view usable if a browser serves an older cached
+// tools.sbair module which predates errorText().
+function errorText(message) {
+	if (sbair && typeof sbair.errorText === 'function')
+		return sbair.errorText(message);
+
+	var text = message && typeof message.message === 'string' ? message.message : String(message);
+	return i18n.translate(text);
+}
+
 function badge(text, color) {
 	var colors = {
 		green: '#5cb85c', yellow: '#e6a23c', red: '#d9534f', gray: '#777'
@@ -174,7 +184,7 @@ function warningSection(warnings) {
 	if (!warnings || !warnings.length) return '';
 	return E('div', { 'class': 'cbi-section sbair-section' }, [
 		E('h3', {}, _("warning")),
-		E('ul', {}, warnings.map(function(w) { return E('li', {}, w); }))
+		E('ul', {}, warnings.map(function(w) { return E('li', {}, errorText(w)); }))
 	]);
 }
 
@@ -385,7 +395,7 @@ return view.extend({
 		return Promise.all([ callStatus(), callGetConfig() ]).then(function(values) {
 			return { status: values[0], config: values[1] };
 		}).catch(function(err) {
-			return { status: { error: sbair.errorText(err) }, config: {} };
+			return { status: { error: errorText(err) }, config: {} };
 		});
 	},
 
@@ -422,7 +432,7 @@ return view.extend({
 					self.selectedMode = effectiveMode(self.data.status);
 				redraw();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'warning');
+				ui.addNotification(null, E('p', {}, errorText(err)), 'warning');
 			});
 		}
 
@@ -439,7 +449,7 @@ return view.extend({
 					if (res && res.error) throw new Error(res.error);
 					ui.addNotification(null, E('p', {}, _("Management of sbair has been cancelled. Network settings have not changed.")), 'info');
 					return reload();
-				}).catch(function(err) { ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger'); });
+				}).catch(function(err) { ui.addNotification(null, E('p', {}, errorText(err)), 'danger'); });
 				return;
 			}
 			var apDhcpEnabled = flagEnabled(c.ap_dhcp_enabled);
@@ -479,7 +489,7 @@ return view.extend({
 				ui.addNotification(null, E('p', {}, _("Started applying. Check the status of the actual machine and automatically check if there are no problems.")), 'info');
 				return reload();
 			}).catch(function(err) {
-				ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger');
+				ui.addNotification(null, E('p', {}, errorText(err)), 'danger');
 			});
 		}
 
@@ -488,7 +498,7 @@ return view.extend({
 				if (res && res.error) throw new Error(res.error);
 				ui.addNotification(null, E('p', {}, _("The settings have been confirmed.")), 'info');
 				return reload();
-			}).catch(function(err) { ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger'); });
+			}).catch(function(err) { ui.addNotification(null, E('p', {}, errorText(err)), 'danger'); });
 		}
 
 		function rollbackChange() {
@@ -496,7 +506,7 @@ return view.extend({
 			callRollback().then(function(res) {
 				if (res && res.error) throw new Error(res.error);
 				return reload();
-			}).catch(function(err) { ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger'); });
+			}).catch(function(err) { ui.addNotification(null, E('p', {}, errorText(err)), 'danger'); });
 		}
 
 		function repair() {
@@ -504,7 +514,7 @@ return view.extend({
 				if (res && res.error) throw new Error(res.error);
 				ui.addNotification(null, E('p', {}, _("DHCP/route status was checked and corrected.")), 'info');
 				return reload();
-			}).catch(function(err) { ui.addNotification(null, E('p', {}, sbair.errorText(err)), 'danger'); });
+			}).catch(function(err) { ui.addNotification(null, E('p', {}, errorText(err)), 'danger'); });
 		}
 
 		redraw();

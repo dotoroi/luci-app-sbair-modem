@@ -64,6 +64,16 @@ To return to cellular routing, choose **Stock cellular router (SIM / ccmni)** in
 - **Management IP DHCP client**: the Air 6 itself obtains a management address from an upstream router. This is for AP/Bridge management and is separate from WAN DHCP.
 - **LAN DHCP server**: the Air 6 assigns addresses to local clients. It must remain enabled in router mode. It is managed under **Network → LAN Services**; the Connection Mode screen does not arbitrarily toggle WAN/LAN DHCP.
 
+## `sbair.errorText is not a function` in Connection Mode
+
+This JavaScript error can occur when the browser mixes an older cached `tools/sbair.js` with a newer `netmode.js`. It does not indicate that WAN settings or the connection mode were changed. Do not click **Apply changes** to dismiss it.
+
+1. In desktop Chrome, press `Ctrl+Shift+R` for a hard reload. On mobile, close and reopen the LuCI tab, or check in a private tab first.
+2. If it persists, clear the site cache for the router address `192.168.3.1` and sign in again.
+3. If it still recurs, reinstall the complete release bundle and reload the page. Do not copy only `netmode.js`.
+
+The current view falls back to displaying the original error if the shared error helper is unavailable. If the error continues, report the LuCI release version, source commit, and browser console message.
+
 ## Personal note: logs in `/tmp`
 
 Logs and temporary files stored under `/tmp` on the Air 6 consume memory. Leaving verbose/debug logging enabled or accumulating large logs for a long time can exhaust memory and make LuCI, network services, or app functions unstable or unavailable. Collect only the diagnostic logs you need for a short period. For long-term retention, copy them to a PC and then clear the device's temporary logs.
