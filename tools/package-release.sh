@@ -20,7 +20,9 @@ sh "$SELF/tools/check-shell-lf.sh"
 
 COMMIT=$(git -C "$SELF" rev-parse HEAD)
 DIRTY=false
-if ! git -C "$SELF" diff --quiet HEAD -- .; then DIRTY=true; fi
+# Windows-hosted WSL checkouts may expose CRLF/LF normalization differences.
+# Ignore end-of-line-only noise, while still refusing substantive source edits.
+if ! git -C "$SELF" -c core.autocrlf=true diff --ignore-space-at-eol --quiet HEAD -- .; then DIRTY=true; fi
 if [ "$DIRTY" = true ] && [ "${ALLOW_DIRTY_PREVIEW:-0}" != 1 ]; then
 	echo 'Refusing to make a release from modified tracked files. Set ALLOW_DIRTY_PREVIEW=1 only for a local preview.' >&2
 	exit 1
