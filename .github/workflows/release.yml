@@ -32,6 +32,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y ripgrep
 
+      - name: Build ARM64 backend
+        run: ./build.sh
+
       - name: Run shell and publication fixtures
         run: |
           for t in tests/*-fixture.sh; do
@@ -41,10 +44,8 @@ jobs:
             esac
           done
 
-      - name: Build and package
-        run: |
-          ./build.sh
-          ./tools/package-release.sh "$GITHUB_REF_NAME" --use-existing-binary
+      - name: Package release bundle
+        run: ./tools/package-release.sh "$GITHUB_REF_NAME" --use-existing-binary
 
       - name: Publish release with bundle and checksum
         env:
