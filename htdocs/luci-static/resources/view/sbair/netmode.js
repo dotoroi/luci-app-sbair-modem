@@ -51,7 +51,7 @@ function errorText(message) {
 		return sbair.errorText(message);
 
 	var text = message && typeof message.message === 'string' ? message.message : String(message);
-	return i18n.translate(text);
+	return _(text);
 }
 
 function badge(text, color) {

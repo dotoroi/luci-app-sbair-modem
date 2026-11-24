@@ -12,6 +12,7 @@ const vm = require('vm');
 
 const source = fs.readFileSync(process.argv[2], 'utf8');
 const calls = [];
+let failStatus = false;
 function E(tag, attrs, children) {
   return { tag, attrs: attrs || {}, children: Array.isArray(children) ? children : (children === undefined ? [] : [ children ]) };
 }
@@ -31,6 +32,8 @@ const rpc = {
   declare: function(options) {
     return function() {
       calls.push(options.method);
+      if (options.method === 'netmode_status' && failStatus)
+        return Promise.reject(new Error('mock RPC error'));
       if (options.method === 'netmode_status')
         return Promise.resolve({ mode: 'sim', managed: 0, health: 'unmanaged' });
       if (options.method === 'netmode_get_config')
@@ -140,7 +143,12 @@ view.load().then(function(data) {
   assert.match(source, /self\.draft = \{\};/);
   assert.match(source, /netmode_unmanage/);
   assert.doesNotMatch(source, /netmode_netdev_status/);
-  process.stdout.write('netmode-js-fixture-ok\n');
+  assert.doesNotMatch(source, /i18n\.translate/);
+  failStatus = true;
+  return view.load().then(function(failed) {
+    assert.strictEqual(failed.status.error, 'mock RPC error');
+    process.stdout.write('netmode-js-fixture-ok\n');
+  });
 }).catch(function(err) {
   console.error(err);
   process.exit(1);
