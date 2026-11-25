@@ -2,7 +2,7 @@
 
 [English](ROUTER-MODE.en.md) | [한국어](ROUTER-MODE.ko.md) | [日本語](ROUTER-MODE.ja.md)
 
-이 안내서는 Floop3의 **Network → Connection Mode(네트워크 → 접속 모드)**에 구현된 라우터 구성을 설명합니다. 대상은 벤더 수정 OpenWrt 21.02.7입니다. 유선 인터넷을 사용하면서 셀룰러 설정도 보존하려면 이 안내서는 **Air 6 Ethernet WAN (VLAN 3)**을 우선 선택지로 권장합니다. 유선 WAN 구성은 두 가지이며 서로 다른 포트 경로를 사용합니다.
+이 안내서는 SoftBank Air 6 제조사 펌웨어에서 Floop3의 **Network → Connection Mode(네트워크 → 접속 모드)**에 구현된 라우터 구성을 설명합니다. 유선 인터넷을 사용하면서 셀룰러 설정도 보존하려면 **Air 6 Ethernet WAN (VLAN 3)**을 우선 선택지로 권장합니다. 유선 WAN 구성은 두 가지이며 포트 경로가 다르므로 적용 전에 현재 기기의 포트 대응을 확인하세요.
 
 ## 모드 선택
 
@@ -28,7 +28,7 @@
 
 ## 적용 전 준비
 
-1. 펌웨어가 지원 대상인 vendor OpenWrt 21.02.7인지 확인합니다.
+1. SoftBank Air 6 제조사 펌웨어인지 확인하고, 화면에 표시된 모델과 현재 포트 대응을 확인합니다.
 2. 설정 백업과 독립된 복구 수단(가능하면 UART)을 준비합니다. LuCI가 접속 중인 LAN/Wi-Fi 관리 경로를 유지하세요.
 3. Network → Diagnostics에서 링크와 WAN 후보를 읽기 전용으로 확인합니다. 유선 모드에서는 WAN에 연결할 실제 잭을 확인하기 전 케이블을 꽂지 마세요.
 4. 선택한 상위 라우터/모뎀이 DHCP로 IPv4 주소를 제공하는지 확인합니다. 이 구현은 ethwan/VLAN WAN의 PPPoE 계정 설정을 제공하지 않습니다.

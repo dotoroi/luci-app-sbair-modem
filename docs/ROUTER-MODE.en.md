@@ -2,7 +2,7 @@
 
 [English](ROUTER-MODE.en.md) | [한국어](ROUTER-MODE.ko.md) | [日本語](ROUTER-MODE.ja.md)
 
-This guide describes the router configurations implemented under Floop3 **Network → Connection Mode**. The target is vendor-modified OpenWrt 21.02.7. If you want wired Internet while preserving the cellular configuration, this guide recommends **Air 6 Ethernet WAN (VLAN 3)** as the preferred mode. The two wired WAN configurations use different port paths.
+This guide describes the router configurations implemented under Floop3 **Network → Connection Mode** on the SoftBank Air 6 vendor firmware. If you want wired Internet while preserving the cellular configuration, this guide recommends **Air 6 Ethernet WAN (VLAN 3)** as the preferred mode. The two wired WAN configurations use different port paths; check the current device's port mapping before applying a mode.
 
 ## Available modes
 
@@ -28,7 +28,7 @@ This is the recommended wired WAN profile when you want to retain the cellular c
 
 ## Before switching
 
-1. Confirm the device runs the supported vendor OpenWrt 21.02.7 firmware.
+1. Confirm the device is a SoftBank Air 6 running its vendor firmware, then check the displayed model and current port mapping.
 2. Back up settings and prepare an independent recovery method, preferably UART. Keep a working LuCI management path over LAN/Wi-Fi.
 3. Use **Network → Diagnostics** to inspect links and WAN candidates. Do not connect the upstream cable until you have identified the physical WAN jack.
 4. Confirm the upstream router/modem offers an IPv4 address by DHCP. These ethwan/VLAN WAN profiles do not configure PPPoE credentials.

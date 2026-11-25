@@ -2,7 +2,7 @@
 
 # Physical SIM, APN, and LTE/5G band setup
 
-This guide is for the SBA6D running vendor OpenWrt 21.02.7 with a compatible Floop3 release installed. You can follow it in LuCI without SSH commands or Codex. Menu labels may vary slightly by translation and release.
+This guide is for a SoftBank Air 6 running its vendor firmware with a compatible Floop3 release installed. You can follow it in LuCI without SSH commands or Codex. Menu labels may vary slightly by firmware, translation, and release.
 
 ## 1. Switch to a physical SIM
 

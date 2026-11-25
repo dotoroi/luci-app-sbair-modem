@@ -6,7 +6,7 @@ Floop3は、**SoftBank Air 6（RG620T-SBK / RUDOLF / SBA6D）**向けのLuCIア�
 
 ## インストール前に
 
-- 対象はメーカー版 **OpenWrt 21.02.7**、target `gem6xxx/evb6990_cpe_mt7990_emmc`、ARM64です。一般のupstream OpenWrt向けではありません。
+- 対象はSoftBank Air 6のメーカー版OpenWrt環境です。インストーラーはAir 6の機種識別とARM64ランタイムを確認し、KNOS/OpenWrtの固定バージョン一覧では制限しません。一般のupstream OpenWrt向けではありません。
 - [ファームウェア互換性](docs/FIRMWARE-COMPATIBILITY-JA.md)を確認してください。メタデータが一致しても、全機能の動作を保証するものではありません。
 - 設定をバックアップし、SSHまたはUARTの復旧経路を確保してください。インストーラーは`rpcd`を再起動しますが、ルーターは再起動しません。
 - リリースのチェックサムと`install.sh --check`を確認してください。機種・既存ファイル所有権・保留中のfirewall変更・空き容量の検査を回避しないでください。

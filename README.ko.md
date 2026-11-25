@@ -6,7 +6,7 @@ Floop3는 **SoftBank Air 6(RG620T-SBK / RUDOLF / SBA6D)**용 LuCI 앱입니다. 
 
 ## 설치 전에
 
-- 대상은 제조사 펌웨어 **OpenWrt 21.02.7**, target `gem6xxx/evb6990_cpe_mt7990_emmc`, ARM64입니다. 일반 upstream OpenWrt용 패키지가 아닙니다.
+- 대상은 SoftBank Air 6 제조사 OpenWrt 환경입니다. 설치기는 Air 6 기기 식별값과 ARM64 런타임을 확인하며 KNOS/OpenWrt 고정 버전 목록으로 제한하지 않습니다. 일반 upstream OpenWrt용 패키지가 아닙니다.
 - [펌웨어 호환성 안내](docs/FIRMWARE-COMPATIBILITY-KO.md)를 확인하세요. 메타데이터가 맞아도 모든 기능이 검증됐다는 뜻은 아닙니다.
 - 공유기 설정을 백업하고 SSH 또는 UART 복구 경로를 확보하세요. 설치기는 `rpcd`를 재시작하지만 공유기를 재부팅하지 않습니다.
 - 릴리즈 체크섬과 `install.sh --check`를 확인하세요. 모델·기존 파일 소유권·미적용 방화벽 변경·여유 공간 검사를 우회하지 마세요.

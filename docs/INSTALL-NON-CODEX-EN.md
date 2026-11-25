@@ -12,7 +12,7 @@ Recommended setup: a Windows 11 host with WSL2 Ubuntu LTS. Use the WSL terminal 
 
 The Air 6 UART material currently includes a user-reported 1.8 V logic measurement, but the header's TX/RX/GND pin order has not been confirmed. **Use a 1.8 V-compatible adapter or a proper level shifter, and verify the pinout and voltage from device-specific information and measurements before connecting. Do not connect a 3.3 V adapter directly or apply power to the UART VCC pin.**
 
-This procedure does not rebuild or flash the Air 6 OpenWrt firmware. Tagged releases can include a prebuilt Go backend and installation bundle. The checked target is limited to stock SBA6D versions in the compatibility matrix; full feature validation on each version is pending.
+This procedure does not rebuild or flash Air 6 firmware. Tagged releases can include a prebuilt Go backend and installation bundle. The installer checks the SoftBank Air 6 board identity and an `aarch64` runtime, but does not restrict KNOS or OpenWrt version numbers. Feature behavior has not been validated on every firmware build.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ This procedure does not rebuild or flash the Air 6 OpenWrt firmware. Tagged rele
 - Installation restarts LuCI's rpcd but does not reboot the router. Back up configuration first.
 - The installer stops rather than overwriting an unrecognized `/usr/sbin/sbair-netmode` implementation.
 
-Floop3 is intended for vendor OpenWrt 21.02.7 when its vendor MT-WiFi integration is needed. Do not install it on current upstream OpenWrt by default.
+Floop3 targets the SoftBank Air 6 vendor firmware environment and relies on vendor MT-WiFi integration. The installer identifies the Air 6 board and ARM64 runtime rather than enforcing a fixed firmware version. Do not install it on generic upstream OpenWrt.
 
 If stock vendor OpenWrt 21.02.7 has no LuCI, first follow [the optional LuCI bootstrap guide](../extras/luci-bootstrap/README.md). It adds LuCI without modifying/replacing the MT-WiFi driver and preserves vendor ABI. Skip bootstrap if LuCI is already installed. Do not use its pinned package set on another release or SNAPSHOT.
 
@@ -74,7 +74,7 @@ sh ./install.sh --check
 sh ./install.sh /
 ```
 
-The installer refuses unsupported firmware, pending firewall changes, unknown network-helper ownership, or less than 24 MiB free on `/overlay`. Resolve the reported condition and rerun the check; do not bypass it.
+The installer refuses a non-Air-6 board identity, a non-`aarch64` runtime, pending firewall changes, unknown network-helper ownership, or less than 24 MiB free on `/overlay`. KNOS and OpenWrt version values are shown for diagnostics and are not allowlisted. Resolve any failed check before installing.
 
 For a source build, use Go 1.25.5 or later, run `./build.sh`, then use `tools/deploy-floop3.sh` for its checked installation flow. Do not copy only the Go binary when the UI and catalogs come from a different source revision.
 

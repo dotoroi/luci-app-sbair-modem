@@ -5,9 +5,9 @@
 
 # luci-app-sbair-modem
 
-A LuCI application for the SoftBank Air 6 (RG620T-SBK / RUDOLF), designed for the vendor-modified OpenWrt 21.02.7 firmware. It provides modem status and controls, SIM/eSIM management, APN and SMS functions, Wi-Fi and client management, AP/Bridge and wired WAN modes, USB device information, and OTA/FOTA maintenance.
+A LuCI application for the SoftBank Air 6 (RG620T-SBK / RUDOLF), designed for its vendor-modified OpenWrt environment. It provides modem status and controls, SIM/eSIM management, APN and SMS functions, Wi-Fi and client management, AP/Bridge and wired WAN modes, USB device information, and OTA/FOTA maintenance.
 
-> This project targets the device vendor's OpenWrt 21.02.7 environment. It is not a general-purpose package for current upstream OpenWrt.
+> This project targets the SoftBank Air 6 board and its vendor-modified OpenWrt environment. The installer checks the device identity and ARM64 runtime, not a fixed KNOS/OpenWrt version list. It is not a general-purpose package for current upstream OpenWrt.
 
 ## Features
 

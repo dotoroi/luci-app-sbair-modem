@@ -12,7 +12,7 @@
 
 현재 확보된 Air 6 UART 자료에는 1.8 V 로직 레벨 측정 보고가 있으나, 헤더의 TX/RX/GND 핀 순서는 확인되지 않았습니다. **1.8 V 호환 어댑터 또는 적절한 레벨 변환기를 사용하고, 장치별 자료와 계측으로 핀 배치·전압을 확인한 뒤 연결하십시오. 3.3 V 어댑터를 바로 연결하거나 UART VCC 핀에 전원을 넣지 마십시오.**
 
-이 절차는 Air 6의 OpenWrt 펌웨어를 다시 빌드하거나 플래시하지 않습니다. 태그 릴리스에는 사전 빌드 Go 백엔드와 설치 파일 묶음을 첨부할 수 있습니다. 현재 확인한 대상은 호환성 표에 적힌 순정 SBA6D 버전으로 제한합니다. 다른 OpenWrt에는 설치하지 마십시오. 버전별 전체 기능 검증은 아직 완료되지 않았습니다.
+이 절차는 Air 6 펌웨어를 다시 빌드하거나 플래시하지 않습니다. 태그 릴리스에는 사전 빌드 Go 백엔드와 설치 파일 묶음을 첨부할 수 있습니다. 설치기는 SoftBank Air 6 모델과 ARM64 실행 환경을 확인하며 KNOS/OpenWrt 버전 목록으로 제한하지 않습니다. 일반 upstream OpenWrt에는 설치하지 마십시오. 펌웨어별 전체 기능 검증은 완료되지 않았습니다.
 
 ## 대상과 준비물
 
@@ -22,7 +22,7 @@
 - 설치는 재부팅하지 않지만 LuCI의 rpcd를 재시작합니다. 설정 백업을 만든 뒤 설치합니다.
 - 설치기는 알 수 없는 /usr/sbin/sbair-netmode 구현을 발견하면 덮어쓰지 않고 중단합니다.
 
-Floop3 앱은 vendor OpenWrt 21.02.7의 vendor MT-WiFi 연계 기능이 필요한 경우를 대상으로 합니다. 최신 OpenWrt에는 Floop3를 설치하지 않는 것을 기본으로 합니다.
+Floop3 앱은 SoftBank Air 6 제조사 펌웨어의 vendor MT-WiFi 연계 기능을 사용합니다. 일반 upstream OpenWrt용 패키지가 아닙니다.
 
 순정 vendor OpenWrt 21.02.7에 LuCI가 없으면 Floop3 설치 전에 ../extras/luci-bootstrap/README.md의 bootstrap을 먼저 실행하십시오. bootstrap은 LuCI만 추가하며 MT-WiFi 드라이버를 수정·이식하지 않고 vendor ABI를 보존합니다. 대상 vendor 환경에 LuCI가 이미 있으면 bootstrap은 생략합니다. 최신 OpenWrt나 다른 release/SNAPSHOT에는 이 bootstrap의 고정 패키지 목록을 적용하지 마십시오.
 
@@ -56,7 +56,7 @@ sha256sum -c SHA256SUMS && sh ./install.sh --check && sh ./install.sh /
 
 릴리즈 번들에는 Floop3용 한국어·일본어 카탈로그, 제거 도구 및 LuCI bootstrap이 들어 있습니다. 장치의 `release-manifest.json`에서 버전과 소스 커밋을 확인하고, 지정 브랜치 소스와 일치하지 않는 이전 태그 바이너리를 섞지 마세요. LuCI가 없으면 동봉된 `extras/luci-bootstrap/README.ko.md`의 사전 검사부터 진행합니다. 호스트에서 OpenWrt 패키지를 내려받는 단계가 필요합니다.
 
-설치기는 SBA6D 식별값, OpenWrt와 KNOS 버전, LuCI 의존성, 미적용 방화벽 변경 및 overlay 여유 공간을 검사합니다. `/overlay`의 여유 공간이 24 MiB보다 적거나 검사를 통과하지 못하면 우회하지 말고 원인을 해결하세요. 설치 중 rpcd가 재시작됩니다. Floop3의 기기 정보에서 설치된 릴리즈 버전과 빌드 커밋을 확인할 수 있습니다. 제거할 때는 `docs/UNINSTALL-FLOOP3-KO.md`를 따릅니다.
+설치기는 SoftBank Air 6 보드 식별값과 `aarch64` 실행 환경, LuCI 의존성, 미적용 방화벽 변경 및 overlay 여유 공간을 검사합니다. KNOS/OpenWrt 버전은 진단 정보로 표시하며 고정 허용 목록으로 제한하지 않습니다. `/overlay` 여유 공간이 24 MiB보다 적거나 검사를 통과하지 못하면 우회하지 말고 원인을 해결하세요. 설치 중 rpcd가 재시작됩니다. Floop3의 기기 정보에서 설치된 릴리즈 버전과 빌드 커밋을 확인할 수 있습니다. 제거할 때는 `docs/UNINSTALL-FLOOP3-KO.md`를 따릅니다.
 
 ## 소스에서 빌드하고 설치
 

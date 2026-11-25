@@ -6,7 +6,7 @@ Floop3 is a LuCI app for modem, SIM/eSIM, SMS, Wi-Fi, connected clients, and net
 
 ## Before installing
 
-- This project targets the vendor firmware **OpenWrt 21.02.7**, target `gem6xxx/evb6990_cpe_mt7990_emmc`, ARM64. It is not a package for generic upstream OpenWrt.
+- This project targets the SoftBank Air 6's vendor-modified OpenWrt environment. It is not a package for generic upstream OpenWrt. The installer checks the Air 6 board identity and ARM64 runtime, not a fixed KNOS/OpenWrt version list.
 - Check the [firmware compatibility notes](docs/FIRMWARE-COMPATIBILITY-EN.md). Matching metadata is not a guarantee that every feature is validated.
 - Back up router configuration and retain a working SSH or UART recovery path. The installer restarts `rpcd`; it does not reboot the router.
 - Run the release bundle's checksum check and `install.sh --check`. Do not bypass a failed model, ownership, pending-firewall, or free-space check.
