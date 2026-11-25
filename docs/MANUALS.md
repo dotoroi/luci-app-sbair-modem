@@ -5,6 +5,7 @@
 | Guide | English | Korean | Japanese |
 |---|---|---|---|
 | Login and password | [EN](INSTALL-ACCESS-EN.md) | [KO](INSTALL-ACCESS-KO.md) | [JA](INSTALL-ACCESS-JA.md) |
+| Physical SIM, APN, LTE/5G bands | [EN](SIM-APN-BANDS-EN.md) | [KO](SIM-APN-BANDS-KO.md) | [JA](SIM-APN-BANDS-JA.md) |
 | Build and install Floop3 without Codex | [EN](INSTALL-NON-CODEX-EN.md) | [KO](INSTALL-NON-CODEX-KO.md) | [JA](INSTALL-NON-CODEX-JA.md) |
 | Remove Floop3 | [EN](UNINSTALL-FLOOP3-EN.md) | [KO](UNINSTALL-FLOOP3-KO.md) | [JA](UNINSTALL-FLOOP3-JA.md) |
 | Air 6 router mode | [EN](ROUTER-MODE.en.md) | [KO](ROUTER-MODE.ko.md) | [JA](ROUTER-MODE.ja.md) |

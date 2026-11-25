@@ -16,16 +16,18 @@ if [ -z "$LTE" ] && [ -z "$NR" ]; then
 fi
 
 mask_for() {
-	printf '%s\n' "$1" | awk -v words="$2" '
+	printf '%s\n' "$1" | awk -v max_words="$2" '
+	BEGIN { words = 1 }
 	{
 		n = split($0, bands, ",")
 		for (i = 1; i <= n; i++) {
-			if (bands[i] !~ /^[0-9]+$/ || bands[i] < 1 || bands[i] > words * 32) {
+			if (bands[i] !~ /^[0-9]+$/ || bands[i] < 1 || bands[i] > max_words * 32) {
 				bad = 1
 				continue
 			}
 			if (seen[bands[i]]++) continue
 			w = int((bands[i] - 1) / 32) + 1
+			if (w > words) words = w
 			bits[w] += 2 ^ ((bands[i] - 1) % 32)
 		}
 	}
@@ -33,6 +35,20 @@ mask_for() {
 		if (bad || n == 0) exit 1
 		for (i = 1; i <= words; i++) printf "%08X", bits[i]
 	}'
+}
+
+# The modem omits unused high 32-bit words from +EPBSEH? (e.g. LTE B3 is
+# returned as "00000004", not "0000000400000000"). Canonicalize readback before
+# comparing it with the minimum-width mask generated above.
+normalize_mask() {
+	mask=$1
+	while [ "${#mask}" -gt 8 ]; do
+		case "$mask" in
+			*00000000) mask=${mask%00000000} ;;
+			*) break ;;
+		esac
+	done
+	printf '%s' "$mask"
 }
 
 LTE_MASK=
@@ -46,7 +62,12 @@ read_masks() {
 	IFS=, read -r GSM UMTS CUR_LTE CUR_NR EXTRA <<EOF
 $line
 EOF
-	[ -n "${GSM:-}" ] && [ -n "${UMTS:-}" ] && [ -n "${CUR_LTE:-}" ] && [ -n "${CUR_NR:-}" ]
+	if [ -z "${GSM:-}" ] || [ -z "${UMTS:-}" ] ||
+		[ -z "${CUR_LTE:-}" ] || [ -z "${CUR_NR:-}" ]; then
+		return 1
+	fi
+	CUR_LTE=$(normalize_mask "$CUR_LTE")
+	CUR_NR=$(normalize_mask "$CUR_NR")
 }
 
 # Wait for the vendor AT service, then keep correcting the masks while the

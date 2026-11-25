@@ -58,7 +58,7 @@ run_restore() {
 printf '%s\n' '00000001,00000002,0000000000000000,000000000000000000000000' > "$state"
 out=$(TEST_LTE=1,8 TEST_NR= run_restore)
 printf '%s\n' "$out" | grep -q 'saved band masks active;'
-[ "$(cat "$state")" = '00000001,00000002,0000008100000000,000000000000000000000000' ] || {
+[ "$(cat "$state")" = '00000001,00000002,00000081,00000000' ] || {
 	echo 'LTE-only restore changed the wrong masks' >&2
 	exit 1
 }
@@ -67,8 +67,18 @@ printf '%s\n' "$out" | grep -q 'saved band masks active;'
 printf '%s\n' '00000001,00000002,0000000000000000,000000000000000000000000' > "$state"
 out=$(TEST_LTE= TEST_NR=77,78 run_restore)
 printf '%s\n' "$out" | grep -q 'saved band masks active;'
-[ "$(cat "$state")" = '00000001,00000002,0000000000000000,000000000000000000003000' ] || {
+[ "$(cat "$state")" = '00000001,00000002,00000000,000000000000000000003000' ] || {
 	echo 'NR-only restore changed the wrong masks' >&2
+	exit 1
+}
+
+# Modems may omit unused high words from the readback (LTE B3 as 00000004).
+# The equivalent full-width mask must not trigger repeated writes.
+printf '%s\n' '00000001,00000002,00000004,000000000000000000000000' > "$state"
+out=$(TEST_LTE=3 TEST_NR= run_restore)
+printf '%s\n' "$out" | grep -q 'saved band masks active; rewrites=0'
+[ "$(cat "$state")" = '00000001,00000002,00000004,000000000000000000000000' ] || {
+	echo 'short modem mask readback was rewritten' >&2
 	exit 1
 }
 

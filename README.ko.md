@@ -15,6 +15,7 @@ Floop3는 **SoftBank Air 6(RG620T-SBK / RUDOLF / SBA6D)**용 LuCI 앱입니다. 
 
 1. 장치와 소스 버전에 맞는 태그 릴리즈를 선택합니다.
 2. [설치 안내](docs/INSTALL-NON-CODEX-KO.md)와 [접근 설정 안내](docs/INSTALL-ACCESS-KO.md)를 따릅니다.
-3. Wi-Fi, 네트워크 모드, USB NIC, 복구 절차는 [사용자 매뉴얼 목록](docs/MANUALS.ko.md)을 참고하세요.
+3. 일반 SIM, 통신사 APN, LTE/5G 밴드는 [설정 안내](docs/SIM-APN-BANDS-KO.md)를 참고하세요.
+4. Wi-Fi, 네트워크 모드, USB NIC, 복구 절차는 [사용자 매뉴얼 목록](docs/MANUALS.ko.md)을 참고하세요.
 
 USB NIC 기능은 실험적이며 어댑터와 펌웨어에 따라 동작이 다릅니다. SSH와 LuCI는 신뢰할 수 있는 내부망에서만 사용하고 공인 인터넷에 직접 노출하지 마세요.

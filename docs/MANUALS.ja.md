@@ -5,6 +5,7 @@
 | ガイド | 日本語 | English | 한국어 |
 |---|---|---|---|
 | ログインとパスワード | [JA](INSTALL-ACCESS-JA.md) | [EN](INSTALL-ACCESS-EN.md) | [KO](INSTALL-ACCESS-KO.md) |
+| 物理SIM・APN・LTE/5Gバンド | [JA](SIM-APN-BANDS-JA.md) | [EN](SIM-APN-BANDS-EN.md) | [KO](SIM-APN-BANDS-KO.md) |
 | Codexを使わないFloop3のビルド・導入 | [JA](INSTALL-NON-CODEX-JA.md) | [EN](INSTALL-NON-CODEX-EN.md) | [KO](INSTALL-NON-CODEX-KO.md) |
 | Floop3の削除 | [JA](UNINSTALL-FLOOP3-JA.md) | [EN](UNINSTALL-FLOOP3-EN.md) | [KO](UNINSTALL-FLOOP3-KO.md) |
 | Air 6ルーターモード | [JA](ROUTER-MODE.ja.md) | [EN](ROUTER-MODE.en.md) | [KO](ROUTER-MODE.ko.md) |

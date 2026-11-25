@@ -5,6 +5,7 @@
 | 안내서 | 한국어 | English | 日本語 |
 |---|---|---|---|
 | 로그인 및 비밀번호 | [KO](INSTALL-ACCESS-KO.md) | [EN](INSTALL-ACCESS-EN.md) | [JA](INSTALL-ACCESS-JA.md) |
+| 일반 SIM, APN, LTE/5G 밴드 설정 | [KO](SIM-APN-BANDS-KO.md) | [EN](SIM-APN-BANDS-EN.md) | [JA](SIM-APN-BANDS-JA.md) |
 | Codex 없이 Floop3 빌드·설치 | [KO](INSTALL-NON-CODEX-KO.md) | [EN](INSTALL-NON-CODEX-EN.md) | [JA](INSTALL-NON-CODEX-JA.md) |
 | Floop3 제거 | [KO](UNINSTALL-FLOOP3-KO.md) | [EN](UNINSTALL-FLOOP3-EN.md) | [JA](UNINSTALL-FLOOP3-JA.md) |
 | Air 6 라우터 모드 | [KO](ROUTER-MODE.ko.md) | [EN](ROUTER-MODE.en.md) | [JA](ROUTER-MODE.ja.md) |
